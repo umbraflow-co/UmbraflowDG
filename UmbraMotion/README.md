@@ -1,6 +1,6 @@
 # UmbraMotion
 
-A Vencord userplugin by Big_Killers. Adds enter animations across Discord's UI, with per-spot control over style, duration, easing and direction. Part of the [Umbraflow](https://github.com/BigKillers/Umbraflow) family.
+A Vencord userplugin by Big_Killers. Adds enter animations across Discord's UI, with per-spot control over style, duration, easing and direction. Part of the [Umbraflow](https://github.com/umbraflow-co/UmbraflowDG) family.
 
 ## What it does
 

@@ -1,3 +1,5 @@
+![Umbraflow — dark theme for Discord & Garry's Mod](assets/banner.webp)
+
 # Umbraflow
 
 A dark theme for Discord and Garry's Mod, based on the Windows 11 Fluent look. Made from scratch.
@@ -53,7 +55,7 @@ Download `Discord-Themes/umbraflow.theme.css` from this repo (or the [Releases](
 
 If you want it to update itself, skip the download and add this under **Themes → Online Themes** instead:
 ```
-https://raw.githubusercontent.com/BigKillers/Umbraflow/main/Discord-Themes/umbraflow.theme.css
+https://raw.githubusercontent.com/umbraflow-co/UmbraflowDG/main/Discord-Themes/umbraflow.theme.css
 ```
 </details>
 
