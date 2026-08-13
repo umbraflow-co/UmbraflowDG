@@ -294,6 +294,11 @@ function GetGamemodeInfo( name )
 	return GamemodeDetails[nameL];
 }
 
+function ResetGamemodeInfo()
+{
+	GamemodeDetails = {};
+}
+
 function UpdateAddonMaps( inmaps )
 {
 	gScope.AddonMapList = inmaps;
