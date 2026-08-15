@@ -3,7 +3,7 @@
  * @description Fluent Windows 11-inspired theme — auto-switches between Light,
  *              Dark (Fluent) and Onyx (Midnight) with Discord's appearance.
  * @author Big_Killers
- * @version 1.0.2
+ * @version 1.0.3
  */
 
 /* ALL-IN-ONE VARIANT */
@@ -958,6 +958,14 @@ main:has(> [class*="tabBody_"]),
   border-radius: 8px !important;
   box-shadow: var(--elevation-high) !important;
   overflow: hidden !important;
+}
+
+/* The "careful — unsaved changes" save bar (noticeRegion_*) hangs below
+   this card, so the overflow clip above swallows it and there's no way to
+   save a profile edit. While the bar is mounted, let overflow show; the
+   corners lose their clip for that moment, which is the lesser evil. */
+[role="dialog"] > *:has([class*="profile__"]):has([class*="noticeRegion"]) {
+  overflow: visible !important;
 }
 
 /* 12. MOTION */
