@@ -952,20 +952,17 @@ main:has(> [class*="tabBody_"]),
 
 /* 11e. FULL PROFILE MODAL */
 
+/* No overflow clip here: this wrapper is also the profile EDITOR's root,
+   whose "unsaved changes" save bar sits outside its box. The editor root
+   keeps an inline transform from its enter animation, so it is the
+   containing block even for position:fixed — an overflow clip on it
+   swallows the save bar with no CSS escape. Square corner spill is the
+   lesser evil. */
 [role="dialog"] > *:has([class*="profile__"]) {
   background-color: var(--fluenty-layer) !important;
   border: 1px solid var(--fluenty-stroke-card) !important;
   border-radius: 8px !important;
   box-shadow: var(--elevation-high) !important;
-  overflow: hidden !important;
-}
-
-/* The "careful — unsaved changes" save bar (noticeRegion_*) hangs below
-   this card, so the overflow clip above swallows it and there's no way to
-   save a profile edit. While the bar is mounted, let overflow show; the
-   corners lose their clip for that moment, which is the lesser evil. */
-[role="dialog"] > *:has([class*="profile__"]):has([class*="noticeRegion"]) {
-  overflow: visible !important;
 }
 
 /* 12. MOTION */
