@@ -3,14 +3,17 @@
  * @description Fluent Windows 11-inspired theme — auto-switches between Light,
  *              Dark (Fluent) and Onyx (Midnight) with Discord's appearance.
  * @author Big_Killers
- * @version 1.0.3
+ * @version 1.0.4
  */
 
 /* ALL-IN-ONE VARIANT */
 
 /* 1. FLUENT DESIGN TOKENS  (dark / Fluent baseline) */
 
-:root {
+:root,
+.theme-dark,
+.theme-light,
+.theme-midnight {
 
   --fluenty-accent: #005fb8;
   --fluenty-accent-light: #60cdff;
@@ -67,7 +70,7 @@
   --fluenty-member-sheen-hover: none;
 
   --fluenty-ease: cubic-bezier(0.1, 0.9, 0.2, 1);
-  --fluenty-ease-out: cubic-bezier(0, 0, 0, 1);
+  --fluenty-motion: 1;
 
   --fluenty-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
 }
@@ -76,7 +79,8 @@
 
 :root,
 .theme-dark,
-.theme-light {
+.theme-light,
+.theme-midnight {
 
   --background-primary: var(--fluenty-layer);
   --background-secondary: var(--fluenty-mica);
@@ -104,7 +108,7 @@
   --border-faint: var(--fluenty-stroke-card);
   --border-subtle: var(--fluenty-stroke-divider);
   --border-strong: var(--fluenty-stroke-control);
-  --elevation-stroke: var(--fluenty-stroke-card);
+  --elevation-stroke: 0 0 0 1px var(--fluenty-stroke-card);
 
   /* Text */
   --text-normal: var(--fluenty-text-secondary);
@@ -140,7 +144,8 @@
 
 :root,
 .theme-dark,
-.theme-light {
+.theme-light,
+.theme-midnight {
   --background-base-lowest: rgb(var(--fluenty-13)) !important;
   --background-base-lower: rgb(var(--fluenty-1b)) !important;
   --background-base-low: rgb(var(--fluenty-20)) !important;
@@ -205,14 +210,7 @@ body {
    and [class*=] is case-sensitive without it */
 [class*="menu_"] [class*="item_" i] {
   border-radius: 4px !important;
-  transition: background-color 0.08s var(--fluenty-ease);
-}
-
-/* profileBody_/profileContentInner_/profileContentOuter_ are gone, the
-   popout's inner wrapper has no name anymore, so hang off the stable
-   .user-profile-popout class instead */
-.user-profile-popout [class*="inner_"] {
-  background: transparent !important;
+  transition: background-color calc(0.08s * var(--fluenty-motion)) var(--fluenty-ease);
 }
 
 [class*="modal_"] {
@@ -220,10 +218,6 @@ body {
   border: 1px solid var(--fluenty-stroke-card) !important;
   border-radius: 8px !important;
   box-shadow: var(--elevation-high) !important;
-}
-
-[class*="modalContent"] {
-  background: transparent !important;
 }
 
 /* 6. SCROLLBARS */
@@ -265,7 +259,7 @@ button[class*="button_"]:not([class*="lookBlank"]):not([class*="lookLink"]) {
   border-radius: 4px !important;
   border: 1px solid var(--fluenty-stroke-control) !important;
   border-bottom-color: rgba(0, 0, 0, 0.16) !important;
-  transition: background-color 0.1s var(--fluenty-ease), border-color 0.1s var(--fluenty-ease);
+  transition: background-color calc(0.1s * var(--fluenty-motion)) var(--fluenty-ease), border-color calc(0.1s * var(--fluenty-motion)) var(--fluenty-ease);
 }
 
 /* Discord rebuilt the button component — lookFilled_/colorBrand_ is dead on
@@ -320,13 +314,14 @@ button[class*="button_"][class*="primary_"]:not([class*="lookBlank"]):active {
   border: 1px solid var(--fluenty-stroke-control) !important;
   border-bottom: 1px solid var(--fluenty-input-underline) !important;
   border-radius: 4px !important;
-  transition: border-bottom-color 0.15s var(--fluenty-ease), background-color 0.15s var(--fluenty-ease);
+  transition: border-bottom-color calc(0.15s * var(--fluenty-motion)) var(--fluenty-ease), background-color calc(0.15s * var(--fluenty-motion)) var(--fluenty-ease);
 }
 
 [class*="channelTextArea_"]:focus-within,
 [class*="searchBar_"]:focus-within {
   background: rgb(var(--fluenty-19)) !important;
-  border-bottom: 2px solid var(--fluenty-accent-light) !important;
+  border-bottom-color: var(--fluenty-accent-light) !important;
+  box-shadow: inset 0 -1px 0 var(--fluenty-accent-light) !important;
 }
 
 [class*="searchBar_"] [class*="input_"],
@@ -339,14 +334,12 @@ button[class*="button_"][class*="primary_"]:not([class*="lookBlank"]):active {
 
 /* 9. NAVIGATION */
 
-/* channel_ is gone, containerDefault_ alone covers channel links now.
-   Radius/margin match the member bubbles in §11 — used to be a second
-   rule down there just re-overriding the radius; merged into this one. */
+/* Horizontal spacing leaves channel row heights under Discord's control. */
 [class*="containerDefault_"] [class*="link_"] {
   position: relative;
-  margin: 1px 8px;
+  margin-inline: 8px;
   border-radius: 8px !important;
-  transition: background-color 0.1s var(--fluenty-ease);
+  transition: background-color calc(0.1s * var(--fluenty-motion)) var(--fluenty-ease);
 }
 
 [class*="modeSelected"] [class*="link_"]::before {
@@ -366,16 +359,7 @@ button[class*="button_"][class*="primary_"]:not([class*="lookBlank"]):active {
   border-radius: 8px !important;
 }
 
-[class*="guilds_"] foreignObject {
-  mask: none !important;
-  clip-path: none !important;
-}
-
-[class*="guilds_"] [class*="blobContainer"] [class*="wrapper_"],
-[class*="guilds_"] [class*="listItem_"] [class*="wrapper_"] {
-  border-radius: 8px !important;
-  overflow: hidden;
-}
+/* Discord owns the server icon masks and badge clipping. */
 
 [class*="guilds_"] [class*="overlay_"] [class*="item_"] {
   background-color: var(--fluenty-accent-light) !important;
@@ -414,7 +398,6 @@ button[class*="button_"][class*="primary_"]:not([class*="lookBlank"]):active {
 /* 10b. SURFACES DISCORD REPAINTS */
 
 [class*="members_"],
-[class*="sidebar_"] [class*="container_"]:not([class*="panels_"] *),
 [class*="chat_"] [class*="container_"]:has(> [class*="membersWrap"]) {
   background-color: transparent !important;
 }
@@ -441,10 +424,8 @@ button[class*="button_"][class*="primary_"]:not([class*="lookBlank"]):active {
 
 /* 10c. LEFTOVER BLURPLE */
 
-[class*="switchIndicator_"],
 [class*="barFill_"],
-[class*="botTag_"],
-button[class*="primary_"] {
+[class*="botTag_"] {
   background-color: var(--fluenty-accent) !important;
 }
 
@@ -453,13 +434,12 @@ button[class*="primary_"] {
   background-color: var(--fluenty-fill-selected) !important;
 }
 
-[class*="switchIndicator_"]:has(~ * input:checked) {
-  background-color: #2f9e5f !important;
-}
-
 /* 11. CARD LAYOUT */
 
-:root {
+:root,
+.theme-dark,
+.theme-light,
+.theme-midnight {
   /* --- TUNE THESE --- */
   --fluenty-card: rgba(255, 255, 255, 0.05);
   --fluenty-card-hover: rgba(255, 255, 255, 0.09);
@@ -508,7 +488,7 @@ body,
   box-shadow: none !important;
 }
 
-[class*="chat_"] section:has([class*="toolbar_"]) {
+[class*="chat_"] section[class*="title_"]:has(> [class*="toolbar_"]) {
   background-color: var(--fluenty-card) !important;
   border: 1px solid var(--fluenty-card-stroke) !important;
   border-radius: 8px !important;
@@ -517,27 +497,17 @@ body,
   box-shadow: var(--elevation-low) !important;
 }
 
-[class*="chat_"] [class*="title_"] {
-  background-color: transparent !important;
-  border: none !important;
-  border-radius: 0 !important;
-  margin: 0 !important;
-  box-shadow: none !important;
-  height: auto !important;
-  min-height: 0 !important;
-}
-
-[class*="chat_"] section [class*="toolbar_"] {
+[class*="chat_"] section[class*="title_"] > [class*="toolbar_"] {
   background-color: var(--fluenty-card) !important;
   border: 1px solid var(--fluenty-card-stroke) !important;
   border-radius: 8px !important;
   align-self: center !important;
   padding: 2px 4px !important;
   box-shadow: var(--elevation-low) !important;
-  transition: background-color 0.12s var(--fluenty-ease);
+  transition: background-color calc(0.12s * var(--fluenty-motion)) var(--fluenty-ease);
 }
 
-[class*="chat_"] section [class*="toolbar_"]:hover {
+[class*="chat_"] section[class*="title_"] > [class*="toolbar_"]:hover {
   background-color: var(--fluenty-card-hover) !important;
 }
 
@@ -557,17 +527,23 @@ body,
   background-color: transparent !important;
 }
 
-[class*="form_"] {
+/* Keep a small inset below the final message. Inline-sized spacers belong
+   to Discord's scroll calculations and retain their supplied height. */
+[class*="messagesWrapper_"] [class*="scrollerSpacer_"]:last-child:not([style*="height"]) {
+  height: 12px !important;
+}
+
+[class*="chatContent_"] [class*="form_"] {
   background-color: transparent !important;
   padding: 28px var(--fluenty-gap) var(--fluenty-gap) var(--fluenty-gap) !important;
   margin-top: 0 !important;
 }
 
-[class*="form_"]::before {
+[class*="chatContent_"] [class*="form_"]::before {
   display: none !important;
 }
 
-[class*="typing_"] {
+[class*="chatContent_"] [class*="typing_"] {
   top: 2px !important;
   bottom: auto !important;
   left: var(--fluenty-gap) !important;
@@ -585,7 +561,8 @@ body,
 [class*="channelTextArea_"]:focus-within {
   background-color: rgb(var(--fluenty-30)) !important;
   border-color: var(--fluenty-card-stroke) !important;
-  border-bottom: 2px solid var(--fluenty-accent-light) !important;
+  border-bottom-color: var(--fluenty-accent-light) !important;
+  box-shadow: inset 0 -1px 0 var(--fluenty-accent-light) !important;
 }
 
 [class*="containerDefault_"] h3 {
@@ -597,7 +574,7 @@ body,
   padding: 2px 8px !important;
   width: auto !important;
   box-sizing: border-box !important;
-  transition: background-color 0.12s var(--fluenty-ease);
+  transition: background-color calc(0.12s * var(--fluenty-motion)) var(--fluenty-ease);
 }
 
 [class*="containerDefault_"] [class*="mainContent_"]:hover h3 {
@@ -618,7 +595,7 @@ body,
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  transition: background-color 0.12s var(--fluenty-ease);
+  transition: background-color calc(0.12s * var(--fluenty-motion)) var(--fluenty-ease);
 }
 
 [class*="containerDefault_"] [class*="addButton_"]:hover {
@@ -631,8 +608,7 @@ body,
   justify-content: space-between !important;
   background: none !important;
   padding: 0 8px !important;
-  margin: 10px 0 6px 0 !important;
-  height: auto !important;
+  margin-inline: 0 !important;
 }
 
 [class*="privateChannels_"] h2 [class*="headerText_"] {
@@ -643,7 +619,7 @@ body,
   border: 1px solid var(--fluenty-card-stroke) !important;
   border-radius: 8px !important;
   padding: 2px 8px !important;
-  transition: background-color 0.12s var(--fluenty-ease);
+  transition: background-color calc(0.12s * var(--fluenty-motion)) var(--fluenty-ease);
 }
 
 [class*="privateChannels_"] h2:hover [class*="headerText_"] {
@@ -660,7 +636,7 @@ body,
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  transition: background-color 0.12s var(--fluenty-ease);
+  transition: background-color calc(0.12s * var(--fluenty-motion)) var(--fluenty-ease);
 }
 
 [class*="privateChannels_"] h2 [role="button"]:hover {
@@ -676,7 +652,7 @@ body,
   margin: var(--fluenty-gap) !important;
   padding: 0 12px !important;
   box-shadow: var(--elevation-low) !important;
-  transition: background-color 0.12s var(--fluenty-ease);
+  transition: background-color calc(0.12s * var(--fluenty-motion)) var(--fluenty-ease);
 }
 
 [class*="sidebar_"] [class*="header_"]:not(h3):not(h2):hover {
@@ -690,7 +666,8 @@ body,
   box-shadow: none !important;
 }
 
-[class*="panels_"] > *:not(:empty):not(:last-child) {
+[class*="panels_"] > [class*="activityPanel_"]:not(:empty),
+[class*="panels_"] > [class*="wrapper_"]:not(:empty) {
   background-color: var(--fluenty-panel) !important;
   background-image: var(--fluenty-panel-sheen) !important;
   border: 1px solid var(--fluenty-card-stroke) !important;
@@ -743,26 +720,24 @@ body,
   background-color: transparent !important;
 }
 
-[class*="panels_"] > *:last-child {
+[class*="panels_"] > [class*="container_"] {
   background-color: var(--fluenty-panel) !important;
   background-image: var(--fluenty-panel-sheen) !important;
   border: 1px solid var(--fluenty-card-stroke) !important;
   box-shadow: var(--elevation-low) !important;
-  position: relative !important;
-  overflow: hidden !important;
   border-radius: 10px !important;
   margin: 0 8px 8px 8px !important;
   padding: 2px 4px !important;
-  transition: background-color 0.12s var(--fluenty-ease);
+  transition: background-color calc(0.12s * var(--fluenty-motion)) var(--fluenty-ease);
 }
 
-[class*="panels_"] > *:last-child:hover {
+[class*="panels_"] > [class*="container_"]:hover {
   background-color: var(--fluenty-panel-hover) !important;
 }
 
 [class*="panels_"] button[class*="button_"] {
   border-radius: 6px !important;
-  transition: background-color 0.12s var(--fluenty-ease);
+  transition: background-color calc(0.12s * var(--fluenty-motion)) var(--fluenty-ease);
 }
 
 [class*="panels_"] button[class*="button_"]:hover {
@@ -773,22 +748,19 @@ body,
   background-color: transparent !important;
 }
 
-[class*="panels_"] [class*="fitInAccount_"] {
-  position: absolute !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  border-radius: inherit !important;
-  z-index: 0;
+[class*="sidebarList_"],
+[class*="sidebarList_"] [class*="container_"]:has(> [class*="scroller_"]),
+[class*="sidebarList_"] [class*="container_"]:has(> #channels) {
+  background-color: var(--fluenty-mica) !important;
 }
 
-[class*="sidebarList_"] {
+/* The scroller overlaps the banner's lower portion. Let the banner and the
+   mica surface behind the channel rows show through. */
+[class*="sidebarList_"] #channels {
   background-color: transparent !important;
 }
 
-[class*="scrollerSpacer_"] {
-  height: 12px !important;
-}
+/* Room for avatars, names and status text inside each member card. */
 
 [class*="membersWrap"] [class*="member_"] {
   background-color: var(--fluenty-card) !important;
@@ -796,33 +768,26 @@ body,
   background-image: var(--fluenty-member-sheen) !important;
   border: none !important;
   border-radius: 10px !important;
-  margin: 3px 10px !important;
-  padding: 0 !important;
-  min-height: 48px !important;
+  min-height: 52px !important;
+  margin: 0 10px 8px !important;
   box-sizing: border-box;
-  position: relative !important;
-  overflow: hidden !important;
-  display: flex !important;
-  align-items: stretch !important;
-  transition: background-color 0.12s var(--fluenty-ease);
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  transition: background-color calc(0.12s * var(--fluenty-motion)) var(--fluenty-ease);
 }
 
-[class*="membersWrap"] [class*="childContainer_"] {
-  position: relative !important;
-  flex: 1 1 auto !important;
-  align-self: stretch !important;
-  width: 100% !important;
+/* Stretch the nameplate wrapper with the card and center its contents. */
+[class*="membersWrap"] [class*="member_"] > [class*="childContainer_"] {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
   height: auto !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  box-sizing: border-box !important;
-  border-radius: inherit !important;
-  overflow: hidden !important;
-  display: flex !important;
-  align-items: center !important;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
-/* Padding only — a width override here is what threw the rows out of line. */
 [class*="membersWrap"] [class*="memberInner_"] {
   padding: 0 8px !important;
 }
@@ -845,8 +810,7 @@ body,
 [class*="privateChannels_"] [class*="scroller_"],
 [class*="nowPlayingColumn_"],
 [class*="tabBody_"],
-main:has(> [class*="tabBody_"]),
-[class*="container_"][class*="themed_"] {
+main:has(> [class*="tabBody_"]) {
   background-color: transparent !important;
 }
 
@@ -868,7 +832,7 @@ main:has(> [class*="tabBody_"]),
 /* The round message / more buttons on each friend row */
 [class*="actionButton_"] {
   background-color: var(--fluenty-card) !important;
-  transition: background-color 0.1s var(--fluenty-ease);
+  transition: background-color calc(0.1s * var(--fluenty-motion)) var(--fluenty-ease);
 }
 
 [class*="actionButton_"]:hover {
@@ -911,40 +875,26 @@ main:has(> [class*="tabBody_"]),
   background-color: var(--fluenty-accent) !important;
 }
 
-/* TODO: couldn't find a real checkbox to test — every toggle we ran into
-   turned out to be a switch (switchIndicator_ above, which does work) */
-[class*="checkboxIndicator_"] {
-  background-color: var(--fluenty-accent) !important;
-  border-color: var(--fluenty-accent) !important;
-  border-radius: 4px !important;
-  transition: background-color 0.12s var(--fluenty-ease), border-color 0.12s var(--fluenty-ease);
-}
-
-[aria-checked="true"] [class*="checkboxIndicator_"] {
-  background-color: #2f9e5f !important;
-  border-color: #2f9e5f !important;
-}
+/* Switches and checkboxes keep Discord's state colors. */
 
 /* Add Friend keeps the accent color — it's a primary action */
 [class*="addFriend_"] {
   background-color: var(--fluenty-accent) !important;
 }
 
-[class*="childWrapper_"] {
+[class*="guilds_"] [class*="childWrapper_"] {
   background-color: var(--fluenty-card) !important;
-  transition: background-color 0.15s var(--fluenty-ease);
+  transition: background-color calc(0.15s * var(--fluenty-motion)) var(--fluenty-ease);
 }
 
-[class*="listItem_"]:hover [class*="childWrapper_"] {
+[class*="guilds_"] [class*="listItem_"]:hover [class*="childWrapper_"] {
   background-color: var(--fluenty-accent) !important;
 }
 
 /* 11d. PROFILES */
 
-/* dropped the old [style*="--background-surface-high"] guard, it stopped
-   matching a while back — .user-profile-popout alone is stable enough */
+/* Keep native profile backgrounds and avoid filtering content behind them. */
 .user-profile-popout {
-  backdrop-filter: blur(30px) saturate(1.25);
   border: 1px solid var(--fluenty-card-stroke) !important;
   border-radius: 10px !important;
   box-shadow: var(--elevation-high) !important;
@@ -967,10 +917,15 @@ main:has(> [class*="tabBody_"]),
 
 /* 12. MOTION */
 
-[class*="menu_"],
-[class*="modal_"],
-[class*="layer_"] {
-  animation-timing-function: var(--fluenty-ease-out) !important;
+/* Only the theme's transitions use this multiplier. Plugin and client
+   animations keep their own timing and reduced-motion handling. */
+@media (prefers-reduced-motion: reduce) {
+  :root,
+  .theme-dark,
+  .theme-light,
+  .theme-midnight {
+    --fluenty-motion: 0;
+  }
 }
 
 /* 13. HOME BUTTON LOGO */
