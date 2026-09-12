@@ -5,46 +5,77 @@
    ============================================================================= */
 
 var RootScope = null;
-var Scope = null;
-var RequestNum = {};
+var Scope = null; // Used by the stock Workshop controllers.
+var ServerScope = null;
+var RequestNum = Object.create( null );
 var DigestUpdate = 0;
-var ServerTypes = {};
+var ServerTypes = Object.create( null );
 var FirstTime = true;
 var UpdateInterval = undefined;
+var RecentServersUpdate;
+var HistoryTimeout;
 
 function EnsureServerType( type ) {
 	if ( !ServerTypes[type] ) {
-		ServerTypes[type] = { gamemodes: {}, list: [] };
+		ServerTypes[type] = { gamemodes: Object.create( null ), list: [], addresses: Object.create( null ) };
 	}
 }
 
 function PreloadHistoryAtBoot() {
-	EnsureServerType( 'history' );
+	RootScope = gScope.$root;
+	RootScope.GMCats = [ 'rp', 'pvp', 'pve', 'other', 'none' ];
+	if ( RequestNum.history ) return;
+	RefreshServerType( 'history' );
+}
 
-	if ( !RequestNum['history'] ) {
-		RequestNum['history'] = 1;
-	} else {
-		RequestNum['history']++;
+function RefreshServerType( type )
+{
+	EnsureServerType( type );
+	RequestNum[type] = ( RequestNum[type] || 0 ) + 1;
+	ServerTypes[type].gamemodes = Object.create( null );
+	ServerTypes[type].addresses = Object.create( null );
+	ServerTypes[type].list.length = 0;
+	RootScope.Refreshing = RootScope.Refreshing || {};
+	RootScope.ServerCount = RootScope.ServerCount || {};
+	RootScope.Refreshing[type] = "true";
+	RootScope.ServerCount[type] = 0;
+	if ( type === 'history' )
+	{
+		gScope.RecentServersLoading = true;
+		clearTimeout( HistoryTimeout );
+		HistoryTimeout = setTimeout( function() {
+			lua.Run( "DoStopServers( %s )", 'history' );
+			FinishedServers( 'history' );
+		}, 15000 );
 	}
+	// Initialize state before the engine can deliver any results.
+	if ( !IN_ENGINE ) TestUpdateServers( type, RequestNum[type] );
+	lua.Run( "GetServers( %s, %s )", type, String( RequestNum[type] ) );
+	UpdateDigest( RootScope, 100 );
+}
 
-	if ( !IN_ENGINE ) TestUpdateServers( 'history', RequestNum['history'] );
-
-	lua.Run( "GetServers( %s, %s )", 'history', String( RequestNum['history'] ) );
-
-	RootScope = RootScope || gScope;
-	if ( RootScope ) {
-		if ( !RootScope.Refreshing ) RootScope.Refreshing = {};
-		if ( !RootScope.ServerCount ) RootScope.ServerCount = {};
-		RootScope.Refreshing['history'] = "true";
-		RootScope.ServerCount['history'] = 0;
-		UpdateDigest( RootScope, 50 );
+function StopServerQueries()
+{
+	clearInterval( UpdateInterval );
+	if ( !RootScope || !RootScope.Refreshing ) return;
+	for ( var type in RootScope.Refreshing )
+	{
+		if ( RootScope.Refreshing[type] !== "true" ) continue;
+		lua.Run( "DoStopServers( %s )", type );
+		FinishedServers( type );
 	}
+}
+
+function StripWeirdSymbols( name )
+{
+	return String( name || "" ).replace( /[\u1400-\u169F\u16A0-\u16FF\u2100-\u23FF\u2580-\u259F\u25A0-\u27BF\u2900-\u297F\u2A00-\u2BFF\u3000-\u303F]/g, "" )
+		.replace( /[\uD808\uD809\uD835\uD83C-\uD83E][\uDC00-\uDFFF]|\u3299\uFE0F/g, "" );
 }
 
 function ControllerServers( $scope, $element, $rootScope, $location )
 {
 	RootScope = $rootScope;
-	Scope = $scope;
+	ServerScope = $scope;
 
 	RootScope.ShowTab = 'internet';
 	RootScope.GMCats = [ 'rp', 'pvp', 'pve', 'other', 'none' ];
@@ -61,6 +92,19 @@ function ControllerServers( $scope, $element, $rootScope, $location )
 	RootScope.GMHasFilterTags = false;
 	RootScope.ServersPerPage = 128;
 	$scope.JoinIfHasSlot = false;
+
+	$scope.$watchGroup( [ 'CurrentGamemode.Search', 'CurrentGamemode.OrderByMain',
+		'CurrentGamemode.OrderReverse', 'SVFilterHasPly', 'SVFilterNotFull',
+		'SVFilterHidePass', 'SVFilterHideOutdated', 'SVFilterMaxPing',
+		'SVFilterPlyMin', 'SVFilterPlyMax' ], ResetServerScroll );
+	$scope.$watchCollection( 'CurrentGamemode.FilterFlags', ResetServerScroll );
+
+	function ResetServerScroll()
+	{
+		if ( RootScope.CurrentGamemode ) RootScope.CurrentGamemode.server_offset = 0;
+		var body = $element[0].querySelector( '.serverlist .body' );
+		if ( body ) body.scrollTop = 0;
+	}
 
 	$scope.FindServerString = "";
 	$scope.FoundServers = [];
@@ -81,44 +125,25 @@ function ControllerServers( $scope, $element, $rootScope, $location )
 	{
 		$scope.DoStopRefresh();
 		clearInterval( UpdateInterval );
+		$scope.JoinIfHasSlot = false;
+		if ( RootScope.CurrentGamemode ) RootScope.CurrentGamemode.Selected = null;
+		if ( ServerScope === $scope ) ServerScope = null;
 	} );
 
 	$scope.Refresh = function()
 	{
 		if ( !RootScope.ServerType ) return;
 
-		if ( !RequestNum[ RootScope.ServerType ] )
-		{
-			RequestNum[ RootScope.ServerType ] = 1;
-		}
-		else
-		{
-			RequestNum[ RootScope.ServerType ]++;
-		}
-
-		//
-		// Clear out all of the servers
-		//
-		ServerTypes[ RootScope.ServerType ].gamemodes = {};
-		ServerTypes[ RootScope.ServerType ].list.length = 0;
-
-		if ( !IN_ENGINE ) TestUpdateServers( RootScope.ServerType, RequestNum[ RootScope.ServerType ] );
-
-		//
-		// Get the server list from the engine
-		//
-		lua.Run( "GetServers( %s, %s )", RootScope.ServerType, String( RequestNum[ RootScope.ServerType ] ) );
-
-		RootScope.Refreshing[ RootScope.ServerType ] = "true";
-		RootScope.ServerCount[ RootScope.ServerType ] = 0;
-		UpdateDigest( RootScope, 50 );
+		$scope.SelectGamemode( null );
+		RefreshServerType( RootScope.ServerType );
 	}
 
 	$scope.SelectServer = function( server, event )
 	{
 		if ( server == null )
 		{
-			RootScope.CurrentGamemode.Selected = null;
+			if ( RootScope.CurrentGamemode ) RootScope.CurrentGamemode.Selected = null;
+			$scope.JoinIfHasSlot = false;
 			clearInterval( UpdateInterval );
 			return;
 		}
@@ -148,6 +173,9 @@ function ControllerServers( $scope, $element, $rootScope, $location )
 
 	$scope.SelectGamemode = function( gm )
 	{
+		clearInterval( UpdateInterval );
+		$scope.JoinIfHasSlot = false;
+		if ( RootScope.CurrentGamemode ) RootScope.CurrentGamemode.Selected = null;
 		RootScope.CurrentGamemode = gm;
 
 		if ( gm ) gm.server_offset = 0;
@@ -191,14 +219,14 @@ function ControllerServers( $scope, $element, $rootScope, $location )
 		if ( !gm ) return "Unknown Gamemode";
 
 		if ( gm.info && gm.info.title )
-			return gm.info.title.replace( /[\u2580-\u259F\u25A0-\u25FF\u2600-\u26FF\u2700-\u27BF\u2B00-\u2BFF]/g, "" );;
+			return StripWeirdSymbols( gm.info.title );
 
-		return gm.name.replace( /[\u2580-\u259F\u25A0-\u25FF\u2600-\u26FF\u2700-\u27BF\u2B00-\u2BFF]/g, "" );;
+		return StripWeirdSymbols( gm.name );
 	}
 
 	$scope.ServerName = function( server )
 	{
-		return server.name.replace( /[\u2580-\u259F\u25A0-\u25FF\u2600-\u26FF\u2700-\u27BF\u2B00-\u2BFF]/g, "" );
+		return server.name;
 	}
 
 	$scope.JoinServer = function( srv )
@@ -215,16 +243,9 @@ function ControllerServers( $scope, $element, $rootScope, $location )
 		lua.Run( "JoinServer( %s )", srv.address );
 
 		// Stop updating so we are not spamming connections and potentially crash player's internet
-		$scope.DoStopRefresh();
+		StopServerQueries();
 	}
 	$rootScope.JoinServer = $scope.JoinServer;
-
-	$scope.PasswordInput = function( e, srv )
-	{
-		if ( e.keyCode == 13 )
-			$scope.JoinServer( srv )
-	}
-	$rootScope.PasswordInput = $scope.PasswordInput;
 
 	$scope.PasswordInput = function( e, srv )
 	{
@@ -239,14 +260,12 @@ function ControllerServers( $scope, $element, $rootScope, $location )
 
 		// Stop refreshing previous type
 		$scope.DoStopRefresh();
+		$scope.SelectGamemode( null );
 
 		var FirstTime = false;
 		if ( !ServerTypes[type] )
 		{
-			ServerTypes[type] = {
-				gamemodes: {},
-				list: []
-			};
+			EnsureServerType( type );
 
 			FirstTime = true;
 		}
@@ -258,16 +277,6 @@ function ControllerServers( $scope, $element, $rootScope, $location )
 		if ( FirstTime )
 		{
 			$scope.Refresh();
-
-			if ( type === 'history' )
-			{
-				setTimeout( function() {
-					if ( gScope && gScope.UpdateRecentServers )
-					{
-						gScope.UpdateRecentServers();
-					}
-				}, 1000 );
-			}
 		}
 		else if ( type === 'history' )
 		{
@@ -368,8 +377,8 @@ function ControllerServers( $scope, $element, $rootScope, $location )
 
 	$scope.FindServersAtAddress = function()
 	{
-		Scope.FoundServers = [];
-		if ( Scope.FindServerString <= 0 ) return;
+		ServerScope.FoundServers = [];
+		if ( !ServerScope.FindServerString.trim() ) return;
 
 		if ( !IN_ENGINE )
 		{
@@ -379,14 +388,23 @@ function ControllerServers( $scope, $element, $rootScope, $location )
 			] );
 		}
 
-		lua.Run( "FindServersAtAddress( %s )", Scope.FindServerString.trim() );
+		lua.Run( "FindServersAtAddress( %s )", ServerScope.FindServerString.trim() );
 
 		UpdateDigest( RootScope, 50 );
 	}
 
 	$rootScope.ShowBack = true;
 
-	if ( FirstTime )
+	if ( RootScope.PendingRecentServer )
+	{
+		var recent = RootScope.PendingRecentServer;
+		delete RootScope.PendingRecentServer;
+		$scope.SwitchType( 'history' );
+		$scope.SelectGamemode( GetGamemode( recent.gamemode, 'history' ) );
+		$scope.SelectServer( recent );
+		FirstTime = false;
+	}
+	else if ( FirstTime )
 	{
 		FirstTime = false;
 		$scope.SwitchType( 'internet' );
@@ -395,8 +413,12 @@ function ControllerServers( $scope, $element, $rootScope, $location )
 
 function FinishedServers( type )
 {
+	if ( !RootScope || !RootScope.Refreshing ) return;
 	RootScope.Refreshing[type] = "false";
 	if ( type === 'history' && typeof gScope !== 'undefined' && gScope && gScope.UpdateRecentServers ) {
+		clearTimeout( HistoryTimeout );
+		clearTimeout( RecentServersUpdate );
+		RecentServersUpdate = null;
 		gScope.UpdateRecentServers();
 	}
 	UpdateDigest( RootScope, 50 );
@@ -418,7 +440,7 @@ function GetGamemode( name, type )
 		sort_players:	0,
 		OrderByMain:	'recommended',
 		OrderBy:		[ 'recommended', 'ping', 'address' ],
-		info:			GetGamemodeInfo( name ),
+		info:			{ title: GetGamemodeInfo( name ).title, name: name },
 		FilterFlags:	{},
 		HasPreferFlags:	false
 	};
@@ -460,28 +482,14 @@ function CalculateRank( server )
 	return recommended;
 }
 
-// Generate a flag from sevrer name if the server doesn't have it set.
-// This is a temporary measure and should not be relied on, you should use sv_location
-var prefixes = { ru: "ru", rus: "ru", fr: "fr", usa: "us", uk: "gb", en: "gb", eng: "gb", ger: "de", pl: "pl", dk: "dk", eu: "eu" };
-function GenerateFlag( server )
-{
-	for ( var key in prefixes )
-	{
-		var s = server.name.toLowerCase().indexOf( "[" + key + "]" );
-		if ( s == -1 ) continue;
-		server.name = server.name.replace( server.name.substring( s, s + key.length + 2 ), "" ).trim();
-		return prefixes[ key ];
-	}
-
-	return "";
-}
-
 function UpdateInfiniteScroll( elem )
 {
 	if ( !RootScope.CurrentGamemode ) return;
 
-	RootScope.CurrentGamemode.server_offset = Math.max( Math.floor( elem.scrollTop / 22 ) - ( RootScope.ServersPerPage / 4 ), 0 );
-	RootScope.CurrentGamemode.server_offset -= RootScope.CurrentGamemode.server_offset % 2; // Keeps the style of every other line consistent.
+	var offset = Math.max( Math.floor( elem.scrollTop / 22 ) - ( RootScope.ServersPerPage / 4 ), 0 );
+	offset -= offset % 2; // Keep alternating row colors stable.
+	if ( RootScope.CurrentGamemode.server_offset === offset ) return;
+	RootScope.CurrentGamemode.server_offset = offset;
 	UpdateDigest( RootScope, 50 );
 }
 
@@ -497,14 +505,16 @@ function UpdateServer( address, ping, name, map, players, maxplayers, botplayers
 	if ( server.address != address ) return;
 
 	server.ping = parseInt( ping );
-	server.name = name;
+	server.name = StripWeirdSymbols( name.trim() );
 	server.map = map;
 	server.players = parseInt( players ) - parseInt( botplayers );
 	server.maxplayers = parseInt( maxplayers ) - parseInt( botplayers );
 	server.botplayers = parseInt( botplayers );
-	server.pass = pass == "1";
+	server.pass = pass === true || pass == "1" || pass == "true";
+	server.hasmap = DoWeHaveMap( map );
+	server.recommended = CalculateRank( server );
 
-	if ( Scope.JoinIfHasSlot && server.players < server.maxplayers )
+	if ( ServerScope && ServerScope.JoinIfHasSlot && server.players < server.maxplayers )
 	{
 		RootScope.JoinServer( server );
 	}
@@ -514,7 +524,8 @@ function UpdateServer( address, ping, name, map, players, maxplayers, botplayers
 
 function AddServer( type, id, ping, name, desc, map, players, maxplayers, botplayers, pass, lastplayed, address, gamemode, workshopid, isAnon, version, isFav, loc, gmcat )
 {
-	if ( id != RequestNum[ type ] ) return;
+	if ( !ServerTypes[type] || id != RequestNum[ type ] ) return;
+	if ( ServerTypes[type].addresses[address] ) return;
 
 	if ( !gamemode ) gamemode = desc;
 	if ( maxplayers <= 1 ) return;
@@ -546,27 +557,26 @@ function AddServer( type, id, ping, name, desc, map, players, maxplayers, botpla
 	var data =
 	{
 		ping:			parseInt( ping ),
-		name:			name.trim(),
+		name:			StripWeirdSymbols( name.trim() ),
 		desc:			desc,
 		map:			map,
 		players:		parseInt( players ) - parseInt( botplayers ),
 		maxplayers:		parseInt( maxplayers ) - parseInt( botplayers ),
 		botplayers:		parseInt( botplayers ),
-		pass:			pass == "1",
-		lastplayed:		parseInt( lastplayed ) * 1000, // Steam gives us time in seconds
+		pass:			pass === true || pass == "1" || pass == "true",
+		lastplayed:		( parseInt( lastplayed ) || 0 ) * 1000, // Steam gives us time in seconds
 		address:		address,
-		flag: 			loc.toLowerCase(),
+		flag: 			( loc || "" ).toLowerCase(),
 		category: 		gmcat || "",
 		gamemode:		gamemode,
 		password:		'',
 		workshopid:		workshopid,
-		isAnon:			isAnon,
+		isAnon:			isAnon === true || isAnon == "true" || isAnon == "1",
 		version:		FormatVersion( version ),
 		version_c:		( version > GMOD_VERSION_INT ) ? 1 : ( GMOD_VERSION_INT == version ? 0 : -1 ),
 		favorite:		isFav == "true"
 	};
 
-	if ( !data.flag ) data.flag = GenerateFlag( data );
 	if ( data.flag == "eu" ) data.flag = "europeanunion"; // ew
 
 	if ( !IN_ENGINE && !version ) data.version_c = 0;
@@ -587,6 +597,7 @@ function AddServer( type, id, ping, name, desc, map, players, maxplayers, botpla
 	if ( data.listen ) data.desc = data.desc.substr( 4 );
 
 	var gm = GetGamemode( data.gamemode, type );
+	ServerTypes[type].addresses[address] = true;
 	gm.servers.push( data );
 
 	UpdateGamemodeInfo( data, type );
@@ -604,11 +615,19 @@ function AddServer( type, id, ping, name, desc, map, players, maxplayers, botpla
 
 	RootScope.ServerCount[ type ] += 1;
 
-	UpdateDigest( RootScope, 50 );
+	if ( type === 'history' && !RecentServersUpdate )
+	{
+		RecentServersUpdate = setTimeout( function() {
+			RecentServersUpdate = null;
+			gScope.UpdateRecentServers();
+		}, 250 );
+	}
+	UpdateDigest( RootScope, 100 );
 }
 
 function MissingGamemodeIcon( element )
 {
+	element.onerror = null;
 	if ( !IN_ENGINE )
 	{
 		element.src = "img/addons.png";
@@ -621,13 +640,14 @@ function MissingGamemodeIcon( element )
 
 function MissingFlag( element )
 {
+	element.onerror = null;
 	element.src = "img/unk_flag.png";
 	return true;
 }
 
 function ReverseFilter( me )
 {
-	cat = me.dataset.cat;
+	var cat = me.dataset.cat;
 
 	RootScope.GMCats.forEach( function( category )
 	{
@@ -645,7 +665,7 @@ function ReverseFilter( me )
 
 function SwitchFilter( me )
 {
-	cat = me.dataset.cat;
+	var cat = me.dataset.cat;
 
 	if ( me.checked )
 	{
@@ -676,7 +696,7 @@ function GetHighestKey( obj )
 	var h = 0;
 	var v = "";
 
-	for ( k in obj )
+	for ( var k in obj )
 	{
 		if ( h == 0 || obj[k] > h )
 		{
@@ -693,10 +713,10 @@ function GetHighestKey( obj )
 //
 function UpdateGamemodeInfo( server, type )
 {
-	var gi = GetGamemodeInfo( server.gamemode );
+	var gi = GetGamemode( server.gamemode, type ).info;
 
 	// Use the most common title
-	if ( !gi.titles ) gi.titles = {};
+	if ( !gi.titles ) gi.titles = Object.create( null );
 
 	// First try to see if we have a capitalized version already (i.e. sandbox should be Sandbox)
 	if ( server.desc == server.gamemode.toLowerCase() )
@@ -721,7 +741,7 @@ function UpdateGamemodeInfo( server, type )
 	// categories
 	if ( server.category != "" )
 	{
-		if ( !gi.categories ) gi.categories = {};
+		if ( !gi.categories ) gi.categories = Object.create( null );
 		if ( !gi.categories[ server.category ] ) { gi.categories[ server.category ] = 1; } else { gi.categories[ server.category ]++; }
 		gi.tag = GetHighestKey( gi.categories );
 		if ( gi.tag ) gi.tag_set = true;
@@ -744,7 +764,7 @@ function UpdateGamemodeInfo( server, type )
 	// Use the most common workshop id
 	if ( server.workshopid != "" && server.workshopid != "0" )
 	{
-		if ( !gi.wsid ) gi.wsid = {};
+		if ( !gi.wsid ) gi.wsid = Object.create( null );
 		if ( !gi.wsid[ server.workshopid ] ) { gi.wsid[ server.workshopid ] = 1; } else { gi.wsid[ server.workshopid ]++; }
 		gi.workshopid = GetHighestKey( gi.wsid );
 	}
@@ -761,7 +781,8 @@ function UpdateGamemodeInfo( server, type )
 
 function ReceiveFoundServers( data )
 {
-	Scope.FoundServers = data;
+	if ( !ServerScope || ServerScope.$$destroyed ) return;
+	ServerScope.FoundServers = data;
 
 	UpdateDigest( RootScope, 60 );
 }

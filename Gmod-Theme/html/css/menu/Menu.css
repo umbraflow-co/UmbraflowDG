@@ -293,8 +293,6 @@ DIV.gridicon name {
     color: var(--text);
     padding: 8px;
     background-color: var(--acrylic-strong);
-    -webkit-backdrop-filter: blur(30px) saturate(125%);
-    backdrop-filter: blur(30px) saturate(125%);
 }
 
 DIV.disabled name {
@@ -312,8 +310,8 @@ DIV.disabled {
 
 .topnav {
     background-color: var(--acrylic);
-    -webkit-backdrop-filter: blur(30px) saturate(125%);
-    backdrop-filter: blur(30px) saturate(125%);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     border: 1px solid var(--stroke-card);
     padding: 5px;
     border-radius: var(--radius-overlay);
@@ -386,8 +384,8 @@ loading {
     font-weight: 600;
     padding: 6px 12px;
     background-color: var(--acrylic);
-    -webkit-backdrop-filter: blur(30px) saturate(125%);
-    backdrop-filter: blur(30px) saturate(125%);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     border: 1px solid var(--stroke-card);
     border-radius: var(--radius-control);
     box-shadow: var(--shadow-card);
@@ -492,8 +490,8 @@ loading {
 
 .news_item div {
     background: var(--acrylic-strong);
-    -webkit-backdrop-filter: blur(30px) saturate(125%);
-    backdrop-filter: blur(30px) saturate(125%);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     border-radius: 0;
     border-top: 1px solid var(--stroke-card);
     display: block;
@@ -533,5 +531,12 @@ loading {
     .news {
         right: 5px;
         top: 65px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        transition: none !important;
+        animation: none !important;
     }
 }

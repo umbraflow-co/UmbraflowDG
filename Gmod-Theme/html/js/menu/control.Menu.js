@@ -11,14 +11,14 @@ if (!IN_ENGINE)
 }
 
 var gScope = null;
-var GamemodeDetails = {}
-var MapIndex = {}
+var GamemodeDetails = Object.create( null );
+var MapIndex = Object.create( null );
 
 	console.log( "\nThanks for using Umbraflow\nMade by Big_Killers | v1.0.0" );
 
 var subscriptions = new Subscriptions();
 
-function MenuController( $scope, $rootScope )
+function MenuController( $scope, $rootScope, $location )
 {
 	$rootScope.ShowBack = false;
 	$scope.Version = "0";
@@ -164,7 +164,7 @@ function MenuController( $scope, $rootScope )
 	// Kinect options
 	$scope.kinect =
 	{
-		available: util.MotionSensorAvailable(),
+		available: false,
 		show_color: false,
 		color_options: [ "topleft", "topright", "bottomleft", "bottomright" ],
 		color: "bottomleft",
@@ -194,6 +194,7 @@ function MenuController( $scope, $rootScope )
 
 	util.MotionSensorAvailable( function( available ) {
 		$scope.kinect.available = available;
+		UpdateDigest( $scope, 50 );
 	} );
 
 	$scope.RecentServers = [];
@@ -201,38 +202,44 @@ function MenuController( $scope, $rootScope )
 
 	$scope.UpdateRecentServers = function()
 	{
-		if ( !ServerTypes || !ServerTypes['history'] || !ServerTypes['history'].gamemodes )
+		var history = ServerTypes.history;
+		if ( !history )
 		{
 			$scope.RecentServers = [];
-			$scope.RecentServersLoading = true;
+			$scope.RecentServersLoading = false;
 			return;
 		}
 
-		var allServers = [];
-
-		for ( var gmName in ServerTypes['history'].gamemodes )
+		// Keep only the three newest entries while walking the history.
+		var recent = [];
+		for ( var gmName in history.gamemodes )
 		{
-			var gamemode = ServerTypes['history'].gamemodes[ gmName ];
-			if ( gamemode.servers && gamemode.servers.length > 0 )
+			var servers = history.gamemodes[ gmName ].servers;
+			for ( var i = 0; i < servers.length; i++ )
 			{
-				allServers = allServers.concat( gamemode.servers );
+				var server = servers[i];
+				var position = 0;
+				while ( position < recent.length && recent[position].lastplayed >= server.lastplayed ) position++;
+				if ( position >= 3 ) continue;
+				recent.splice( position, 0, server );
+				if ( recent.length > 3 ) recent.pop();
 			}
 		}
-
-		allServers.sort( function( a, b ) {
-			return ( b.lastplayed || 0 ) - ( a.lastplayed || 0 );
-		} );
-
-		$scope.RecentServers = allServers.slice( 0, 5 );
-		$scope.RecentServersLoading = false;
+		$scope.RecentServers = recent;
+		$scope.RecentServersLoading = recent.length === 0 && $rootScope.Refreshing.history === "true";
 		UpdateDigest( $scope, 50 );
 	};
 
 	$scope.JoinRecentServer = function( server )
 	{
-		if ( server.password )
-			lua.Run( "RunConsoleCommand( \"password\", %s )", server.password );
-
+		if ( !server || !server.address ) return;
+		if ( server.pass )
+		{
+			$rootScope.PendingRecentServer = server;
+			$location.path( '/servers/' );
+			return;
+		}
+		StopServerQueries();
 		lua.Run( "JoinServer( %s )", server.address );
 	};
 
@@ -259,7 +266,7 @@ function SetShowFavButton( bShow, bFav )
 function UpdateGamemodes( gm )
 {
 	gScope.Gamemodes = [];
-	for ( k in gm )
+	for ( var k in gm )
 	{
 		var gi = GetGamemodeInfo( gm[k].name );
 		gi.title = gm[k].title
@@ -277,7 +284,7 @@ function UpdateCurrentGamemode( gm )
 
 	gScope.Gamemode = gm;
 
-	for ( k in gScope.Gamemodes )
+	for ( var k in gScope.Gamemodes )
 	{
 		if ( gScope.Gamemodes[k].name == gm )
 			gScope.GamemodeTitle = gScope.Gamemodes[k].title;
@@ -296,7 +303,7 @@ function GetGamemodeInfo( name )
 
 function ResetGamemodeInfo()
 {
-	GamemodeDetails = {};
+	GamemodeDetails = Object.create( null );
 }
 
 function UpdateAddonMaps( inmaps )
@@ -309,15 +316,16 @@ function UpdateMaps( inmaps )
 {
 	var mapList = [];
 	var favList = {};
+	MapIndex = Object.create( null );
 
-	for ( k in inmaps )
+	for ( var k in inmaps )
 	{
 		var order = k;
 		if ( k == 'Sandbox' ) order = '2';
 		if ( k == 'Favourites' ) order = '1';
 
 		var maps = []
-		for ( v in inmaps[k] )
+		for ( var v in inmaps[k] )
 		{
 			maps.push( inmaps[k][v] );
 			MapIndex[ inmaps[k][v].toLowerCase() ] = true;
@@ -346,7 +354,7 @@ function UpdateLanguages( lang )
 {
 	gScope.Languages = [];
 
-	for ( k in lang )
+	for ( var k in lang )
 	{
 		gScope.Languages.push( lang[k].substr( 0, lang[k].length - 4 ) )
 	}
@@ -363,7 +371,7 @@ function UpdateGames( games )
 {
 	gScope.Games = [];
 
-	for ( k in games )
+	for ( var k in games )
 	{
 		games[k].mounted	= games[k].mounted == 1;
 		games[k].installed	= games[k].installed == 1;
@@ -403,9 +411,17 @@ function SetProblemCount( num, severity )
 // buttons (.button), dialog command buttons (.centermessage a / .button) and
 // anything explicitly tagged .noisy / .ui_sound_return.
 var UMBRA_HOVER_SELECTOR =
-	".options a, .button, .noisy, .ui_sound_return, .centermessage a, .centermessage .button, ul.popup li";
+	".options a, .button, .noisy, .ui_sound_return, .centermessage a, .centermessage .button, ul.popup li, #RecentServers .server-item";
 
-$(document).on( "mouseenter", UMBRA_HOVER_SELECTOR,	function() { lua.PlaySound( "umbraflow/hover.wav" ); } );
+var lastUmbraHover = 0;
+$(document).on( "mouseenter", UMBRA_HOVER_SELECTOR, function( event ) {
+	if ( $(event.target).closest( UMBRA_HOVER_SELECTOR )[0] !== this ) return;
+	if ( this.disabled || $(this).hasClass( 'disabled' ) ) return;
+	var now = Date.now();
+	if ( now - lastUmbraHover < 60 ) return;
+	lastUmbraHover = now;
+	lua.PlaySound( "umbraflow/hover.wav" );
+} );
 
 // Click sounds keep the stock Garry's Mod feedback.
 $(document).on( "click", ".options a",				function() { lua.PlaySound( "garrysmod/ui_click.wav" ); } );

@@ -2,71 +2,6 @@
    UMBRAFLOW  —  Fluent-inspired Garry's Mod menu theme.
    Created by Big_Killers  ·  v1.0.0  ·  © Big_Killers. All rights reserved.
    ========================================================================== */
-:root {
-    /* Accent — Umbraflow violet by default, Fluent green alternative in comments. */
-    --accent:             #b18cff;  /* green: #6ccb5f */
-    --accent-hover:       #a274ff;  /* green: #57c24a */
-    --accent-pressed:     #8b57e6;  /* green: #4caf43 */
-    --accent-text:        #d8c4ff;  /* green: #a7e59d */
-    --accent-on:          #000000;  /* green: #000000 */
-    --accent-subtle:      rgba(177, 140, 255, 0.16);
-    --accent-glow:        rgba(177, 140, 255, 0.28);
-
-    /* Surfaces */
-    --surface-base:       #202020;
-    --surface-alt:        #1c1c1c;
-    --surface-layer:      #282828;
-    --surface-card:       #2b2b2b;
-    --surface-card-hover: #323232;
-    --acrylic:            rgba(44, 44, 44, 0.86);
-    --acrylic-strong:     rgba(32, 32, 32, 0.92);
-    --smoke:              rgba(0, 0, 0, 0.36);
-
-    /* Control fills */
-    --control:            rgba(255, 255, 255, 0.0605);
-    --control-hover:      rgba(255, 255, 255, 0.0837);
-    --control-pressed:    rgba(255, 255, 255, 0.0326);
-    --control-disabled:   rgba(255, 255, 255, 0.0419);
-    --subtle-hover:       rgba(255, 255, 255, 0.0605);
-    --subtle-pressed:     rgba(255, 255, 255, 0.0419);
-
-    /* Strokes */
-    --stroke:             rgba(255, 255, 255, 0.0698);
-    --stroke-strong:      rgba(255, 255, 255, 0.093);
-    --stroke-card:        rgba(255, 255, 255, 0.0578);
-    --stroke-divider:     rgba(255, 255, 255, 0.0837);
-    --stroke-flyout:      rgba(0, 0, 0, 0.2);
-
-    /* Text */
-    --text:               #ffffff;
-    --text-secondary:     rgba(255, 255, 255, 0.786);
-    --text-tertiary:      rgba(255, 255, 255, 0.5442);
-    --text-disabled:      rgba(255, 255, 255, 0.3628);
-
-    /* Semantic */
-    --critical:           #ff99a4;
-    --critical-fill:      #c42b1c;
-    --success:            #6ccb5f;
-
-    /* Shape, elevation, motion */
-    --radius-control:     4px;
-    --radius-card:        7px;
-    --radius-overlay:     8px;
-    --shadow-card:        0 2px 4px rgba(0, 0, 0, 0.26);
-    --shadow-flyout:      0 8px 16px rgba(0, 0, 0, 0.34);
-    --shadow-dialog:      0 32px 64px rgba(0, 0, 0, 0.44), 0 2px 21px rgba(0, 0, 0, 0.26);
-    --ease:               cubic-bezier(0, 0, 0, 1);
-    --ease-out:           cubic-bezier(0.1, 0.9, 0.2, 1);
-    --dur-fast:           0.083s;
-    --dur:                0.167s;
-    --dur-slow:           0.25s;
-
-    /* Type */
-    --font:         "Segoe UI Variable Text", "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
-    --font-display: "Segoe UI Variable Display", "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
-    --font-mono:    "Cascadia Mono", "Cascadia Code", Consolas, monospace;
-}
-
 /* Navigation pane */
 DIV.page DIV.options {
     position: absolute;
@@ -77,6 +12,8 @@ DIV.page DIV.options {
     padding-top: 50px;
     padding-left: 50px;
     box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
     /* Scrim removed. A soft text-shadow (inherited by the labels) keeps them
        legible over a bright 3D background without a dark band. */
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
@@ -186,6 +123,7 @@ DIV.page DIV.options A.active::before {
 DIV.page DIV.options .search_bar {
     padding: 6px 10px;
     box-sizing: border-box;
+    max-width: 100%;
     margin-top: 12px;
     margin-bottom: 8px;
     font-family: var(--font);
@@ -326,6 +264,8 @@ div.centermessage {
     box-shadow: var(--shadow-dialog), inset 0 0 0 1px var(--stroke-card);
     padding: 24px;
     max-width: 500px;
+    max-height: calc(100vh - 32px);
+    overflow: auto;
     text-align: center;
 }
 
@@ -507,4 +447,27 @@ div.centermessage .subbed {
 
 div.centermessage .subbed:hover {
     background: rgba(177, 140, 255, 0.24) !important;
+}
+
+DIV.page[ng-controller="ControllerMain"] DIV.options {
+    width: 500px;
+    max-width: 100%;
+}
+
+DIV.page[ng-controller="ControllerMain"] DIV.options img {
+    max-width: 100%;
+    height: auto;
+}
+
+@media (max-width: 1024px) {
+    DIV.page DIV.options { width: 200px; padding-left: 8px; }
+    DIV.page DIV.options UL { margin-left: 0; }
+    DIV.page DIV.innerpage, div.ugc_content { left: 200px; }
+}
+
+@media (max-width: 640px) {
+    DIV.page DIV.options { width: 160px; }
+    DIV.page DIV.options UL LI { padding: 0 8px; }
+    DIV.page DIV.innerpage, div.ugc_content { left: 160px; }
+    div.centermessage { width: calc(100% - 32px); box-sizing: border-box; padding: 16px; }
 }

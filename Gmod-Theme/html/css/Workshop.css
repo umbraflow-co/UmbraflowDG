@@ -137,8 +137,6 @@ workshopicon name {
     right: 0;
     text-align: left;
     background-color: var(--acrylic-strong);
-    -webkit-backdrop-filter: blur(30px) saturate(125%);
-    backdrop-filter: blur(30px) saturate(125%);
     border-bottom: 1px solid var(--stroke-card);
     font-size: 13px;
     font-weight: 600;
@@ -186,8 +184,6 @@ workshopicon size {
     font-family: var(--font);
     color: var(--text-secondary);
     background-color: var(--acrylic-strong);
-    -webkit-backdrop-filter: blur(30px) saturate(125%);
-    backdrop-filter: blur(30px) saturate(125%);
     border-radius: var(--radius-control) 0 0 0;
     padding: 4px 8px;
     border: none;
@@ -240,8 +236,6 @@ workshopicon description {
     right: 0;
     text-align: left;
     background-color: rgba(28, 28, 28, 0.92);
-    -webkit-backdrop-filter: blur(30px) saturate(125%);
-    backdrop-filter: blur(30px) saturate(125%);
     font-size: 12px;
     line-height: 1.45;
     padding: 34px 10px;
@@ -371,8 +365,6 @@ controls control {
     font-size: 11px;
     display: inline-block;
     background-color: var(--acrylic);
-    -webkit-backdrop-filter: blur(30px) saturate(125%);
-    backdrop-filter: blur(30px) saturate(125%);
     color: var(--text);
     padding: 3px 6px;
     border-radius: var(--radius-control);
@@ -440,8 +432,8 @@ controls control.disabled {
     width: 100%;
     padding: 12px;
     background: var(--acrylic);
-    -webkit-backdrop-filter: blur(30px) saturate(125%);
-    backdrop-filter: blur(30px) saturate(125%);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     z-index: 128;
     position: absolute;
     bottom: 52px;
@@ -614,8 +606,8 @@ controls control.disabled {
 
 pagination {
     background-color: var(--acrylic);
-    -webkit-backdrop-filter: blur(30px) saturate(125%);
-    backdrop-filter: blur(30px) saturate(125%);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     border-radius: var(--radius-overlay);
     margin: 0 auto;
     padding: 6px;
@@ -696,4 +688,10 @@ pagination a.page.active {
     font-weight: 600;
     border-radius: var(--radius-control);
     padding: 3px 8px;
+}
+
+@media (max-width: 640px) {
+    .create_preset, .preset_content { min-width: 0; width: 100%; }
+    .preset_list, .preset_data { width: 100%; margin-left: 0; }
+    .preset_list { min-height: 0; max-height: 120px; }
 }

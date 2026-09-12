@@ -1,92 +1,61 @@
-<!--
-	UMBRAFLOW — Fluent-inspired Garry's Mod menu theme.
-	Created by Big_Killers · v1.0.0 · © Big_Killers. All rights reserved.
--->
+<!doctype html>
+<!-- Umbraflow loading screen. Created by Big_Killers. -->
 <html>
-	<head>
-		<title>Loading..</title>
-		<link rel="stylesheet" type="text/css" href="loading.css" />
-	</head>
-	<body>
+<head>
+    <meta charset="utf-8" />
+    <title>Loading...</title>
+    <link rel="stylesheet" type="text/css" href="loading.css" />
+</head>
+<body>
+    <div id="background">
+        <div id="container">
+            <img id="logo" src="img/umbraflow_eclipse.png" alt="Umbraflow" />
+            <div class="walk" aria-hidden="true">:v</div>
+            <div id="loading-status" role="status" aria-live="polite">Loading...</div>
+        </div>
+        <div class="server_info">
+            <img id="mapimg" alt="" />
+            <div class="text">
+                <div id="serverName"></div>
+                <div id="serverMap"></div>
+                <div id="serverGamemode"></div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var serverName = document.getElementById( 'serverName' );
+        var serverMap = document.getElementById( 'serverMap' );
+        var serverGamemode = document.getElementById( 'serverGamemode' );
+        var mapImage = document.getElementById( 'mapimg' );
+        var loadingStatus = document.getElementById( 'loading-status' );
 
-		<div id="background">
-			<div id="container">
+        mapImage.onerror = function() {
+            mapImage.style.visibility = 'hidden';
+            document.body.style.backgroundImage = 'none';
+        };
+        mapImage.onload = function() { mapImage.style.visibility = 'visible'; };
 
-				<img id="logo" src='img/umbraflow_eclipse.png'/>
-				
-				<div>
-					<div class="walk">:v</div>
-				</div>
+        function GameDetails( servername, serverurl, mapname, maxplayers, steamid, gamemode, volume, lang, gamemodeNice )
+        {
+            serverName.textContent = servername || '';
+            serverMap.textContent = mapname || '';
+            serverGamemode.textContent = gamemodeNice || gamemode || '';
+            var mapUrl = 'asset://mapimage/' + encodeURIComponent( mapname || '' ).replace( /'/g, '%27' );
+            mapImage.style.visibility = 'hidden';
+            mapImage.src = mapUrl;
+            document.body.style.backgroundImage = 'url("' + mapUrl + '")';
+            document.querySelector( '.server_info' ).classList.add( 'visible' );
+        }
 
-			</div>
+        function DownloadingFile( file )
+        {
+            loadingStatus.textContent = file ? 'Downloading ' + file : 'Downloading...';
+        }
 
-			<div class="server_info">
-				<img id="mapimg" src="asset://mapimage/invalid_map" />
-				<div class="text">
-					<div id="serverName">A really long server name will be here that will be too long to fit on the loading screen</div>
-					<div id="serverMap">gm_hilldirt</div>
-					<div id="serverGamemode">Snadbox</div>
-				</div>
-			</div>
-
-			<div id="spambox">
-			</div>
-
-		</div>
-
-		<script type="text/javascript">
-			document.addEventListener( "DOMContentLoaded", function() {
-				var today = new Date();
-
-				// Force it to dark on Spooktober or when it's late
-				var isHalloween = today.getMonth() == 9 && today.getDate() >= 15 || today.getMonth() == 10 && today.getDate() <= 5;
-				var darkMode = today.getHours() >= 19 || today.getHours() <= 7;
-
-				var isSupportsSystemDarkMode = navigator.userAgent.match(/Chrome\/(\d+)/)[1] >= 76;
-				var systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-				if ( isHalloween || ( isSupportsSystemDarkMode ? systemDarkMode : darkMode ) )
-				{
-					document.body.classList.add( "dark" );
-				}
-			} );
-
-			function GameDetails( servername, serverurl, mapname, maxplayers, steamid, gamemode, volume, lang, gamemodeNice )
-			{
-				var mapImg = "asset://mapimage/" + mapname;
-				
-				document.querySelector("#serverName").innerText = servername;
-				document.querySelector("#serverMap").innerText = mapname;
-				document.querySelector("#serverGamemode").innerText = gamemodeNice;
-				document.querySelector("#mapimg").setAttribute( "src", mapImg );
-				document.body.style.backgroundImage = "url('" + mapImg + "')";
-
-				document.querySelector(".server_info").classList.add( "visible" );
-
-				// Do with these what you will :)
-				// this function gets called only when joining a multiplayer server
-				/*document.querySelector("#spambox").innerHTML += "serverurl: " + serverurl + "<br>";
-				document.querySelector("#spambox").innerHTML += "servername: " + servername + "<br>";
-				document.querySelector("#spambox").innerHTML += "maxplayers: " + maxplayers + "<br>";
-				document.querySelector("#spambox").innerHTML += "steamid: " + steamid + "<br>";
-				document.querySelector("#spambox").innerHTML += "gamemode: " + gamemode + "<br>";
-				document.querySelector("#spambox").innerHTML += "mapname: " + mapname + "<br>";
-				document.querySelector("#spambox").innerHTML += "volume: " + volume + "<br>";
-				document.querySelector("#spambox").innerHTML += "lang: " + lang + "<br>";*/
-			}
-
-			// A file has begun downloading
-			function DownloadingFile( file )
-			{
-				//document.querySelector("#spambox").innerHTML = "<span style='color:red'>" + file + "</span><br>" + document.querySelector("#spambox").innerHTML;
-			}
-
-			// This will not be called when DownloadingFile() is
-			function SetStatusChanged( status )
-			{
-				//document.querySelector("#spambox").innerHTML = status + "<br>" + document.querySelector("#spambox").innerHTML;
-			}
-		</script>
-
-	</body>
+        function SetStatusChanged( status )
+        {
+            loadingStatus.textContent = status || 'Loading...';
+        }
+    </script>
+</body>
 </html>

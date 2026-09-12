@@ -205,8 +205,6 @@ DIV.gridicon name {
     color: var(--text);
     padding: 8px;
     background-color: var(--acrylic-strong);
-    -webkit-backdrop-filter: blur(30px) saturate(125%);
-    backdrop-filter: blur(30px) saturate(125%);
 }
 
 DIV.disabled name {
@@ -293,8 +291,7 @@ workshopmessage {
     padding: 1px;
     margin: 0px;
     border-radius: var(--radius-control);
-    -webkit-transition: all var(--dur) var(--ease);
-    transition: all var(--dur) var(--ease);
+    transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
     color: var(--text-secondary);
     font-weight: 400;
 }
@@ -465,5 +462,12 @@ workshopmessage {
         margin: 0px;
         margin-right: 0px;
         margin-bottom: 0px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        transition: none !important;
+        animation: none !important;
     }
 }

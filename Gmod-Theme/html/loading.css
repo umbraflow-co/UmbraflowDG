@@ -36,6 +36,11 @@
     --font-mono:    "Cascadia Mono", "Cascadia Code", Consolas, monospace;
 }
 
+html, body
+{
+	height: 100%;
+}
+
 BODY
 {
 	overflow: hidden;
@@ -56,14 +61,12 @@ BODY
 	text-align: center;
 	left: 50%;
 	top: 45%;
-	margin-top: -120px;
-	margin-left: -150px;
-	width: 300px;
+	transform: translate(-50%, -50%);
+	width: 360px;
+	max-width: calc(100% - 32px);
 }
 
-/* Umbraflow mark: the eclipse with the Garry's Mod "g" baked into its centre
-   (one image — the old separate gmod_logo_brave.png was corrupt and wouldn't
-   decode, which is why the g wasn't showing). */
+/* The eclipse and Garry's Mod logo share one image. */
 #logo
 {
 	display: block;
@@ -142,11 +145,14 @@ BODY
 	box-shadow: var(--shadow-card);
 }
 
-#spambox
+#loading-status
 {
-	float: right;
+	margin-top: 16px;
+	font-size: 13px;
+	line-height: 20px;
 	overflow: hidden;
-	max-height: 100%;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 /* The map screenshot sits behind a Fluent scrim so the caption stays legible
@@ -172,9 +178,8 @@ BODY
 	pointer-events: none;
 }
 
-#background > *
+#container, .server_info
 {
-	position: relative;
 	z-index: 1;
 }
 
@@ -189,11 +194,14 @@ body.dark
 
 .server_info
 {
-	display: inline-block;
+	display: flex;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
 	font-family: var(--font-display);
 	background-image: none;
 	padding: 20px;
-	padding-right: 180px;
 	visibility: hidden;
 	white-space: nowrap;
 	max-width: 100%;
@@ -205,7 +213,8 @@ body.dark
 }
 .server_info .text
 {
-	display: inline-block;
+	min-width: 0;
+	flex: 1;
 	vertical-align: top;
 	max-width: 100%;
 
@@ -233,10 +242,24 @@ body.dark
 {
 	width: 128px;
 	height: 128px;
+	flex: 0 0 128px;
+	object-fit: cover;
 	background: var(--surface-card);
 	border: 1px solid var(--stroke-card);
 	border-radius: var(--radius-overlay);
 	box-shadow: var(--shadow-flyout);
 	margin-right: 16px;
 	float: left;
+}
+
+@media (max-height: 600px) {
+	#logo { width: 160px; margin-bottom: 12px; }
+	.server_info { padding: 12px; }
+	.server_info #mapimg { width: 72px; height: 72px; flex-basis: 72px; }
+	.server_info .text { font-size: 20px; line-height: 28px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.walk { -webkit-animation: none; animation: none; }
+	.progressbar .inner { transition: none; }
 }
