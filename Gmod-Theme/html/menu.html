@@ -1,6 +1,6 @@
 <!--
 	UMBRAFLOW — Fluent-inspired Garry's Mod menu theme.
-	Created by Big_Killers · v1.0.0 · © Big_Killers. All rights reserved.
+	Created by Big_Killers · v1.1.0 · MIT License, see LICENSE
 -->
 <html>
 <head>
@@ -53,7 +53,8 @@
 	</div>
 
 	<div id="RecentServers" ng-show="!ShowBack && (RecentServersLoading || RecentServers.length > 0)">
-		<div class="header" ng-show="RecentServersLoading">Loading...</div>
+		<div class="title" ng-Localize="'servers_history'"></div>
+		<div class="header" ng-show="RecentServersLoading" ng-Localize="'ugc.loading'"></div>
 		<button type="button" class="server-item"
 		     ng-show="!RecentServersLoading"
 		     ng-repeat="server in RecentServers track by server.address"

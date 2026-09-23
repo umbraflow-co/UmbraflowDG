@@ -192,7 +192,7 @@
 								<input type='password' ng-model="CurrentGamemode.Selected.password" ng-show="CurrentGamemode.Selected.pass" ng-keyup="PasswordInput( $event, CurrentGamemode.Selected )" ng-Localize="'password'" />
 
 								<div ng-show="CurrentGamemode.Selected.players >= CurrentGamemode.Selected.maxplayers">
-									<input type="checkbox" ng-model="$parent.JoinIfHasSlot" id="join_if_not_full" />
+									<input type="checkbox" ng-checked="JoinIfHasSlot" ng-click="SetJoinIfHasSlot( !JoinIfHasSlot )" id="join_if_not_full" />
 									<label for="join_if_not_full" ng-Localize="'sv_join_if_not_full'"></label>
 								</div>
 

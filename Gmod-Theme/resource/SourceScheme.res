@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////
 // UMBRAFLOW — Fluent-inspired Garry's Mod menu theme.
-// Created by Big_Killers · v1.0.0 · © Big_Killers. All rights reserved.
+// Created by Big_Killers · v1.1.0 · MIT License, see LICENSE
 // VGUI scheme (console, dialogs, spawnmenu, options)
 // To reskin: change only the ACCENT block in Colors.
 ///////////////////////////////////////////////////////////
@@ -270,7 +270,7 @@ Scheme
 
 	//////////////////////// FONTS /////////////////////////////
 	// Chrome: Segoe UI (static). Fixed-width: Cascadia Mono / Consolas.
-	// Gameplay HUD fonts left unchanged.
+	// Gameplay HUD and overlay fonts (net_graph, cl_showfps) stay stock.
 	Fonts
 	{
 		// ---- Fixed width / console -------------------------------------
@@ -312,25 +312,20 @@ Scheme
 				"antialias" "1"
 			}
 		}
+		// Stock on purpose: net_graph and cl_showfps draw with this over the
+		// game world. Cascadia Mono at this size came out tiny, and its outline
+		// shimmered as the numbers changed every frame.
 		"DefaultFixedOutline"
 		{
 			"1"
 			{
-				"name"		"Cascadia Mono" [$WINDOWS]
-				"name"		"DejaVu Sans Mono" [!$WINDOWS]
+				"name"		"Lucida Console" [$WINDOWS]
+				"name"		"Verdana" [!$WINDOWS]
 				"tall"		"14" [$LINUX]
-				"tall"		 "11"
+				"tall"		 "10"
 				"tall_lodef" "15"
 				"tall_hidef" "20"
-				"weight"	 "400"
-				"outline"	 "1"
-			}
-			"2"
-			{
-				"name"		"Consolas" [$WINDOWS]
-				"name"		"Courier New" [!$WINDOWS]
-				"tall"		 "11"
-				"weight"	 "400"
+				"weight"	 "0"
 				"outline"	 "1"
 			}
 		}
@@ -403,15 +398,15 @@ Scheme
 				"antialias"	"1"
 			}
 		}
+		// Stock on purpose: net_graph's right-hand rate column uses it.
 		"DefaultVerySmall"
 		{
 			"1"
 			{
-				"name"		"Segoe UI" [$WINDOWS]
+				"name"		"Tahoma" [$WINDOWS]
 				"name"		"Verdana" [!$WINDOWS]
 				"tall"		"12"
-				"weight"	"400"
-				"antialias"	"1"
+				"weight"	"0"
 			}
 		}
 

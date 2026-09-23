@@ -1,6 +1,6 @@
 /* =============================================================================
    UMBRAFLOW  —  Fluent-inspired Garry's Mod menu theme.
-   Created by Big_Killers  ·  v1.0.0  ·  © Big_Killers. All rights reserved.
+   Created by Big_Killers  ·  v1.1.0  ·  MIT License, see LICENSE
    ============================================================================= */
 
 if (!IN_ENGINE)
@@ -14,7 +14,7 @@ var gScope = null;
 var GamemodeDetails = Object.create( null );
 var MapIndex = Object.create( null );
 
-	console.log( "\nThanks for using Umbraflow\nMade by Big_Killers | v1.0.0" );
+	console.log( "\nThanks for using Umbraflow\nMade by Big_Killers | v1.1.0" );
 
 var subscriptions = new Subscriptions();
 

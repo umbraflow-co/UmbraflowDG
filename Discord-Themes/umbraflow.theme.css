@@ -3,7 +3,7 @@
  * @description Fluent Windows 11-inspired theme — auto-switches between Light,
  *              Dark (Fluent) and Onyx (Midnight) with Discord's appearance.
  * @author Big_Killers
- * @version 1.0.4
+ * @version 1.0.5
  */
 
 /* ALL-IN-ONE VARIANT */
@@ -254,8 +254,10 @@ body {
 /* 7. CONTROLS */
 
 /* lookLink didn't turn up live either — left in the :not() anyway since
-   worst case a link-style button just gets an extra border */
-button[class*="button_"]:not([class*="lookBlank"]):not([class*="lookLink"]) {
+   worst case a link-style button just gets an extra border.
+   :where() zeroes the :not() specificity. Without it this rule outranked
+   the borderless user-panel buttons below and they kept a 1px border. */
+button[class*="button_"]:where(:not([class*="lookBlank"]):not([class*="lookLink"])) {
   border-radius: 4px !important;
   border: 1px solid var(--fluenty-stroke-control) !important;
   border-bottom-color: rgba(0, 0, 0, 0.16) !important;
@@ -293,6 +295,7 @@ button[class*="button_"][class*="primary_"]:not([class*="lookBlank"]):active {
 [class*="panels_"] button[class*="button_"][class*="primary_"]:not([class*="lookBlank"]) {
   background-color: var(--fluenty-card) !important;
   color: var(--fluenty-text-primary) !important;
+  border: none !important;
   border-radius: 6px !important;
 }
 
@@ -383,11 +386,13 @@ button[class*="button_"][class*="primary_"]:not([class*="lookBlank"]):active {
   box-shadow: none !important;
 }
 
-[class*="layer_"] [class*="contentContainer_"] {
+/* Matched as a class that starts with layer_, since a plain substring match
+   also catches player_* elements. */
+:is([class^="layer_"], [class*=" layer_"]) [class*="contentContainer_"] {
   background: var(--fluenty-layer) !important;
 }
 
-[class*="layer_"] [class*="baseSettingWrapper_"] {
+:is([class^="layer_"], [class*=" layer_"]) [class*="baseSettingWrapper_"] {
   background: transparent !important;
 }
 

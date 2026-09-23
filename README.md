@@ -159,7 +159,7 @@ Questions, updates, or want to show off your setup? Come hang out:
 
 ## Issues and contributions
 
-Found a bug or have an idea? Open an [issue](../../issues). Pull requests are welcome, just keep things consistent with the Fluent look.
+Found a bug or have an idea? Open an [issue](../../issues). Pull requests are welcome, just keep things consistent with the Fluent look. Run `node tools/check.mjs` before you send one, and see [MAINTENANCE.md](MAINTENANCE.md) for the parts that are easy to break.
 
 ---
 

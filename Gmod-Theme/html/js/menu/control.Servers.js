@@ -1,7 +1,7 @@
 
 /* =============================================================================
    UMBRAFLOW  —  Fluent-inspired Garry's Mod menu theme.
-   Created by Big_Killers  ·  v1.0.0  ·  © Big_Killers. All rights reserved.
+   Created by Big_Killers  ·  v1.1.0  ·  MIT License, see LICENSE
    ============================================================================= */
 
 var RootScope = null;
@@ -246,6 +246,13 @@ function ControllerServers( $scope, $element, $rootScope, $location )
 		StopServerQueries();
 	}
 	$rootScope.JoinServer = $scope.JoinServer;
+
+	// The checkbox sits two ng-if scopes deep, so an ng-model on it would land
+	// on a child scope and UpdateServer (which reads ServerScope) never sees it.
+	$scope.SetJoinIfHasSlot = function( bJoin )
+	{
+		$scope.JoinIfHasSlot = !!bJoin;
+	}
 
 	$scope.PasswordInput = function( e, srv )
 	{
