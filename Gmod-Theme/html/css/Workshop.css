@@ -2,6 +2,10 @@
    UMBRAFLOW  —  Fluent-inspired Garry's Mod menu theme.
    Created by Big_Killers  ·  v1.1.0  ·  MIT License, see LICENSE
    ========================================================================== */
+/* Proton and Linux have no Segoe UI, so the stacks fall back to Umbraflow Sans
+   (Noto Sans with proportional figures, see fonts/umbraflow). */
+@import url("../fonts/umbraflow/umbraflow.css");
+
 :root {
     /* Accent — Umbraflow violet by default, Fluent green alternative in comments. */
     --accent:             #b18cff;  /* green: #6ccb5f */
@@ -62,8 +66,8 @@
     --dur-slow:           0.25s;
 
     /* Type */
-    --font:         "Segoe UI Variable Text", "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
-    --font-display: "Segoe UI Variable Display", "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+    --font:         "Segoe UI Variable Text", "Segoe UI Variable", "Segoe UI", "Umbraflow Sans", system-ui, sans-serif;
+    --font-display: "Segoe UI Variable Display", "Segoe UI Variable", "Segoe UI", "Umbraflow Sans", system-ui, sans-serif;
     --font-mono:    "Cascadia Mono", "Cascadia Code", Consolas, monospace;
 }
 

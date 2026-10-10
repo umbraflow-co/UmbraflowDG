@@ -137,17 +137,76 @@ for (const file of ["loading.css", "awesomium_global.css"]) {
     check("GMod: no CSS content strings for user-facing labels", !/content:\s*'[A-Za-z]{3,}/.test(read(`${GM}css/menu/NavBar.css`)));
 }
 
-// net_graph and cl_showfps draw with these over the game world. The themed
-// versions came out tiny and shimmered, so they must stay stock.
+// Proton's prefix has no Segoe UI, so without a bundled face the menu falls
+// back to Tahoma Bold. Umbraflow Sans (Noto Sans with proportional figures)
+// sits right after Segoe UI in the stack, so Windows keeps the real thing.
+{
+    for (const token of ["--font", "--font-display"]) {
+        const stack = canonical.get(token) ?? "";
+        check(`GMod: ${token} falls back to the bundled Umbraflow Sans right after Segoe UI`, /"Segoe UI", "Umbraflow Sans", /.test(stack), stack);
+    }
+
+    // Web fonts are fetched with CORS, which asset:// pages may not pass, so
+    // the faces are data URIs in one sheet that every themed sheet imports.
+    // GMod's Chrome 86 under Wine draws semibold heavy and blocky, so the
+    // Regular file answers 400-600 and Bold covers bold.
+    const faces = [...read(`${GM}fonts/umbraflow/umbraflow.css`).matchAll(/@font-face\s*\{([^}]*)\}/g)].map(m => m[1]);
+    const weights = faces.filter(f => /font-family:\s*"Umbraflow Sans"/.test(f) && /url\("data:font\/woff2;base64,/.test(f))
+        .map(f => f.match(/font-weight:\s*([\d ]+);/)?.[1]).sort().join(",");
+    check("GMod: umbraflow.css maps 400-600 to one face and 700 to another, as woff2 data URIs", weights === "400 600,700", `found ${weights || "none"}`);
+
+    for (const file of ["css/menu/Menu.css", "css/Workshop.css", "css/creations/Creations.css", "loading.css"]) {
+        const url = read(GM + file).match(/^@import url\("([^"]+umbraflow\.css)"\);/m)?.[1];
+        const resolves = !!url && join(GM, dirname(file), url) === join(GM, "fonts/umbraflow/umbraflow.css");
+        check(`GMod: ${file} imports fonts/umbraflow/umbraflow.css`, resolves, url ?? "no @import");
+    }
+}
+
+// net_graph and cl_showfps draw with these over the game world. Stock is a
+// 10px 1-bit Lucida Console, which comes out as unreadable specks under Proton
+// and on 1440p screens. These are antialiased and step up with screen height.
+// Lucida Console stays because Windows and Proton both have it, and a
+// monospace face keeps the numbers from jittering as they change.
 {
     const scheme = read("Gmod-Theme/resource/SourceScheme.res");
     const font = name => scheme.match(new RegExp(`\\t\\t"${name}"\\n\\t\\t\\{([\\s\\S]*?)\\n\\t\\t\\}`))?.[1] ?? "";
+    // Each numbered glyph set's yres range, in order. They must cover 1..10000 with no gaps.
+    const tiersCover = body => {
+        const ranges = [...body.matchAll(/"yres"\s+"(\d+) (\d+)"/g)].map(m => [+m[1], +m[2]]);
+        return ranges.length > 1 && ranges[0][0] === 1 && ranges.at(-1)[1] === 10000 &&
+            ranges.every((r, i) => i === 0 || r[0] === ranges[i - 1][1] + 1);
+    };
+    const sets = body => body.split(/\n\t\t\t"\d+"\n/).slice(1);
+
+    // VGUI can't fall back by font name, and Proton reports $WINDOWS, so a face
+    // missing from Proton (Segoe UI, Cascadia) turns into whatever Wine picks,
+    // often a serif. The scheme loads its own Umbraflow Sans and Cascadia Mono instead.
+    const bundled = ["UmbraflowSans-Regular.ttf", "UmbraflowSans-Bold.ttf", "CascadiaMono-Regular.ttf"];
+    const custom = scheme.match(/CustomFontFiles\s*\{([^}]*)\}/)?.[1] ?? "";
+    const unlisted = bundled.filter(f => !custom.includes(`"resource/umbraflow/${f}"`));
+    check("GMod: SourceScheme loads the bundled VGUI fonts", !unlisted.length, unlisted.join(", "));
+    // No license files ship, so each font must keep the copyright and OFL
+    // reference in its own name table (UTF-16BE strings).
+    const ofl = Buffer.from("scripts.sil.org/OFL", "utf16le").swap16();
+    const bad = bundled.filter(f => {
+        try { return !readFileSync(join(ROOT, "Gmod-Theme/resource/umbraflow", f)).includes(ofl); } catch { return true; }
+    });
+    check("GMod: bundled VGUI fonts exist and keep their embedded license fields", !bad.length, bad.join(", "));
+    check("GMod: SourceScheme no longer asks for Segoe UI or Selawik", !/"(Segoe UI|Selawik)/.test(scheme));
+
     const outline = font("DefaultFixedOutline");
+    check("GMod: DefaultFixedOutline (net_graph) is Lucida Console on Windows/Proton",
+        /"name"\s+"Lucida Console" \[\$WINDOWS\]/.test(outline));
+    check("GMod: every DefaultFixedOutline tier is antialiased and outlined",
+        sets(outline).length > 1 && sets(outline).every(s => /"antialias"\s+"1"/.test(s) && /"outline"\s+"1"/.test(s)));
+    check("GMod: DefaultFixedOutline yres tiers cover every screen height", tiersCover(outline));
+
     const small = font("DefaultVerySmall");
-    check("GMod: DefaultFixedOutline (net_graph) is stock Lucida Console 10",
-        /"name"\s+"Lucida Console" \[\$WINDOWS\]/.test(outline) && /"tall"\s+"10"/.test(outline) && !/antialias/.test(outline));
-    check("GMod: DefaultVerySmall (net_graph) is stock Tahoma 12",
-        /"name"\s+"Tahoma" \[\$WINDOWS\]/.test(small) && /"tall"\s+"12"/.test(small) && !/antialias/.test(small));
+    check("GMod: DefaultVerySmall (net_graph rates) is Tahoma on Windows/Proton",
+        /"name"\s+"Tahoma" \[\$WINDOWS\]/.test(small));
+    check("GMod: every DefaultVerySmall tier is antialiased",
+        sets(small).length > 1 && sets(small).every(s => /"antialias"\s+"1"/.test(s)));
+    check("GMod: DefaultVerySmall yres tiers cover every screen height", tiersCover(small));
 }
 
 // Functions the engine calls into the menu by name. Losing one crashes the

@@ -269,7 +269,8 @@ Scheme
 	}
 
 	//////////////////////// FONTS /////////////////////////////
-	// Chrome: Segoe UI (static). Fixed-width: Cascadia Mono / Consolas.
+	// Chrome: Umbraflow Sans (Noto Sans with proportional figures). Fixed-width:
+	// Cascadia Mono. Both ship in resource/umbraflow (see CustomFontFiles).
 	// Gameplay HUD and overlay fonts (net_graph, cl_showfps) stay stock.
 	Fonts
 	{
@@ -312,21 +313,72 @@ Scheme
 				"antialias" "1"
 			}
 		}
-		// Stock on purpose: net_graph and cl_showfps draw with this over the
-		// game world. Cascadia Mono at this size came out tiny, and its outline
-		// shimmered as the numbers changed every frame.
+		// net_graph and cl_showfps draw with this over the game world. Stock is a
+		// 10px 1-bit Lucida Console, which turns to specks under Proton and on big
+		// screens, so it's antialiased and steps up with screen height. Lucida
+		// Console stays because Windows and Proton both ship it, and a monospace
+		// face keeps the numbers from jittering as they change.
 		"DefaultFixedOutline"
 		{
 			"1"
 			{
 				"name"		"Lucida Console" [$WINDOWS]
-				"name"		"Verdana" [!$WINDOWS]
+				"name"		"DejaVu Sans Mono" [$LINUX]
+				"name"		"Menlo" [$OSX]
 				"tall"		"14" [$LINUX]
-				"tall"		 "10"
-				"tall_lodef" "15"
-				"tall_hidef" "20"
-				"weight"	 "0"
-				"outline"	 "1"
+				"tall"		"12"
+				"weight"	"0"
+				"antialias"	"1"
+				"outline"	"1"
+				"yres"		"1 899"
+			}
+			"2"
+			{
+				"name"		"Lucida Console" [$WINDOWS]
+				"name"		"DejaVu Sans Mono" [$LINUX]
+				"name"		"Menlo" [$OSX]
+				"tall"		"16" [$LINUX]
+				"tall"		"14"
+				"weight"	"0"
+				"antialias"	"1"
+				"outline"	"1"
+				"yres"		"900 1199"
+			}
+			"3"
+			{
+				"name"		"Lucida Console" [$WINDOWS]
+				"name"		"DejaVu Sans Mono" [$LINUX]
+				"name"		"Menlo" [$OSX]
+				"tall"		"19" [$LINUX]
+				"tall"		"17"
+				"weight"	"0"
+				"antialias"	"1"
+				"outline"	"1"
+				"yres"		"1200 1599"
+			}
+			"4"
+			{
+				"name"		"Lucida Console" [$WINDOWS]
+				"name"		"DejaVu Sans Mono" [$LINUX]
+				"name"		"Menlo" [$OSX]
+				"tall"		"21" [$LINUX]
+				"tall"		"19"
+				"weight"	"0"
+				"antialias"	"1"
+				"outline"	"1"
+				"yres"		"1600 1999"
+			}
+			"5"
+			{
+				"name"		"Lucida Console" [$WINDOWS]
+				"name"		"DejaVu Sans Mono" [$LINUX]
+				"name"		"Menlo" [$OSX]
+				"tall"		"26" [$LINUX]
+				"tall"		"24"
+				"weight"	"0"
+				"antialias"	"1"
+				"outline"	"1"
+				"yres"		"2000 10000"
 			}
 		}
 
@@ -335,7 +387,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Segoe UI" [$WINDOWS]
+				"name"		"Umbraflow Sans" [$WINDOWS]
 				"name"		"Verdana" [!$WINDOWS]
 				"tall"		"16"
 				"weight"	"400"
@@ -346,7 +398,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Segoe UI Semibold" [$WINDOWS]
+				"name"		"Umbraflow Sans" [$WINDOWS]
 				"name"		"Verdana" [!$WINDOWS]
 				"tall"		"16"
 				"weight"	"600"
@@ -354,7 +406,7 @@ Scheme
 			}
 			"2"
 			{
-				"name"		"Segoe UI" [$WINDOWS]
+				"name"		"Umbraflow Sans" [$WINDOWS]
 				"name"		"Verdana" [!$WINDOWS]
 				"tall"		"16"
 				"weight"	"700"
@@ -365,7 +417,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Segoe UI" [$WINDOWS]
+				"name"		"Umbraflow Sans" [$WINDOWS]
 				"name"		"Verdana" [!$WINDOWS]
 				"tall"		"16"
 				"weight"	"400"
@@ -377,7 +429,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Segoe UI" [$WINDOWS]
+				"name"		"Umbraflow Sans" [$WINDOWS]
 				"name"		"Verdana" [!$WINDOWS]
 				"tall"		"13" [$WINDOWS]
 				"tall"		"14" [$OSX]
@@ -390,7 +442,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Segoe UI" [$WINDOWS]
+				"name"		"Umbraflow Sans" [$WINDOWS]
 				"name"		"Verdana" [!$WINDOWS]
 				"tall"		"14"
 				"weight"	"400"
@@ -398,15 +450,58 @@ Scheme
 				"antialias"	"1"
 			}
 		}
-		// Stock on purpose: net_graph's right-hand rate column uses it.
+		// net_graph's right-hand rate column. Same treatment as DefaultFixedOutline.
 		"DefaultVerySmall"
 		{
 			"1"
 			{
 				"name"		"Tahoma" [$WINDOWS]
 				"name"		"Verdana" [!$WINDOWS]
-				"tall"		"12"
+				"tall"		"15" [$LINUX]
+				"tall"		"13"
 				"weight"	"0"
+				"antialias"	"1"
+				"yres"		"1 899"
+			}
+			"2"
+			{
+				"name"		"Tahoma" [$WINDOWS]
+				"name"		"Verdana" [!$WINDOWS]
+				"tall"		"17" [$LINUX]
+				"tall"		"15"
+				"weight"	"0"
+				"antialias"	"1"
+				"yres"		"900 1199"
+			}
+			"3"
+			{
+				"name"		"Tahoma" [$WINDOWS]
+				"name"		"Verdana" [!$WINDOWS]
+				"tall"		"20" [$LINUX]
+				"tall"		"18"
+				"weight"	"0"
+				"antialias"	"1"
+				"yres"		"1200 1599"
+			}
+			"4"
+			{
+				"name"		"Tahoma" [$WINDOWS]
+				"name"		"Verdana" [!$WINDOWS]
+				"tall"		"23" [$LINUX]
+				"tall"		"21"
+				"weight"	"0"
+				"antialias"	"1"
+				"yres"		"1600 1999"
+			}
+			"5"
+			{
+				"name"		"Tahoma" [$WINDOWS]
+				"name"		"Verdana" [!$WINDOWS]
+				"tall"		"28" [$LINUX]
+				"tall"		"26"
+				"weight"	"0"
+				"antialias"	"1"
+				"yres"		"2000 10000"
 			}
 		}
 
@@ -414,7 +509,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Segoe UI" [$WINDOWS]
+				"name"		"Umbraflow Sans" [$WINDOWS]
 				"name"		"Verdana" [!$WINDOWS]
 				"tall"		"20"
 				"weight"	"400"
@@ -425,7 +520,7 @@ Scheme
 		{
 			"1"	[$WIN32]
 			{
-				"name"		"Segoe UI Semibold" [$WINDOWS]
+				"name"		"Umbraflow Sans" [$WINDOWS]
 				"name"		"Verdana" [!$WINDOWS]
 				"tall"		"14"
 				"weight"	"600"
@@ -433,7 +528,7 @@ Scheme
 			}
 			"2"	[$WIN32]
 			{
-				"name"		"Segoe UI" [$WINDOWS]
+				"name"		"Umbraflow Sans" [$WINDOWS]
 				"name"		"Verdana" [!$WINDOWS]
 				"tall"		"14"
 				"weight"	"700"
@@ -480,7 +575,7 @@ Scheme
 			}
 			"1"	[!$LINUX]
 			{
-				"name"		"Segoe UI Semibold" [$WINDOWS]
+				"name"		"Umbraflow Sans" [$WINDOWS]
 				"name"		"Verdana" [!$WINDOWS]
 				"tall"		"18"
 				"weight"	"600"
@@ -500,7 +595,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Segoe UI Semibold" [$WINDOWS]
+				"name"		"Umbraflow Sans" [$WINDOWS]
 				"name"		"Verdana" [!$WINDOWS]
 				"tall"		"20"
 				"weight"	"600"
@@ -513,7 +608,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Segoe UI Semibold" [$WINDOWS]
+				"name"		"Umbraflow Sans" [$WINDOWS]
 				"name"		"Verdana" [!$WINDOWS]
 				"tall"		"18"
 				"weight"	"600"
@@ -526,7 +621,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Segoe UI" [$WINDOWS]
+				"name"		"Umbraflow Sans" [$WINDOWS]
 				"name"		"Verdana" [!$WINDOWS]
 				"tall"		"15"
 				"weight"	"400"
@@ -536,7 +631,7 @@ Scheme
 			}
 			"2"
 			{
-				"name"		"Segoe UI" [$WINDOWS]
+				"name"		"Umbraflow Sans" [$WINDOWS]
 				"name"		"Verdana" [!$WINDOWS]
 				"tall"		"20"
 				"weight"	"400"
@@ -737,7 +832,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Segoe UI" [!$POSIX]
+				"name"		"Umbraflow Sans" [!$POSIX]
 				"name"		"Verdana" [$POSIX]
 				"tall"		"16"
 				"weight"	"400"
@@ -748,7 +843,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Segoe UI" [!$POSIX]
+				"name"		"Umbraflow Sans" [!$POSIX]
 				"name"		"Verdana" [$POSIX]
 				"tall"		"16"
 				"weight"	"400"
@@ -760,7 +855,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Segoe UI Semibold" [!$POSIX]
+				"name"		"Umbraflow Sans" [!$POSIX]
 				"name"		"Verdana Bold" [$POSIX]
 				"tall"		"16"
 				"weight"	"600"
@@ -771,7 +866,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Segoe UI Semibold" [!$POSIX]
+				"name"		"Umbraflow Sans" [!$POSIX]
 				"name"		"Verdana Bold Italic" [$POSIX]
 				"tall"		"16"
 				"weight"	"600"
@@ -834,7 +929,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Segoe UI Semibold" [!$POSIX]
+				"name"		"Umbraflow Sans" [!$POSIX]
 				"name"		"Verdana Bold" [$POSIX]
 				"weight"		"600"
 				"tall"			"20"
@@ -846,7 +941,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Segoe UI" [!$POSIX]
+				"name"		"Umbraflow Sans" [!$POSIX]
 				"name"		"Verdana Bold" [$POSIX]
 				"weight"		"400"
 				"tall"			"18"
@@ -858,7 +953,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Segoe UI Semibold" [!$POSIX]
+				"name"		"Umbraflow Sans" [!$POSIX]
 				"name"		"Verdana Bold" [$POSIX]
 				"weight"		"600"
 				"tall"			"16" [!$POSIX]
@@ -871,7 +966,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Segoe UI" [!$POSIX]
+				"name"		"Umbraflow Sans" [!$POSIX]
 				"name"		"Verdana Bold" [$POSIX]
 				"weight"		"400"
 				"tall"			"16"
@@ -884,7 +979,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Segoe UI" [!$POSIX]
+				"name"		"Umbraflow Sans" [!$POSIX]
 				"name"		"Verdana Bold" [$POSIX]
 				"weight"		"400"
 				"tall"			"14" [!$POSIX]
@@ -897,7 +992,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Segoe UI Semibold" [!$POSIX]
+				"name"		"Umbraflow Sans" [!$POSIX]
 				"name"		"Verdana Bold" [$POSIX]
 				"weight"		"600"
 				"tall"			"18" [!$POSIX]
@@ -910,7 +1005,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Segoe UI" [!$POSIX]
+				"name"		"Umbraflow Sans" [!$POSIX]
 				"name"		"Verdana" [$POSIX]
 				"weight"		"400"
 				"tall"			"14" [!$POSIX]
@@ -924,7 +1019,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Segoe UI Semibold" [!$POSIX]
+				"name"		"Umbraflow Sans" [!$POSIX]
 				"name"		"Verdana" [$POSIX]
 				"tall"		"32"
 				"tall_lodef"	"40"
@@ -938,7 +1033,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Segoe UI"
+				"name"		"Umbraflow Sans"
 				"tall"		"16"
 				"weight"	"400"
 				"range"		"0x0000 0x017F" //	Basic Latin, Latin-1 Supplement, Latin Extended-A
@@ -947,7 +1042,7 @@ Scheme
 			}
 			"2"
 			{
-				"name"		"Segoe UI"
+				"name"		"Umbraflow Sans"
 				"tall"		"16"
 				"weight"	"400"
 				"range"		"0x0000 0x017F" //	Basic Latin, Latin-1 Supplement, Latin Extended-A
@@ -956,7 +1051,7 @@ Scheme
 			}
 			"3"
 			{
-				"name"		"Segoe UI"
+				"name"		"Umbraflow Sans"
 				"tall"		"16"
 				"weight"	"400"
 				"range"		"0x0000 0x017F" //	Basic Latin, Latin-1 Supplement, Latin Extended-A
@@ -965,7 +1060,7 @@ Scheme
 			}
 			"4"
 			{
-				"name"		"Segoe UI"
+				"name"		"Umbraflow Sans"
 				"tall"		"19"
 				"weight"	"400"
 				"range"		"0x0000 0x017F" //	Basic Latin, Latin-1 Supplement, Latin Extended-A
@@ -974,7 +1069,7 @@ Scheme
 			}
 			"5"
 			{
-				"name"		"Segoe UI"
+				"name"		"Umbraflow Sans"
 				"tall"		"19"
 				"weight"	"400"
 				"range"		"0x0000 0x017F" //	Basic Latin, Latin-1 Supplement, Latin Extended-A
@@ -1489,5 +1584,10 @@ Scheme
 		"1"		"resource/HALFLIFE2.ttf"
 		"2"		"resource/HL2EP2.ttf"
 		"3"		"resource/marlett.ttf"
+		// Bundled so the VGUI fonts exist under Proton, which has no Segoe UI or
+		// Cascadia and reports $WINDOWS, so the scheme can't pick per platform.
+		"4"		"resource/umbraflow/UmbraflowSans-Regular.ttf"
+		"5"		"resource/umbraflow/UmbraflowSans-Bold.ttf"
+		"6"		"resource/umbraflow/CascadiaMono-Regular.ttf"
 	}
 }
