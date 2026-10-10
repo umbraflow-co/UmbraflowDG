@@ -1,7 +1,7 @@
 
 /* =============================================================================
    UMBRAFLOW  —  Fluent-inspired Garry's Mod menu theme.
-   Created by Big_Killers  ·  v1.1.0  ·  MIT License, see LICENSE
+   Created by Big_Killers  ·  v1.1.1  ·  MIT License, see LICENSE
    ============================================================================= */
 
 var RootScope = null;
