@@ -279,16 +279,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Cascadia Mono" [$WINDOWS]
-				"name"		"DejaVu Sans Mono" [!$WINDOWS]
-				"tall"		"11"
-				"weight"	"400"
-				"antialias" "1"
-			}
-			"2"
-			{
-				"name"		"Consolas" [$WINDOWS]
-				"name"		"Courier New" [!$WINDOWS]
+				"name"		"Cascadia Mono"
 				"tall"		"11"
 				"weight"	"400"
 				"antialias" "1"
@@ -298,16 +289,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Cascadia Mono" [$WINDOWS]
-				"name"		"DejaVu Sans Mono" [!$WINDOWS]
-				"tall"		"8"
-				"weight"	"400"
-				"antialias" "1"
-			}
-			"2"
-			{
-				"name"		"Consolas" [$WINDOWS]
-				"name"		"Courier New" [!$WINDOWS]
+				"name"		"Cascadia Mono"
 				"tall"		"8"
 				"weight"	"400"
 				"antialias" "1"
@@ -315,16 +297,16 @@ Scheme
 		}
 		// net_graph and cl_showfps draw with this over the game world. Stock is a
 		// 10px 1-bit Lucida Console, which turns to specks under Proton and on big
-		// screens, so it's antialiased and steps up with screen height. Lucida
-		// Console stays because Windows and Proton both ship it, and a monospace
-		// face keeps the numbers from jittering as they change.
+		// screens, so it's antialiased and steps up with screen height. Windows
+		// and Proton keep Lucida Console since both ship it; native Linux and
+		// macOS get the bundled Cascadia Mono. Monospace keeps the numbers from
+		// jittering as they change.
 		"DefaultFixedOutline"
 		{
 			"1"
 			{
 				"name"		"Lucida Console" [$WINDOWS]
-				"name"		"DejaVu Sans Mono" [$LINUX]
-				"name"		"Menlo" [$OSX]
+				"name"		"Cascadia Mono" [!$WINDOWS]
 				"tall"		"14" [$LINUX]
 				"tall"		"12"
 				"weight"	"0"
@@ -335,8 +317,7 @@ Scheme
 			"2"
 			{
 				"name"		"Lucida Console" [$WINDOWS]
-				"name"		"DejaVu Sans Mono" [$LINUX]
-				"name"		"Menlo" [$OSX]
+				"name"		"Cascadia Mono" [!$WINDOWS]
 				"tall"		"16" [$LINUX]
 				"tall"		"14"
 				"weight"	"0"
@@ -347,8 +328,7 @@ Scheme
 			"3"
 			{
 				"name"		"Lucida Console" [$WINDOWS]
-				"name"		"DejaVu Sans Mono" [$LINUX]
-				"name"		"Menlo" [$OSX]
+				"name"		"Cascadia Mono" [!$WINDOWS]
 				"tall"		"19" [$LINUX]
 				"tall"		"17"
 				"weight"	"0"
@@ -359,8 +339,7 @@ Scheme
 			"4"
 			{
 				"name"		"Lucida Console" [$WINDOWS]
-				"name"		"DejaVu Sans Mono" [$LINUX]
-				"name"		"Menlo" [$OSX]
+				"name"		"Cascadia Mono" [!$WINDOWS]
 				"tall"		"21" [$LINUX]
 				"tall"		"19"
 				"weight"	"0"
@@ -371,8 +350,7 @@ Scheme
 			"5"
 			{
 				"name"		"Lucida Console" [$WINDOWS]
-				"name"		"DejaVu Sans Mono" [$LINUX]
-				"name"		"Menlo" [$OSX]
+				"name"		"Cascadia Mono" [!$WINDOWS]
 				"tall"		"26" [$LINUX]
 				"tall"		"24"
 				"weight"	"0"
@@ -387,8 +365,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Umbraflow Sans" [$WINDOWS]
-				"name"		"Verdana" [!$WINDOWS]
+				"name"		"Umbraflow Sans"
 				"tall"		"16"
 				"weight"	"400"
 				"antialias"	"1"
@@ -398,16 +375,14 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Umbraflow Sans" [$WINDOWS]
-				"name"		"Verdana" [!$WINDOWS]
+				"name"		"Umbraflow Sans"
 				"tall"		"16"
 				"weight"	"600"
 				"antialias"	"1"
 			}
 			"2"
 			{
-				"name"		"Umbraflow Sans" [$WINDOWS]
-				"name"		"Verdana" [!$WINDOWS]
+				"name"		"Umbraflow Sans"
 				"tall"		"16"
 				"weight"	"700"
 				"antialias"	"1"
@@ -417,8 +392,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Umbraflow Sans" [$WINDOWS]
-				"name"		"Verdana" [!$WINDOWS]
+				"name"		"Umbraflow Sans"
 				"tall"		"16"
 				"weight"	"400"
 				"underline" "1"
@@ -429,8 +403,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Umbraflow Sans" [$WINDOWS]
-				"name"		"Verdana" [!$WINDOWS]
+				"name"		"Umbraflow Sans"
 				"tall"		"13" [$WINDOWS]
 				"tall"		"14" [$OSX]
 				"tall"		"16" [$LINUX]
@@ -442,8 +415,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Umbraflow Sans" [$WINDOWS]
-				"name"		"Verdana" [!$WINDOWS]
+				"name"		"Umbraflow Sans"
 				"tall"		"14"
 				"weight"	"400"
 				"dropshadow" "1"
@@ -456,7 +428,7 @@ Scheme
 			"1"
 			{
 				"name"		"Tahoma" [$WINDOWS]
-				"name"		"Verdana" [!$WINDOWS]
+				"name"		"Umbraflow Sans" [!$WINDOWS]
 				"tall"		"15" [$LINUX]
 				"tall"		"13"
 				"weight"	"0"
@@ -466,7 +438,7 @@ Scheme
 			"2"
 			{
 				"name"		"Tahoma" [$WINDOWS]
-				"name"		"Verdana" [!$WINDOWS]
+				"name"		"Umbraflow Sans" [!$WINDOWS]
 				"tall"		"17" [$LINUX]
 				"tall"		"15"
 				"weight"	"0"
@@ -476,7 +448,7 @@ Scheme
 			"3"
 			{
 				"name"		"Tahoma" [$WINDOWS]
-				"name"		"Verdana" [!$WINDOWS]
+				"name"		"Umbraflow Sans" [!$WINDOWS]
 				"tall"		"20" [$LINUX]
 				"tall"		"18"
 				"weight"	"0"
@@ -486,7 +458,7 @@ Scheme
 			"4"
 			{
 				"name"		"Tahoma" [$WINDOWS]
-				"name"		"Verdana" [!$WINDOWS]
+				"name"		"Umbraflow Sans" [!$WINDOWS]
 				"tall"		"23" [$LINUX]
 				"tall"		"21"
 				"weight"	"0"
@@ -496,7 +468,7 @@ Scheme
 			"5"
 			{
 				"name"		"Tahoma" [$WINDOWS]
-				"name"		"Verdana" [!$WINDOWS]
+				"name"		"Umbraflow Sans" [!$WINDOWS]
 				"tall"		"28" [$LINUX]
 				"tall"		"26"
 				"weight"	"0"
@@ -509,8 +481,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Umbraflow Sans" [$WINDOWS]
-				"name"		"Verdana" [!$WINDOWS]
+				"name"		"Umbraflow Sans"
 				"tall"		"20"
 				"weight"	"400"
 				"antialias"	"1"
@@ -520,16 +491,14 @@ Scheme
 		{
 			"1"	[$WIN32]
 			{
-				"name"		"Umbraflow Sans" [$WINDOWS]
-				"name"		"Verdana" [!$WINDOWS]
+				"name"		"Umbraflow Sans"
 				"tall"		"14"
 				"weight"	"600"
 				"antialias"	"1"
 			}
 			"2"	[$WIN32]
 			{
-				"name"		"Umbraflow Sans" [$WINDOWS]
-				"name"		"Verdana" [!$WINDOWS]
+				"name"		"Umbraflow Sans"
 				"tall"		"14"
 				"weight"	"700"
 				"antialias"	"1"
@@ -569,14 +538,14 @@ Scheme
 		{
 			"1"	[$LINUX]
 			{
-				"name"		"Helvetica Bold"
+				"name"		"Umbraflow Sans"
 				"tall"		"20"
+				"weight"	"600"
 				"antialias" "1"
 			}
 			"1"	[!$LINUX]
 			{
-				"name"		"Umbraflow Sans" [$WINDOWS]
-				"name"		"Verdana" [!$WINDOWS]
+				"name"		"Umbraflow Sans"
 				"tall"		"18"
 				"weight"	"600"
 				"antialias" "1"
@@ -595,8 +564,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Umbraflow Sans" [$WINDOWS]
-				"name"		"Verdana" [!$WINDOWS]
+				"name"		"Umbraflow Sans"
 				"tall"		"20"
 				"weight"	"600"
 				"antialias" "1"
@@ -608,8 +576,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Umbraflow Sans" [$WINDOWS]
-				"name"		"Verdana" [!$WINDOWS]
+				"name"		"Umbraflow Sans"
 				"tall"		"18"
 				"weight"	"600"
 				"antialias" "1"
@@ -621,8 +588,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Umbraflow Sans" [$WINDOWS]
-				"name"		"Verdana" [!$WINDOWS]
+				"name"		"Umbraflow Sans"
 				"tall"		"15"
 				"weight"	"400"
 				"antialias" "1"
@@ -631,8 +597,7 @@ Scheme
 			}
 			"2"
 			{
-				"name"		"Umbraflow Sans" [$WINDOWS]
-				"name"		"Verdana" [!$WINDOWS]
+				"name"		"Umbraflow Sans"
 				"tall"		"20"
 				"weight"	"400"
 				"antialias" "1"
@@ -662,17 +627,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Cascadia Mono" [$WINDOWS]
-				"name"		"DejaVu Sans Mono" [!$WINDOWS]
-				"tall"		"13" [$WINDOWS]
-				"tall"		"14" [!$WINDOWS]
-				"weight"	"400"
-				"antialias"	"1"
-			}
-			"2"
-			{
-				"name"		"Consolas" [$WINDOWS]
-				"name"		"Courier New" [!$WINDOWS]
+				"name"		"Cascadia Mono"
 				"tall"		"13" [$WINDOWS]
 				"tall"		"14" [!$WINDOWS]
 				"weight"	"400"
@@ -785,18 +740,8 @@ Scheme
 		{
 			"1"
 			{
-				"name"		 "Cascadia Mono" [$WINDOWS]
-				"name"		 "Cascadia Mono" [$X360]
-				"name"		 "DejaVu Sans Mono" [$LINUX]
+				"name"		 "Cascadia Mono"
 				"tall"		"12" [$LINUX]
-				"tall"		"11"
-				"weight"	"400"
-				"antialias"	"1"
-			}
-			"2"
-			{
-				"name"		 "Consolas" [$WINDOWS]
-				"name"		 "Courier New" [!$WINDOWS]
 				"tall"		"11"
 				"weight"	"400"
 				"antialias"	"1"
@@ -807,20 +752,8 @@ Scheme
 		{
 			"1"
 			{
-				"name"		 "Cascadia Mono" [$WINDOWS]
-				"name"		 "Cascadia Mono" [$X360]
-				"name"		 "Cascadia Mono" [$OSX]
-				"name"		 "DejaVu Sans Mono" [$LINUX]
+				"name"		 "Cascadia Mono"
 				"tall"		"14" [$LINUX]
-				"tall"		"11"
-				"weight"	"400"
-				"dropshadow" "1"
-				"antialias"	"1"
-			}
-			"2"
-			{
-				"name"		 "Consolas" [$WINDOWS]
-				"name"		 "Courier" [!$WINDOWS]
 				"tall"		"11"
 				"weight"	"400"
 				"dropshadow" "1"
@@ -832,8 +765,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Umbraflow Sans" [!$POSIX]
-				"name"		"Verdana" [$POSIX]
+				"name"		"Umbraflow Sans"
 				"tall"		"16"
 				"weight"	"400"
 				"antialias"	"1"
@@ -843,8 +775,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Umbraflow Sans" [!$POSIX]
-				"name"		"Verdana" [$POSIX]
+				"name"		"Umbraflow Sans"
 				"tall"		"16"
 				"weight"	"400"
 				"italic"	"1"
@@ -855,8 +786,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Umbraflow Sans" [!$POSIX]
-				"name"		"Verdana Bold" [$POSIX]
+				"name"		"Umbraflow Sans"
 				"tall"		"16"
 				"weight"	"600"
 				"antialias"	"1"
@@ -866,8 +796,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Umbraflow Sans" [!$POSIX]
-				"name"		"Verdana Bold Italic" [$POSIX]
+				"name"		"Umbraflow Sans"
 				"tall"		"16"
 				"weight"	"600"
 				"italic"	"1"
@@ -929,8 +858,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Umbraflow Sans" [!$POSIX]
-				"name"		"Verdana Bold" [$POSIX]
+				"name"		"Umbraflow Sans"
 				"weight"		"600"
 				"tall"			"20"
 				"antialias"		"1"
@@ -941,8 +869,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Umbraflow Sans" [!$POSIX]
-				"name"		"Verdana Bold" [$POSIX]
+				"name"		"Umbraflow Sans"
 				"weight"		"400"
 				"tall"			"18"
 				"antialias"		"1"
@@ -953,8 +880,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Umbraflow Sans" [!$POSIX]
-				"name"		"Verdana Bold" [$POSIX]
+				"name"		"Umbraflow Sans"
 				"weight"		"600"
 				"tall"			"16" [!$POSIX]
 				"tall"			"18" [$POSIX]
@@ -966,8 +892,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Umbraflow Sans" [!$POSIX]
-				"name"		"Verdana Bold" [$POSIX]
+				"name"		"Umbraflow Sans"
 				"weight"		"400"
 				"tall"			"16"
 				"antialias"		"1"
@@ -979,8 +904,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Umbraflow Sans" [!$POSIX]
-				"name"		"Verdana Bold" [$POSIX]
+				"name"		"Umbraflow Sans"
 				"weight"		"400"
 				"tall"			"14" [!$POSIX]
 				"tall"			"16" [$POSIX]
@@ -992,8 +916,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Umbraflow Sans" [!$POSIX]
-				"name"		"Verdana Bold" [$POSIX]
+				"name"		"Umbraflow Sans"
 				"weight"		"600"
 				"tall"			"18" [!$POSIX]
 				"tall"			"19" [$POSIX]
@@ -1005,8 +928,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Umbraflow Sans" [!$POSIX]
-				"name"		"Verdana" [$POSIX]
+				"name"		"Umbraflow Sans"
 				"weight"		"400"
 				"tall"			"14" [!$POSIX]
 				"tall"			"15" [$POSIX]
@@ -1019,8 +941,7 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Umbraflow Sans" [!$POSIX]
-				"name"		"Verdana" [$POSIX]
+				"name"		"Umbraflow Sans"
 				"tall"		"32"
 				"tall_lodef"	"40"
 				"weight"	"600"

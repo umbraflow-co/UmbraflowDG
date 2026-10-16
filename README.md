@@ -137,6 +137,24 @@ No beta code is needed, both branches are public. If the menu ever shows up plai
 
 To undo it, restore your backup or verify the game files through Steam.
 
+### Linux and Proton
+
+The theme ships its own fonts for the menu, console and dialogs, so Windows and Linux use the same ones. On Linux you can run GMod two ways.
+
+**Native.** Stay on the `x86-64` branch and turn off Steam Play for Garry's Mod (Properties → Compatibility). For video playback and a newer in-game browser, use [GModPatchTool](https://github.com/solsticegamestudios/GModPatchTool). It patches the stock menu files and checks them before it does, so the order matters:
+
+1. Verify the game files in Steam, so the menu files are stock again.
+2. Run GModPatchTool.
+3. Copy `Gmod-Theme/` in as described above.
+
+Do the same three steps whenever you rerun the tool.
+
+**Proton.** The theme works the same. Server addon text (chat boxes, F4 menus, scoreboards) can look heavier than it does natively, but that's down to the addons, not the theme. Natively, GMod ignores bold and falls back to DejaVu Sans for fonts it can't find. Under Proton, as on Windows, addons get exactly the font and weight they ask for. If an addon's text shows up in an odd fallback font, it's asking for one of the Microsoft fonts Proton doesn't have (Verdana, Trebuchet MS, Impact and so on), and installing them into GMod's Proton prefix fixes that part:
+
+```
+protontricks 4000 corefonts
+```
+
 ### Menu sound
 
 Hovering a menu button plays `sound/umbraflow/hover.wav`. Want your own sound? Drop a `.wav` in at that same path and keep the name, and it just works. A short 16-bit wav (mono, 44.1kHz) is the safe bet. If you'd rather point it somewhere else or turn it off, the hover line is at the bottom of `html/js/menu/control.Menu.js`.

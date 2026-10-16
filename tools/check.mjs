@@ -194,16 +194,37 @@ for (const file of ["loading.css", "awesomium_global.css"]) {
     check("GMod: bundled VGUI fonts exist and keep their embedded license fields", !bad.length, bad.join(", "));
     check("GMod: SourceScheme no longer asks for Segoe UI or Selawik", !/"(Segoe UI|Selawik)/.test(scheme));
 
+    // The bundled fonts have to reach native Linux and macOS too, not just
+    // Windows/Proton. Any font that uses them may only add Lucida Console or
+    // Tahoma for Windows (net_graph); console-only ($X360) sets don't count.
+    {
+        const fontsBody = scheme.slice(scheme.indexOf("\n\tFonts\n"), scheme.indexOf("\n\tBorders\n"));
+        const blocks = [...fontsBody.matchAll(/\n\t\t"?(\w+)"?[^\n]*\n\t\t\{([\s\S]*?)\n\t\t\}/g)];
+        const strays = [];
+        for (const [, name, body] of blocks) {
+            if (!/"(Umbraflow Sans|Cascadia Mono)"/.test(body)) continue;
+            for (const set of body.split(/\n\t\t\t(?="\d+")/).slice(1)) {
+                if (/^"\d+"[ \t]*\[\$X360\]/.test(set)) continue;
+                const names = [...set.matchAll(/"name"\s+"([^"]+)"[ \t]*(\[[^\]]+\])?/gi)].map(m => [m[1], m[2] ?? ""]);
+                const bundled = names.filter(([n]) => n === "Umbraflow Sans" || n === "Cascadia Mono");
+                const others = names.filter(([n, c]) => !bundled.some(b => b[0] === n) && !(["Lucida Console", "Tahoma"].includes(n) && c === "[$WINDOWS]"));
+                const reachesLinux = bundled.some(([, c]) => c === "" || c === "[!$WINDOWS]");
+                if (others.length || !reachesLinux) strays.push(`${name}: ${names.map(([n, c]) => `${n} ${c}`.trim()).join(", ")}`);
+            }
+        }
+        check("GMod: bundled VGUI fonts apply on every platform", !strays.length, strays.join("; "));
+    }
+
     const outline = font("DefaultFixedOutline");
-    check("GMod: DefaultFixedOutline (net_graph) is Lucida Console on Windows/Proton",
-        /"name"\s+"Lucida Console" \[\$WINDOWS\]/.test(outline));
+    check("GMod: DefaultFixedOutline (net_graph) is Lucida Console on Windows/Proton, Cascadia Mono elsewhere",
+        sets(outline).length > 1 && sets(outline).every(s => /"name"\s+"Lucida Console" \[\$WINDOWS\]/.test(s) && /"name"\s+"Cascadia Mono" \[!\$WINDOWS\]/.test(s)));
     check("GMod: every DefaultFixedOutline tier is antialiased and outlined",
         sets(outline).length > 1 && sets(outline).every(s => /"antialias"\s+"1"/.test(s) && /"outline"\s+"1"/.test(s)));
     check("GMod: DefaultFixedOutline yres tiers cover every screen height", tiersCover(outline));
 
     const small = font("DefaultVerySmall");
-    check("GMod: DefaultVerySmall (net_graph rates) is Tahoma on Windows/Proton",
-        /"name"\s+"Tahoma" \[\$WINDOWS\]/.test(small));
+    check("GMod: DefaultVerySmall (net_graph rates) is Tahoma on Windows/Proton, Umbraflow Sans elsewhere",
+        sets(small).length > 1 && sets(small).every(s => /"name"\s+"Tahoma" \[\$WINDOWS\]/.test(s) && /"name"\s+"Umbraflow Sans" \[!\$WINDOWS\]/.test(s)));
     check("GMod: every DefaultVerySmall tier is antialiased",
         sets(small).length > 1 && sets(small).every(s => /"antialias"\s+"1"/.test(s)));
     check("GMod: DefaultVerySmall yres tiers cover every screen height", tiersCover(small));
