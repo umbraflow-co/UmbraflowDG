@@ -111,7 +111,7 @@ Works fine with or without the Umbraflow theme. They don't touch each other.
 
 ## Garry's Mod
 
-The `Gmod-Theme/` folder mirrors your `garrysmod` directory. It has the main menu, loading screen, VGUI scheme (`resource/SourceScheme.res`), custom logos, and a hover sound for the menu buttons.
+The `Gmod-Theme/` folder mirrors your `garrysmod` directory. It has the main menu, loading screen, VGUI scheme (`resource/SourceScheme.res`), chat box font, custom logos, and a hover sound for the menu buttons.
 
 ### Requires Chromium
 
@@ -137,6 +137,15 @@ No beta code is needed, both branches are public. If the menu ever shows up plai
 
 To undo it, restore your backup or verify the game files through Steam.
 
+### Chat and addon text
+
+Server addons (HUDs, F4 menus, scoreboards and plenty of others) mostly draw with Roboto, and GMod's built-in chat box uses bold Verdana. On Windows and Proton both come out heavy. Native Linux draws them lighter, because it ignores bold and falls back to DejaVu Sans, and that's the look the theme copies everywhere:
+
+- GMod's own Roboto files in `resource/fonts/` are replaced with DejaVu Sans under the same names, so addon text that asks for Roboto gets regular-weight DejaVu Sans. Bold Roboto comes out regular too, like on native Linux. Italic Roboto is left as it is.
+- The built-in chat box (`resource/ChatScheme.res`) uses regular, smoothed DejaVu Sans.
+
+This applies on every server, to any addon that uses Roboto. Verifying the game files in Steam puts the original Roboto and chat font back.
+
 ### Linux and Proton
 
 The theme ships its own fonts for the menu, console and dialogs, so Windows and Linux use the same ones. On Linux you can run GMod two ways.
@@ -149,7 +158,7 @@ The theme ships its own fonts for the menu, console and dialogs, so Windows and 
 
 Do the same three steps whenever you rerun the tool.
 
-**Proton.** The theme works the same. Server addon text (chat boxes, F4 menus, scoreboards) can look heavier than it does natively, but that's down to the addons, not the theme. Natively, GMod ignores bold and falls back to DejaVu Sans for fonts it can't find. Under Proton, as on Windows, addons get exactly the font and weight they ask for. If an addon's text shows up in an odd fallback font, it's asking for one of the Microsoft fonts Proton doesn't have (Verdana, Trebuchet MS, Impact and so on), and installing them into GMod's Proton prefix fixes that part:
+**Proton.** The theme works the same, including the chat and addon text changes above. If an addon's text shows up in an odd fallback font, it's asking for a Microsoft font Proton doesn't have (Verdana, Trebuchet MS, Impact and so on), and installing them into GMod's Proton prefix fixes that:
 
 ```
 protontricks 4000 corefonts

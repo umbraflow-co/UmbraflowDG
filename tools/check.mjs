@@ -114,7 +114,7 @@ for (const file of ["loading.css", "awesomium_global.css"]) {
         "css/Workshop.css", "css/creations/Creations.css",
         "css/menu/Menu.css", "css/menu/NavBar.css", "css/menu/NewGame.css", "css/menu/PageOptions.css", "css/menu/Servers.css",
         "js/menu/control.Menu.js", "js/menu/control.Servers.js"
-    ].map(f => GM + f).concat("Gmod-Theme/resource/SourceScheme.res");
+    ].map(f => GM + f).concat("Gmod-Theme/resource/SourceScheme.res", "Gmod-Theme/resource/ChatScheme.res");
 
     const versions = new Set();
     for (const f of files) {
@@ -228,6 +228,31 @@ for (const file of ["loading.css", "awesomium_global.css"]) {
     check("GMod: every DefaultVerySmall tier is antialiased",
         sets(small).length > 1 && sets(small).every(s => /"antialias"\s+"1"/.test(s)));
     check("GMod: DefaultVerySmall yres tiers cover every screen height", tiersCover(small));
+}
+
+// Server addons mostly draw with Roboto, and GMod's chat box with bold,
+// unsmoothed Verdana. Both look heavy on Windows and Proton next to native
+// Linux, which ignores bold and falls back to DejaVu Sans. So the theme
+// replaces GMod's non-italic Roboto faces with DejaVu Sans glyphs under the
+// same names and flags, and gives the chat box regular, antialiased DejaVu Sans.
+{
+    const utf16 = text => Buffer.from(text, "utf16le").swap16();
+    const fontHas = (file, text) => {
+        try { return readFileSync(join(ROOT, file)).includes(utf16(text)); } catch { return false; }
+    };
+    const faces = ["Regular", "Medium", "Light", "Thin", "Bold", "Black", "Condensed", "BoldCondensed"].map(s => `Gmod-Theme/resource/fonts/Roboto-${s}.ttf`);
+    const wrong = faces.filter(f => !fontHas(f, `Roboto`) || !fontHas(f, "Bitstream"));
+    check("GMod: the replacement Roboto faces exist, keep Roboto's names and DejaVu's embedded license", !wrong.length, wrong.join(", "));
+
+    const chat = read("Gmod-Theme/resource/ChatScheme.res");
+    const chatFont = chat.match(/\t\t"ChatFont"\n\t\t\{([\s\S]*?)\n\t\t\}/)?.[1] ?? "";
+    const chatSets = chatFont.split(/\n\t\t\t"\d+"\n/).slice(1);
+    check("GMod: ChatFont is regular, antialiased DejaVu Sans with Linux sizes kept",
+        chatSets.length === 5 && chatSets.every(s => /"name"\s+"DejaVu Sans"/.test(s) && /"weight"\s+"400"/.test(s) &&
+            /"antialias"\s+"1"/.test(s) && /"tall"\s+"\d+" \[\$LINUX\]/.test(s)));
+    check("GMod: ChatScheme loads the bundled DejaVu Sans",
+        /"resource\/umbraflow\/DejaVuSans\.ttf"/.test(chat.match(/CustomFontFiles\s*\{([^}]*)\}/)?.[1] ?? "") &&
+        fontHas("Gmod-Theme/resource/umbraflow/DejaVuSans.ttf", "Bitstream"));
 }
 
 // Functions the engine calls into the menu by name. Losing one crashes the
