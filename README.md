@@ -45,7 +45,7 @@ The Discord screenshots show version 1. They have not been retaken for version 2
 | Lists | Channels are pill rows with the icon in a chip, and categories sit in a bubble. The member list groups each role into one card. Direct messages and the friends list are cards too, and the friends tabs are one segmented control. |
 | Settings | Each section's rows sit in one card, with pill entries in the sidebar. |
 | Forums and threads | Gallery posts are smaller cards that lead with the image. A thread under a message is a card with the link to open it on the right. |
-| Voice | The call stage is charcoal instead of black and the controls sit in one tray. The Voice Connected box in the sidebar is its own card with round buttons. |
+| Voice | The call stage is charcoal instead of black and the controls sit in one tray. The Voice Connected box in the sidebar sits straight on the user panel, with its buttons sharing one row and Disconnect at the end in red. |
 
 The theme uses no blur, animations or transitions.
 

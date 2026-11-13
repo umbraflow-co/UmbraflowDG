@@ -1,7 +1,7 @@
 /**
  * @name Umbraflow
  * @author Big_Killers
- * @version 2.4.2
+ * @version 2.5.2
  * @description A calm charcoal and blue restyle of Discord. Rounded panels, card-based lists and Ubuntu Sans type across chat, settings, forums and voice calls. Follows Discord's own light and dark setting.
  */
 
@@ -1132,19 +1132,29 @@ aside[class*="sidebar_"] {
   border-color: transparent;
 }
 
-/* The "Voice Connected" box in the sidebar is a card of its own inside
-   the user panel; it is the one box there set in Discord's small
-   medium text style. Its buttons read their fill from a token,
-   re-pointed here. The top row may grow, since plugins add lines to it. */
+/* The "Voice Connected" box in the sidebar sits straight on the user
+   panel, with one hairline between it and the user row below. It is the
+   one box there set in Discord's small medium text style. Its buttons
+   read their fill from a token, re-pointed here. The top row may grow,
+   since plugins add lines to it. */
 [class*="panels_"] [class*="container_"][class*="body-sm/medium_"] {
-  --control-secondary-background-default: var(--umbra-raised-3);
+  --control-secondary-background-default: var(--umbra-raised-2);
   position: relative;
-  gap: var(--space-8);
-  margin: var(--space-8) var(--space-8) 0;
-  padding: 10px var(--space-12);
+  gap: 10px;
+  margin: 0;
+  padding: var(--space-12) var(--space-12) 10px;
   border: 0;
-  border-radius: var(--radius-sm);
-  background: var(--umbra-raised-2);
+  border-radius: 0;
+  background: none;
+}
+
+[class*="panels_"] [class*="container_"][class*="body-sm/medium_"]::after {
+  content: "";
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: var(--space-12);
+  height: 1px;
+  background: color-mix(in srgb, var(--umbra-line) 70%, transparent);
 }
 
 [class*="panels_"] [class*="connection_"],
@@ -1190,38 +1200,64 @@ aside[class*="sidebar_"] {
   font-weight: var(--font-weight-semibold);
 }
 
-/* Camera, screen share and the other actions: round chips in a row from
-   the left. A button that carries a label stays a pill. */
+/* Camera, screen share and the other actions share the row equally as
+   pills, and Disconnect closes it as one more of the same width in red.
+   Disconnect is the last button of the top row, lifted out and pinned
+   to the corner, so the row keeps a slot free for it: with 12px of
+   padding each side and four 6px gaps, a fifth of what is left. It only
+   moves when a row follows the top one for it to join. */
 [class*="panels_"] [class*="actionButtons_"] {
   display: flex;
-  justify-content: flex-start;
   gap: 6px;
-  padding-inline-end: 40px;
+  padding-inline-end: calc((100% - 24px) / 5 + 6px);
 }
 
 [class*="panels_"] [class*="actionButtons_"] > * {
-  flex: none;
-  width: auto;
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 [class*="panels_"] [class*="actionButtons_"] button {
-  width: auto;
-  min-width: 32px;
-  padding: 0 5px;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
   border-radius: var(--radius-round);
 }
 
-/* Disconnect closes that row on the right as a red chip. It is the last
-   button of the top row, lifted out and pinned to the card's corner,
-   and only when a row follows the top one for it to join. */
+/* The buttons left in the top row, such as noise suppression, take a
+   round plate on hover in place of Discord's rounded square, so they
+   match the pills below. */
+[class*="panels_"] [class*="voiceButtonsContainer_"] > * {
+  border-radius: var(--radius-round);
+}
+
+/* Noise suppression shows a plain sine wave in place of Discord's
+   animated icon. Discord's icon is hidden and the wave is drawn as a
+   mask, so it takes the button's own colour in every state. This drops
+   the animation that showed whether suppression is on; the button's
+   popout still does. A disabled button keeps Discord's icon, which is
+   how an error is shown. */
+[class*="panels_"] [class*="voiceButtonsContainer_"] > [class*="enabled_"]:not(:last-child) > * {
+  display: none;
+}
+
+[class*="panels_"] [class*="voiceButtonsContainer_"] > [class*="enabled_"]:not(:last-child)::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  background-color: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 12h2c2 0 2-8 4-8s3 16 6 16 2-8 4-8h2'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
 [class*="panels_"] [class*="connection_"]:not(:last-child) [class*="voiceButtonsContainer_"] > :last-child,
 [class*="panels_"] [class*="connection_"]:not(:last-child) [class*="voiceButtonsContainer_"] > :last-child:hover {
   position: absolute;
   inset-block-end: 10px;
   inset-inline-end: var(--space-12);
-  width: 32px;
+  width: calc((100% - 48px) / 5);
   height: 32px;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   background-color: var(--umbra-red);
   color: #fff;
 }
