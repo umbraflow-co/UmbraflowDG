@@ -1,7 +1,7 @@
 /**
  * @name Umbraflow
  * @author Big_Killers
- * @version 2.4.0
+ * @version 2.4.2
  * @description A calm charcoal and blue restyle of Discord. Rounded panels, card-based lists and Ubuntu Sans type across chat, settings, forums and voice calls. Follows Discord's own light and dark setting.
  */
 
@@ -1074,6 +1074,17 @@ aside[class*="sidebar_"] {
 [class*="videoGrid_"] > [class*="listItems_"]:has(> :first-child > :only-child):has(> :nth-child(2):last-child) > [class*="row_"] > [class*="tile_"] {
   width: 100% !important;
   margin: 0;
+}
+
+/* A voice-only call, as in direct messages, shows the callers' avatars
+   centred over the whole call area, which puts them right on top of the
+   controls. Discord gives the row 100% height and adds its bottom
+   padding outside that, so the padding moves nothing. Counting the
+   padding inside the height centres the avatars in the space above it:
+   32px lifts them 16px. */
+[class*="voiceCallWrapper_"] {
+  box-sizing: border-box;
+  padding-block-end: 32px;
 }
 
 /* Controls: one floating tray. Discord's two groups lose their own
