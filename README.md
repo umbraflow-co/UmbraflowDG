@@ -2,11 +2,11 @@
 
 # Umbraflow
 
-A dark theme for Discord and Garry's Mod, based on the Windows 11 Fluent look. Made from scratch.
+Themes for Discord and Garry's Mod, plus a Vencord plugin that animates Discord. Made from scratch.
 
 | Platform | What it does |
 |----------|----------------|
-| Discord | Themes the whole client: chat, member list, panels, menus, and settings. One file that auto-switches between Light, Dark, and Onyx. |
+| Discord | Restyles the whole client: colors, type and layout across chat, lists, settings, forums and voice calls. One file that follows Discord's Light and Dark setting. |
 | Garry's Mod | Themes the main menu, loading screen, VGUI scheme (console, dialogs, spawnmenu), and custom logos. |
 | UmbraMotion | A Vencord plugin that animates Discord's UI: menus, modals, popouts, tooltips, messages and more, each spot configurable on its own. |
 
@@ -14,11 +14,11 @@ A dark theme for Discord and Garry's Mod, based on the Windows 11 Fluent look. M
 
 ## Features
 
-- Windows 11 Fluent styling: acrylic-style surfaces, rounded corners, and soft shadows.
-- The Discord theme changes itself to match your Discord appearance (Light, Dark, or Onyx). You don't toggle anything.
-- Discord and Garry's Mod share the same look.
+- The Discord theme is charcoal and blue, set in Ubuntu Sans, with rounded panels and card-based lists.
+- It changes itself to match your Discord appearance (Light or Dark). You don't toggle anything.
+- The Garry's Mod theme uses Windows 11 Fluent styling: acrylic-style surfaces, rounded corners, and soft shadows.
 - The Garry's Mod menu plays a soft hover sound when you mouse over the buttons.
-- The Discord theme is a single file with everything inlined, so there are no extra assets to install.
+- The Discord theme is a single file with no assets to install. The only thing it loads is the Ubuntu Sans font from Google Fonts, and it falls back to Discord's own font if that can't load.
 - UmbraMotion adds enter animations to Discord on top of the theme, with style, speed, easing and direction settings for each part of the UI. Runs on Vencord, works with or without the theme.
 
 ---
@@ -29,17 +29,25 @@ A dark theme for Discord and Garry's Mod, based on the Windows 11 Fluent look. M
 |---------|-------------|
 | ![Discord preview](screenshots/discord-server.png)<br>![Discord settings preview](screenshots/discord-settings.png) | ![Gmod preview](screenshots/gmod.png) |
 
+The Discord screenshots show version 1. They have not been retaken for version 2 yet.
+
 ---
 
 ## Discord
 
-`Discord-Themes/umbraflow.theme.css` holds three palettes and picks one automatically based on your Discord appearance:
+`Discord-Themes/umbraflow.theme.css` restyles Discord's colors, type and layout. Version 2 is a new design, with charcoal surfaces and a blue accent in place of the earlier Fluent look. The Fluent version (1.0.5) is still [in the repo's history](https://github.com/umbraflow-co/UmbraflowDG/blob/8d560b83875bf55b248b4d11fb1d2f2e3747bc16/Discord-Themes/umbraflow.theme.css).
 
-| Discord appearance | Palette |
-|--------------------|---------|
-| Light | Clean off-white with silvery cards |
-| Dark  | Fluent dark (the default) |
-| Onyx  | Near-black, OLED-friendly |
+| Area | What changes |
+|------|--------------|
+| Color | Dark mode uses three charcoal surfaces (`#232323`, `#2b2b2b`, `#333`) with a blue accent. Light mode uses white and pale grey with the same accent. |
+| Type | The interface is set in Ubuntu Sans on a 14px scale. |
+| Chat | The chat sits in a rounded panel. Each sender's messages carry a thin line on the left, which turns yellow on messages that mention you. The message box is a pill with its tools in a tray. |
+| Lists | Channels are pill rows with the icon in a chip, and categories sit in a bubble. The member list groups each role into one card. Direct messages and the friends list are cards too, and the friends tabs are one segmented control. |
+| Settings | Each section's rows sit in one card, with pill entries in the sidebar. |
+| Forums and threads | Gallery posts are smaller cards that lead with the image. A thread under a message is a card with the link to open it on the right. |
+| Voice | The call stage is charcoal instead of black and the controls sit in one tray. The Voice Connected box in the sidebar is its own card with round buttons. |
+
+The theme uses no blur, animations or transitions.
 
 ### Install
 
@@ -62,7 +70,7 @@ https://raw.githubusercontent.com/umbraflow-co/UmbraflowDG/main/Discord-Themes/u
 <details>
 <summary><strong>Equicord</strong> (Vencord fork)</summary>
 
-Same as Vencord: **Settings → Equicord → Themes → Open Themes Folder**, drop the file in, enable it.
+Same as Vencord: **Settings → Equicord → Themes → Open Themes Folder**, drop the file in, enable it. Version 2 has not been tested on Equicord yet.
 </details>
 
 <details>
@@ -73,18 +81,30 @@ Same as Vencord: **Settings → Equicord → Themes → Open Themes Folder**, dr
 3. Drop `umbraflow.theme.css` into that folder.
 4. Toggle **Umbraflow** on in the Themes list.
 
-The file has the metadata header BetterDiscord needs, so it shows up with its name and author.
+The file has the metadata header BetterDiscord needs, so it shows up with its name and author. Version 2 was built on Vencord and has not been tested on BetterDiscord yet.
 </details>
 
 > If it doesn't show up, reload Discord with **`Ctrl`/`Cmd` + R**, or toggle it off and on.
 
+### Optional Vencord plugins
+
+Three details need a Vencord plugin and do nothing without it:
+
+| Plugin | What it adds |
+|--------|--------------|
+| MemberCount | Online and total counts above the member list, styled to match. |
+| ThemeAttributes | Your own messages get a red line in place of the blue one. |
+| Any plugin that adds message box buttons, such as SilentTyping | A hairline separates those buttons from Discord's own. |
+
 ### Choosing the look
 
-Go to **Settings → Appearance → Theme** and pick Light, Dark, or Onyx. Switch whenever you want and the palette changes right away. There's no separate Umbraflow setting.
+Go to **Settings → Appearance → Theme** and pick Light or Dark. Switch whenever you want and the palette changes right away. There's no separate Umbraflow setting.
+
+Version 2 has no palette of its own for Onyx, and it has not been tested there.
 
 ### How the auto-switch works
 
-Discord puts a class on the app for the current appearance (`theme-light`, `theme-dark`, or `theme-dark theme-midnight` for Onyx). Umbraflow ships all three palettes as CSS variables. Dark is the baseline, and two override blocks (`1b. THEME OVERRIDES`, at the bottom of the file) change only what's different for Light and Onyx. The layout is written once and shared by all three.
+Discord puts a class on the app for the current appearance (`theme-light` or `theme-dark`). Umbraflow defines its surfaces once for each class, in two short blocks near the top of the file, then points Discord's own color tokens at them. The layout is written once and shared by both.
 
 ---
 
@@ -172,7 +192,9 @@ Hovering a menu button plays `sound/umbraflow/hover.wav`. Want your own sound? D
 
 ## Customization
 
-The Discord colors are all CSS variables. The Dark palette is the `:root` block near the top of `umbraflow.theme.css`. Light and Onyx are the two blocks under `1b. THEME OVERRIDES` at the bottom, and each one only lists what's different. Edit a value and reload. The layout rules read the variables, so one change applies to all three palettes.
+The Discord colors are all CSS variables. The accent colors and the font are in the `:root` block at the top of `umbraflow.theme.css`, and the Dark and Light surfaces are the `.theme-dark` and `.theme-light` blocks right under it. Edit a value and reload. The layout rules read the variables, so one change applies everywhere.
+
+`--umbra-forum-density` in the same `:root` block sets how many forum gallery cards fit per row. 1 is Discord's own size, and higher values fit more, smaller cards.
 
 ---
 
@@ -186,7 +208,7 @@ Questions, updates, or want to show off your setup? Come hang out:
 
 ## Issues and contributions
 
-Found a bug or have an idea? Open an [issue](../../issues). Pull requests are welcome, just keep things consistent with the Fluent look. Run `node tools/check.mjs` before you send one, and see [MAINTENANCE.md](MAINTENANCE.md) for the parts that are easy to break.
+Found a bug or have an idea? Open an [issue](../../issues). Pull requests are welcome, just keep things consistent with each theme's look. Run `node tools/check.mjs` before you send one, and see [MAINTENANCE.md](MAINTENANCE.md) for the parts that are easy to break.
 
 ---
 
@@ -198,6 +220,6 @@ Umbraflow is under the [MIT License](LICENSE). Use it, change it, and share it, 
 
 ## Credits
 
-Created by BigKillers (Discord: `Big_Killers`). Fluent design language from Microsoft / Windows 11. Discord Spotify glyph from [Simple Icons](https://simpleicons.org) (CC0).
+Created by BigKillers (Discord: `Big_Killers`). Fluent design language from Microsoft / Windows 11. [Ubuntu Sans](https://fonts.google.com/specimen/Ubuntu+Sans) by Canonical, loaded from Google Fonts.
 
 Not affiliated with Discord, Microsoft, or Facepunch Studios.

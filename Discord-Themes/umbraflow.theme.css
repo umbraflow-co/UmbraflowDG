@@ -1,1043 +1,1305 @@
 /**
  * @name Umbraflow
- * @description Fluent Windows 11-inspired theme — auto-switches between Light,
- *              Dark (Fluent) and Onyx (Midnight) with Discord's appearance.
  * @author Big_Killers
- * @version 1.0.5
+ * @version 2.4.0
+ * @description A calm charcoal and blue restyle of Discord. Rounded panels, card-based lists and Ubuntu Sans type across chat, settings, forums and voice calls. Follows Discord's own light and dark setting.
  */
 
-/* ALL-IN-ONE VARIANT */
+/* Ubuntu Sans, the interface font, loaded from Google Fonts so it is
+   present on every system. Must stay the first statement in the file. */
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu+Sans:ital,wght@0,100..800;1,100..800&display=swap");
 
-/* 1. FLUENT DESIGN TOKENS  (dark / Fluent baseline) */
-
-:root,
-.theme-dark,
-.theme-light,
-.theme-midnight {
-
-  --fluenty-accent: #005fb8;
-  --fluenty-accent-light: #60cdff;
-  --fluenty-accent-hover: #1a6cbf;
-  --fluenty-accent-pressed: #005097;
-
-  /* Grayscale ramp */
-  --fluenty-13: 19, 19, 19;
-  --fluenty-19: 25, 25, 25;
-  --fluenty-1b: 32, 32, 32;
-  --fluenty-20: 39, 39, 39;
-  --fluenty-2b: 44, 44, 44;
-  --fluenty-30: 48, 48, 48;
-  --fluenty-37: 55, 55, 55;
-
-  /* mica backdrop sits darker than the content layer on top of it */
-  --fluenty-mica: rgb(var(--fluenty-1b));
-  --fluenty-layer: rgb(var(--fluenty-20));
-
-  --fluenty-acrylic: rgba(44, 44, 44, 0.86);
-
-  /* hover/pressed fills are translucent white, not a solid color */
-  --fluenty-fill-hover: rgba(255, 255, 255, 0.0605);
-  --fluenty-fill-pressed: rgba(255, 255, 255, 0.0419);
-  --fluenty-fill-selected: rgba(255, 255, 255, 0.0837);
-  --fluenty-fill-control: rgba(255, 255, 255, 0.0605);
-
-  --fluenty-stroke-control: rgba(255, 255, 255, 0.0837);
-  --fluenty-stroke-card: rgba(0, 0, 0, 0.1);
-  --fluenty-stroke-divider: rgba(255, 255, 255, 0.0837);
-
-  --fluenty-text-primary: rgba(255, 255, 255, 1);
-  --fluenty-text-secondary: rgba(255, 255, 255, 0.786);
-  --fluenty-text-tertiary: rgba(255, 255, 255, 0.5442);
-  --fluenty-text-disabled: rgba(255, 255, 255, 0.3628);
-
-  --fluenty-elev-low: 0 1px 2px rgba(0, 0, 0, 0.13), 0 0 2px rgba(0, 0, 0, 0.11);
-  --fluenty-elev-medium: 0 4px 8px rgba(0, 0, 0, 0.14), 0 0 2px rgba(0, 0, 0, 0.12);
-  --fluenty-elev-high: 0 8px 16px rgba(0, 0, 0, 0.14), 0 0 2px rgba(0, 0, 0, 0.12);
-  --fluenty-mod-faint: rgba(255, 255, 255, 0.03);
-  --fluenty-mod-subtle: rgba(255, 255, 255, 0.06);
-  --fluenty-mod-strong: rgba(255, 255, 255, 0.09);
-  --fluenty-scrollbar: rgba(255, 255, 255, 0.2);
-  --fluenty-scrollbar-hover: rgba(255, 255, 255, 0.45);
-  --fluenty-input-underline: rgba(255, 255, 255, 0.16);
-  --fluenty-base-gradient:
-    radial-gradient(125% 90% at 0% 0%, rgba(0, 95, 184, 0.22), transparent 58%),
-    radial-gradient(110% 85% at 100% 100%, rgba(96, 205, 255, 0.09), transparent 55%);
-  --fluenty-chip-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.01));
-  --fluenty-panel-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0));
-  --fluenty-hover-tint: rgba(255, 255, 255, 0.0261);
-
-  --fluenty-member-sheen: none;
-  --fluenty-member-sheen-hover: none;
-
-  --fluenty-ease: cubic-bezier(0.1, 0.9, 0.2, 1);
-  --fluenty-motion: 1;
-
-  --fluenty-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
-}
-
-/* 2. MAP ONTO DISCORD */
-
-:root,
-.theme-dark,
-.theme-light,
-.theme-midnight {
-
-  --background-primary: var(--fluenty-layer);
-  --background-secondary: var(--fluenty-mica);
-  --background-secondary-alt: var(--fluenty-mica);
-  --background-tertiary: var(--fluenty-mica);
-  --background-accent: var(--fluenty-accent);
-  --background-floating: var(--fluenty-acrylic);
-  --background-mobile-primary: var(--fluenty-layer);
-  --background-mobile-secondary: var(--fluenty-mica);
-  --channeltextarea-background: var(--fluenty-fill-control);
-  --input-background: var(--fluenty-fill-control);
-  --modal-background: var(--fluenty-layer);
-  --modal-footer-background: var(--fluenty-mica);
-  --deprecated-card-bg: var(--fluenty-hover-tint);
-  --deprecated-quickswitcher-input-background: var(--fluenty-fill-control);
-
-  /* State fills */
-  --background-modifier-hover: var(--fluenty-fill-hover);
-  --background-modifier-active: var(--fluenty-fill-pressed);
-  --background-modifier-selected: var(--fluenty-fill-selected);
-  --background-modifier-accent: var(--fluenty-stroke-divider);
-  --background-message-hover: var(--fluenty-hover-tint);
-
-  /* Strokes */
-  --border-faint: var(--fluenty-stroke-card);
-  --border-subtle: var(--fluenty-stroke-divider);
-  --border-strong: var(--fluenty-stroke-control);
-  --elevation-stroke: 0 0 0 1px var(--fluenty-stroke-card);
-
-  /* Text */
-  --text-normal: var(--fluenty-text-secondary);
-  --text-default: var(--fluenty-text-secondary);
-  --text-secondary: var(--fluenty-text-tertiary);
-  --text-muted: var(--fluenty-text-tertiary);
-  --text-link: var(--fluenty-accent-light);
-  --header-primary: var(--fluenty-text-primary);
-  --header-secondary: var(--fluenty-text-tertiary);
-  --channels-default: var(--fluenty-text-tertiary);
-  --channel-icon: var(--fluenty-text-tertiary);
-  --interactive-normal: var(--fluenty-text-secondary);
-  --interactive-hover: var(--fluenty-text-primary);
-  --interactive-active: var(--fluenty-text-primary);
-  --interactive-muted: var(--fluenty-text-disabled);
-
-  /* Brand */
-  --brand-experiment: var(--fluenty-accent);
-  --brand-experiment-560: var(--fluenty-accent);
-  --brand-experiment-600: var(--fluenty-accent-pressed);
-  --brand-500: var(--fluenty-accent);
-  --button-filled-brand-background: var(--fluenty-accent);
-
-  --elevation-low: var(--fluenty-elev-low);
-  --elevation-medium: var(--fluenty-elev-medium);
-  --elevation-high: var(--fluenty-elev-high);
-  --shadow-low: var(--elevation-low);
-  --shadow-medium: var(--elevation-medium);
-  --shadow-high: var(--elevation-high);
-}
-
-/* 2b. DISCORD'S REAL COLOUR TOKENS */
-
-:root,
-.theme-dark,
-.theme-light,
-.theme-midnight {
-  --background-base-lowest: rgb(var(--fluenty-13)) !important;
-  --background-base-lower: rgb(var(--fluenty-1b)) !important;
-  --background-base-low: rgb(var(--fluenty-20)) !important;
-
-  --background-surface-high: rgb(var(--fluenty-2b)) !important;
-  --background-surface-higher: rgb(var(--fluenty-30)) !important;
-  --background-surface-highest: rgb(var(--fluenty-37)) !important;
-  --background-surface-overlay: var(--fluenty-acrylic) !important;
-
-  --background-mod-faint: var(--fluenty-mod-faint) !important;
-  --background-mod-subtle: var(--fluenty-mod-subtle) !important;
-  --background-mod-strong: var(--fluenty-mod-strong) !important;
-
-  --background-brand: var(--fluenty-accent) !important;
-}
-
-/* 3. TYPOGRAPHY */
+/* ── Palette ─────────────────────────────────────────────────────────── */
 
 :root {
-  --font-primary: "Segoe UI Variable Text", "Segoe UI Variable Static Text", "Segoe UI", system-ui, sans-serif;
-  --font-display: "Segoe UI Variable Display", "Segoe UI Variable Static Display", "Segoe UI", system-ui, sans-serif;
-  --font-headline: "Segoe UI Variable Display", "Segoe UI Variable Static Display", "Segoe UI", system-ui, sans-serif;
+  --umbra-blue: #0fadff;
+  --umbra-yellow: #fffc00;
+  --umbra-red: #f23c57;
+
+  /* Hue and saturation of --umbra-blue, kept apart so the ramp at the end of
+     this file still honours Discord's saturation accessibility slider. */
+  --umbra-blue-hs: 201 calc(var(--saturation-factor, 1) * 100%);
+
+  /* Interface font, loaded by the import at the top of the file. If it
+     cannot be fetched, this falls back to Discord's own face. */
+  --font-primary: "Ubuntu Sans", "Ubuntu", "gg sans", "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  /* Ubuntu Sans runs heavier than Discord's own face at the same weight,
+     so each emphasis step drops one notch to keep the interface light. */
+  --font-weight-medium: 400;
+  --font-weight-semibold: 500;
+  --font-weight-bold: 600;
+
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+
+  /* How much denser the forum gallery is than Discord's own. 1 is
+     Discord's card size; higher fits more, smaller cards per row. */
+  --umbra-forum-density: 1.4;
 }
 
-body {
-  font-synthesis-weight: none;
-  -webkit-font-smoothing: antialiased;
+.theme-dark {
+  --umbra-base: #232323;
+  --umbra-raised-1: #2b2b2b;
+  --umbra-raised-2: #333;
+  --umbra-raised-3: #3d3d3d;
+  --umbra-line: rgb(255 255 255 / 0.1);
+  --umbra-panel-line: transparent;
+  --umbra-link: var(--umbra-blue);
 }
 
-/* 4. GEOMETRY */
-
-:root {
-  --radius-xxs: 2px;
-  --radius-xs: 4px;
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 8px;
-  --radius-xl: 8px;
+.theme-light {
+  --umbra-base: #fff;
+  --umbra-raised-1: #fff;
+  --umbra-raised-2: #f5f5f7;
+  --umbra-raised-3: #ebebef;
+  --umbra-line: rgb(0 0 0 / 0.1);
+  --umbra-panel-line: var(--umbra-line);
+  --umbra-link: #0077cc;
 }
 
-/* 5. ACRYLIC SURFACES */
+/* ── Discord tokens ──────────────────────────────────────────────────── */
 
-/* contextMenu_ is gone, Discord merged all its context menus into menu_ */
-[class*="menu_"],
-[class*="autocomplete_"] {
+/* One mapping serves both modes: each token resolves against whichever
+   palette the nearest theme class supplies. */
+.theme-dark,
+.theme-light {
+  --app-frame-background: var(--umbra-base);
+  --background-base-lowest: var(--umbra-base);
+  --background-base-lower: var(--umbra-base);
+  --background-base-low: var(--umbra-base);
 
-  background: var(--fluenty-noise) repeat, rgb(var(--fluenty-2b)) !important;
-  border: 1px solid var(--fluenty-stroke-card) !important;
-  border-radius: 8px !important;
-  box-shadow: var(--elevation-high) !important;
+  --chat-background-default: var(--umbra-raised-1);
+  --background-surface-high: var(--umbra-raised-1);
+  --modal-background: var(--umbra-raised-1);
+  --modal-footer-background: var(--umbra-raised-1);
+
+  --background-surface-higher: var(--umbra-raised-2);
+  --card-background-default: var(--umbra-raised-2);
+  --input-background-default: var(--umbra-raised-2);
+
+  --background-surface-highest: var(--umbra-raised-3);
+  --user-profile-overlay-background: var(--umbra-raised-3);
+  --user-profile-toolbar-background: var(--umbra-raised-3);
+  --user-profile-activity-toolbar-background: var(--umbra-raised-3);
+
+  --app-frame-border: var(--umbra-panel-line);
+  --border-subtle: var(--umbra-line);
+
+  --text-link: var(--umbra-link);
+  --spine-default: var(--umbra-raised-3);
+
+  --badge-notification-background: var(--background-brand);
+  --message-mentioned-background-default: hsl(var(--blurple-50-hsl) / 0.14);
+  --message-mentioned-background-hover: hsl(var(--blurple-50-hsl) / 0.1);
+
+  --control-critical-primary-background-default: var(--umbra-red);
+  --control-critical-primary-background-hover: color-mix(in srgb, var(--umbra-red) 88%, #000);
+  --control-critical-primary-background-active: color-mix(in srgb, var(--umbra-red) 76%, #000);
+  --status-danger: var(--umbra-red);
 }
 
-[class*="tooltip_"] {
+/* ── Type scale ──────────────────────────────────────────────────────── */
 
-  background: var(--fluenty-noise) repeat, rgba(var(--fluenty-2b), 0.98) !important;
-  border: 1px solid var(--fluenty-stroke-card) !important;
-  border-radius: 8px !important;
-  box-shadow: var(--elevation-high) !important;
+/* Discord styles most interface text (settings, menus, dialogs, popouts)
+   through a shared set of text classes with the size and weight written
+   in. These bring that set down to the 14px scale and onto the lighter
+   weights above. The larger heading sizes are left as they are. */
+[class*="body-md/"],
+[class*="heading-sm/"] {
+  font-size: 0.875rem;
 }
 
-/* keep the "i" flag — menu items are classed customItem_ now, capital I,
-   and [class*=] is case-sensitive without it */
-[class*="menu_"] [class*="item_" i] {
-  border-radius: 4px !important;
-  transition: background-color calc(0.08s * var(--fluenty-motion)) var(--fluenty-ease);
+[class*="body-sm/"],
+[class*="heading-xs/"] {
+  font-size: 0.8125rem;
 }
 
-[class*="modal_"] {
-  background: rgb(var(--fluenty-2b)) !important;
-  border: 1px solid var(--fluenty-stroke-card) !important;
-  border-radius: 8px !important;
-  box-shadow: var(--elevation-high) !important;
+[class*="heading-md/"] {
+  font-size: 1rem;
 }
 
-/* 6. SCROLLBARS */
-
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+[class*="/medium_"] {
+  font-weight: var(--font-weight-medium);
 }
 
-::-webkit-scrollbar-track {
-  background: transparent !important;
-  border: none !important;
-  margin: 0 !important;
+[class*="/semibold_"] {
+  font-weight: var(--font-weight-semibold);
 }
 
-::-webkit-scrollbar-thumb {
-  background-clip: padding-box !important;
-  background-color: var(--fluenty-scrollbar) !important;
-  border: 0 solid transparent !important;
-  border-left-width: 3px !important;
-  border-right-width: 3px !important;
-  border-radius: 8px !important;
-  min-height: 40px;
+/* ── Components ──────────────────────────────────────────────────────── */
+
+/* Discord hashes its class names per build, so these match on the stable
+   prefix instead of the full name. */
+
+/* On :has(). A class test inside :has(), such as :has(> [class*="x_"]),
+   makes the browser restyle most of the window every time any element's
+   class changes, and Discord changes classes constantly. So :has() is
+   only used here with tags, structure or other attributes inside it,
+   which do not carry that cost. */
+
+/* Layout: the chat becomes a rounded panel resting on the frame. Auto
+   sizing lets the grid stretch it to the cell minus the margin. Discord
+   paints the chat, its header and the member list from the base tokens,
+   so those are re-pointed here to lift everything inside the panel. */
+[class*="base_"] > [class*="content_"] > [class*="page_"] {
+  --background-base-lowest: var(--umbra-raised-1);
+  --background-base-lower: var(--umbra-raised-1);
+  --background-base-low: var(--umbra-raised-1);
+  --custom-channel-members-bg: var(--umbra-raised-1);
+  width: auto;
+  height: auto;
+  margin: 0 var(--space-8) var(--space-8) 0;
+  border: 1px solid var(--umbra-panel-line);
+  border-radius: var(--radius-lg);
+  background: var(--umbra-raised-1);
+  overflow: hidden;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background-color: var(--fluenty-scrollbar-hover) !important;
+/* The channel header takes the panel's surface, and the chat drops its
+   own top rule, which would double up with the panel's border. */
+[class*="page_"] [class*="themed_"] {
+  border-bottom-color: var(--umbra-panel-line);
+  background: var(--umbra-raised-1);
 }
 
-::-webkit-scrollbar-corner {
-  background: transparent !important;
+/* The server header loses the matching rule on the sidebar side. */
+[class*="sidebarList_"] [class*="header_"] {
+  border-bottom-color: var(--umbra-panel-line);
 }
 
-/* 7. CONTROLS */
-
-/* lookLink didn't turn up live either — left in the :not() anyway since
-   worst case a link-style button just gets an extra border.
-   :where() zeroes the :not() specificity. Without it this rule outranked
-   the borderless user-panel buttons below and they kept a 1px border. */
-button[class*="button_"]:where(:not([class*="lookBlank"]):not([class*="lookLink"])) {
-  border-radius: 4px !important;
-  border: 1px solid var(--fluenty-stroke-control) !important;
-  border-bottom-color: rgba(0, 0, 0, 0.16) !important;
-  transition: background-color calc(0.1s * var(--fluenty-motion)) var(--fluenty-ease), border-color calc(0.1s * var(--fluenty-motion)) var(--fluenty-ease);
+/* Header text follows the 14px scale: the server and channel names drop
+   to it and the topic sits one step below. */
+[class*="sidebarList_"] [class*="header_"] :is([class*="name_"], [class*="name_"] > *),
+[class*="titleWrapper_"] :is([class*="title_"], [class*="title_"] > *) {
+  font-size: 0.875rem;
 }
 
-/* Discord rebuilt the button component — lookFilled_/colorBrand_ is dead on
-   normal buttons (still alive on a few compact ones like mic/deafen, hence
-   kept alongside). Filled/brand buttons now carry primary_ instead. */
-button[class*="lookFilled_"][class*="colorBrand_"],
-button[class*="button_"][class*="primary_"]:not([class*="lookBlank"]) {
-  background: var(--fluenty-accent) !important;
-  color: #fff !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  border-bottom-color: rgba(0, 0, 0, 0.24) !important;
+[class*="themed_"] [class*="topic_"] {
+  font-size: 0.8125rem;
 }
 
-button[class*="lookFilled_"][class*="colorBrand_"]:hover,
-button[class*="button_"][class*="primary_"]:not([class*="lookBlank"]):hover {
-  background: var(--fluenty-accent-hover) !important;
+[class*="page_"] [class*="chat_"][data-has-border] {
+  border-top: 0;
 }
 
-button[class*="lookFilled_"][class*="colorBrand_"]:active,
-button[class*="button_"][class*="primary_"]:not([class*="lookBlank"]):active {
-  background: var(--fluenty-accent-pressed) !important;
-  border-bottom-color: transparent !important;
+/* Member list: part of the chat panel, with no rule between the two in
+   dark mode. */
+[class*="chat_"] > [class*="content_"] > [class*="container_"] {
+  border-inline-start-color: var(--umbra-panel-line);
 }
 
-[class*="panels_"] button {
-  border: none !important;
-  box-shadow: none !important;
+/* Inside it, cards and row states step up one surface so they still
+   read against the panel. */
+[class*="membersWrap_"] {
+  --background-surface-high: var(--umbra-raised-2);
+  --interactive-background-hover: var(--umbra-raised-3);
+  --interactive-background-selected: var(--umbra-raised-3);
 }
 
-[class*="panels_"] button[class*="lookFilled_"][class*="colorBrand_"],
-[class*="panels_"] button[class*="button_"][class*="primary_"]:not([class*="lookBlank"]) {
-  background-color: var(--fluenty-card) !important;
-  color: var(--fluenty-text-primary) !important;
-  border: none !important;
-  border-radius: 6px !important;
+/* REQUIRES VENCORD, with its "MemberCount" plugin enabled. Without it
+   these rules match nothing and have no effect.
+   Member counts above the list (the plugin's class names are fixed, so
+   they are matched exactly). One quiet line: online on the left, total
+   on the right, each with its label. The two labels are in English. */
+.vc-membercount-member-list {
+  --color-online: var(--text-subtle);
+  --color-total: var(--text-subtle);
+  justify-content: space-between;
+  font-size: 0.75rem;
 }
 
-[class*="panels_"] button[class*="lookFilled_"][class*="colorBrand_"]:hover,
-[class*="panels_"] button[class*="button_"][class*="primary_"]:not([class*="lookBlank"]):hover {
-  background-color: var(--fluenty-card-hover) !important;
+.vc-membercount-member-list .vc-membercount-online-count {
+  width: 8px;
+  height: 8px;
 }
 
-[class*="panels_"] button[class*="lookFilled_"][class*="colorBrand_"]:active,
-[class*="panels_"] button[class*="button_"][class*="primary_"]:not([class*="lookBlank"]):active {
-  background-color: var(--fluenty-fill-pressed) !important;
+.vc-membercount-member-list .vc-membercount-total-count {
+  display: none;
 }
 
-/* 8. INPUTS */
-
-[class*="channelTextArea_"],
-[class*="searchBar_"] {
-  background: var(--fluenty-fill-control) !important;
-  border: 1px solid var(--fluenty-stroke-control) !important;
-  border-bottom: 1px solid var(--fluenty-input-underline) !important;
-  border-radius: 4px !important;
-  transition: border-bottom-color calc(0.15s * var(--fluenty-motion)) var(--fluenty-ease), background-color calc(0.15s * var(--fluenty-motion)) var(--fluenty-ease);
+.vc-membercount-member-list .vc-membercount-online::after {
+  content: " online";
 }
 
-[class*="channelTextArea_"]:focus-within,
-[class*="searchBar_"]:focus-within {
-  background: rgb(var(--fluenty-19)) !important;
-  border-bottom-color: var(--fluenty-accent-light) !important;
-  box-shadow: inset 0 -1px 0 var(--fluenty-accent-light) !important;
+.vc-membercount-member-list .vc-membercount-total::after {
+  content: " members";
 }
 
-[class*="searchBar_"] [class*="input_"],
-[class*="searchBar_"] input {
-  background: transparent !important;
-  border: none !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-}
-
-/* 9. NAVIGATION */
-
-/* Horizontal spacing leaves channel row heights under Discord's control. */
-[class*="containerDefault_"] [class*="link_"] {
+/* Member list: each role is one card. The header draws the card's top
+   as a layer behind its label, so the header keeps the height Discord's
+   scroller expects. The inline offsets line that layer up with the
+   member rows, which Discord insets differently from the header. */
+[class*="membersGroup_"] {
   position: relative;
-  margin-inline: 8px;
-  border-radius: 8px !important;
-  transition: background-color calc(0.1s * var(--fluenty-motion)) var(--fluenty-ease);
+  isolation: isolate;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.02em;
 }
 
-[class*="modeSelected"] [class*="link_"]::before {
+[class*="membersGroup_"]::before {
   content: "";
   position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3px;
+  z-index: -1;
+  inset: calc(var(--space-lg) - 11px) -1px -4px 8px;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  background-color: var(--umbra-raised-2);
+}
+
+/* The rows continue the card. Each grows 2px up and down into the gap
+   Discord leaves between rows, trading margin for padding so nothing
+   moves; that way a nameplate fills its whole row with no seam. :where()
+   keeps these at the weight of Discord's own row rule, so its hover and
+   selected fills still win. */
+:where([class*="member_"]) [class*="childContainer_"] {
+  margin-block: -2px;
+  padding-block: 2px;
+  border-radius: 0;
+  background-color: var(--umbra-raised-2);
+  overflow: hidden;
+}
+
+/* The last member before the next role, or at the end of the list,
+   closes the card. A role header is the only heading in the list. */
+:where([class*="member_"]:has(+ :is(h1, h2, h3, h4, h5, h6)), [class*="member_"]:last-child) [class*="childContainer_"] {
+  border-end-start-radius: var(--radius-md);
+  border-end-end-radius: var(--radius-md);
+}
+
+/* Nameplates fade to a tint behind the row's content. */
+:where([class*="member_"]) [class*="childContainer_"] > :not([class*="layout_"]) {
+  opacity: 0.45;
+}
+
+/* Activity tiles join into one card under the Activity header. Each
+   keeps its own spacing, which Discord's scroller relies on, and paints
+   over the 8px gap above itself to meet the tile or header before it.
+   The tiles are the only boxes in the list that are neither a member
+   row, part of one, nor a role header. */
+[class*="membersWrap_"] [class*="container_"]:not(:is(h1, h2, h3, h4, h5, h6), [class*="member_"], [class*="member_"] *) {
+  border-color: transparent;
+  border-radius: 0;
+  box-shadow: 0 -8px var(--umbra-raised-2);
+}
+
+[class*="membersWrap_"] [class*="container_"]:not(:is(h1, h2, h3, h4, h5, h6), [class*="member_"], [class*="member_"] *):is(:has(+ :is(h1, h2, h3, h4, h5, h6)), :has(+ :is(h1, h2, h3, h4, h5, h6)) > *) {
+  border-end-start-radius: var(--radius-md);
+  border-end-end-radius: var(--radius-md);
+}
+
+/* Server tags and device icons stay out of the way until the row is
+   hovered. Bot tags always show. */
+[class*="member_"]:not(:hover) [class*="nameAndDecorators_"] > :not([class*="name_"], [class*="botTag_"]) {
+  display: none;
+}
+
+/* User panel: same raised surface and corner as the chat panel. Clipping
+   makes a profile nameplate follow the rounded corners too. */
+[class*="sidebar_"] [class*="panels_"] {
+  --border-muted: var(--umbra-panel-line);
+  --border-subtle: var(--umbra-panel-line);
+  border-color: var(--umbra-panel-line);
+  border-radius: var(--radius-md);
+  background: var(--umbra-raised-1);
+  overflow: hidden;
+}
+
+/* Server rail: round icons, with a ring on the selected server. The ring
+   sits inside the icon because Discord masks anything drawn outside it. */
+[class*="blobContainer_"] :is(img[class*="icon_"], [class*="childWrapper_"]) {
+  border-radius: 50%;
+}
+
+[class*="blobContainer_"][class*="selected_"] img[class*="icon_"] {
+  outline: 2px solid var(--umbra-blue);
+  outline-offset: -2px;
+}
+
+/* Server rail: unread and selected marker. */
+[class*="listItem_"] span[class*="item_"] {
+  background-color: var(--umbra-blue);
+}
+
+/* Unread and mention counts. Discord sets this background inline, which
+   only !important can outrank. */
+[class*="numberBadge_"] {
+  background-color: var(--background-brand) !important;
+}
+
+/* Channel list: pill rows with the channel icon in a chip. The chip is
+   the row's existing minimum height, so no row grows and the list's
+   scroll maths stays intact. */
+[class*="containerDefault_"] [class*="link_"] {
+  border-radius: var(--radius-round);
+}
+
+[class*="containerDefault_"] [class*="iconContainer_"] {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  background-color: var(--umbra-raised-2);
+}
+
+[class*="containerDefault_"] [class*="iconContainer_"] [class*="icon_"] {
+  width: 16px;
   height: 16px;
-  border-radius: 999px;
-  background: var(--fluenty-accent-light);
 }
 
-[class*="modeSelected"] [class*="link_"] {
-  background-color: var(--fluenty-card-hover) !important;
-  border-radius: 8px !important;
+[class*="modeSelected_"] [class*="iconContainer_"] {
+  background-color: var(--background-brand);
 }
 
-/* Discord owns the server icon masks and badge clipping. */
-
-[class*="guilds_"] [class*="overlay_"] [class*="item_"] {
-  background-color: var(--fluenty-accent-light) !important;
+[class*="modeSelected_"] [class*="iconContainer_"] [class*="icon_"] {
+  color: var(--white);
 }
 
-/* 9b. MEMBER LIST */
-
-[class*="membersGroupHeader"],
-[class*="membersGroupName"] {
-  color: var(--fluenty-text-tertiary) !important;
-  font-weight: 600;
+/* Channel and member names drop to 14px, the scale the interface font
+   was chosen at. */
+[class*="containerDefault_"] [class*="link_"] :is([class*="name_"], [class*="name_"] > *),
+[class*="member_"] [class*="name_"] {
+  font-size: 0.875rem;
 }
 
-/* 10. CHROME */
-
-[class*="scrollerContent_"] {
-  background-color: var(--fluenty-layer) !important;
+/* A member's name keeps that size and weight in every state. Discord
+   swaps in differently styled text inside the name on hover, which would
+   otherwise make it shrink and grow. */
+[class*="member_"] [class*="name_"] * {
+  font-size: inherit;
+  font-weight: inherit;
 }
 
-[class*="upperContainer_"] {
-  box-shadow: none !important;
+/* Channel list: unread marker as a dot. */
+[class*="containerDefault_"] [class*="unread_"] {
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 50%;
+  background-color: var(--umbra-blue);
 }
 
-/* Matched as a class that starts with layer_, since a plain substring match
-   also catches player_* elements. */
-:is([class^="layer_"], [class*=" layer_"]) [class*="contentContainer_"] {
-  background: var(--fluenty-layer) !important;
+/* Channel list: each category label sits in a bubble. The bubble is 6px
+   taller than Discord's row and pulled up by the same 6px, so the list
+   item keeps the height Discord's scroller expects. */
+[class*="wrapperCommon_"] {
+  height: 30px;
+  margin-block-start: -6px;
+  margin-inline-start: var(--space-xs);
+  padding-inline-start: var(--space-xs);
+  border: 1px solid var(--umbra-panel-line);
+  border-radius: var(--radius-md);
+  background-color: var(--umbra-raised-2);
 }
 
-:is([class^="layer_"], [class*=" layer_"]) [class*="baseSettingWrapper_"] {
-  background: transparent !important;
+/* The label stays in Discord's own face and casing: smaller than a
+   channel name, medium weight, lightly tracked. */
+[class*="wrapperCommon_"] [class*="name_"] {
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.02em;
 }
 
-[class*="scroller_"] [class*="divider_"] {
-  border-color: var(--fluenty-stroke-divider) !important;
+/* Header search: a pill. */
+[class*="search_"] [class*="searchBar_"] {
+  border-color: var(--umbra-panel-line);
+  border-radius: var(--radius-round);
 }
 
-/* 10b. SURFACES DISCORD REPAINTS */
+/* Date divider: a centred pill with no rule. The "new messages" divider
+   keeps its line. */
+[class*="divider_"][class*="hasContent_"]:not([class*="isUnread_"]) {
+  border-top-color: transparent;
+}
 
-[class*="members_"],
-[class*="chat_"] [class*="container_"]:has(> [class*="membersWrap"]) {
-  background-color: transparent !important;
+[class*="hasContent_"] > [class*="content_"] {
+  padding: 4px 12px;
+  border-radius: var(--radius-round);
+  background: var(--umbra-raised-2);
+}
+
+/* Messages: a line beside each sender's block. It overshoots the row by
+   the row's own padding so consecutive messages join into one stroke. */
+[class*="cozy_"] > [class*="contents_"] > [class*="messageContent_"]:not(:empty)::before {
+  content: "";
+  position: absolute;
+  inset-block: calc(var(--custom-message-spacing-vertical-container-cozy) * -1);
+  inset-inline-start: calc(var(--custom-message-margin-left-content-cozy) - 9px);
+  inline-size: 2px;
+  background-color: var(--umbra-blue);
+}
+
+/* REQUIRES VENCORD, with its "ThemeAttributes" plugin enabled, which is
+   what adds data-is-self. Without it this rule matches nothing and has
+   no effect.
+   Your own messages take the red line. */
+[data-is-self="true"] [class*="contents_"] > [class*="messageContent_"]:not(:empty)::before {
+  background-color: var(--umbra-red);
+}
+
+/* Messages that mention you: a rounded tint in place of Discord's edge
+   bar, and a yellow line. */
+[class*="cozy_"][class*="mentioned_"] {
+  border-radius: var(--radius-md);
+}
+
+[class*="cozy_"][class*="mentioned_"]::before {
+  content: none;
+}
+
+[class*="mentioned_"] > [class*="contents_"] > [class*="messageContent_"]:not(:empty)::before {
+  background-color: var(--umbra-yellow);
+}
+
+/* Sender name: on the 14px scale, one weight above the message text. The
+   colour is left alone, so role colours and Discord's default both show
+   as usual. */
+[class*="headerText_"] [class*="username_"] {
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Message text follows the same scale, with the line height tightened
+   to match. Both are in rem, so Discord's chat font setting still
+   applies on top. */
+[class*="messageContent_"] {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+/* Reactions and attached images. */
+[class*="reaction_"] {
+  border-radius: var(--radius-round);
+}
+
+[class*="reactionInner_"] {
+  padding-inline: 8px;
+}
+
+[class*="imageWrapper_"] {
+  border-radius: var(--radius-md);
+}
+
+/* Message box: a filled pill. The fill moves to the outer box so the
+   inner scroller's own corners stop mattering. */
+[class*="channelTextArea_"] {
+  --radius-sm: 1.375rem;
+  background-color: var(--umbra-raised-2);
+}
+
+[class*="scrollableContainer_"] {
+  background: none;
+}
+
+[class*="page_"] [class*="channelTextArea_"] {
+  border-color: var(--umbra-panel-line);
+}
+
+[class*="channelTextArea_"] [class*="attachButton_"] {
+  border-radius: 50%;
+  background-color: var(--background-brand);
+  color: var(--white);
+}
+
+/* Message box tools: one inset tray. The tray is shorter than the box
+   and takes the difference back as margin, so the box keeps its height.
+   Inside it the icons are muted and the hover fill steps up a surface. */
+[class*="channelTextArea_"] [class*="buttons_"] {
+  --interactive-text-default: var(--text-muted);
+  --interactive-background-selected: var(--umbra-raised-3);
+  gap: 2px;
+  height: 34px;
+  margin-block: calc((var(--custom-channel-textarea-text-area-height) - 34px) / 2);
+  padding-inline: 5px;
+  border-radius: var(--radius-round);
+  background-color: var(--umbra-raised-1);
+}
+
+[class*="channelTextArea_"] [class*="buttons_"] [class*="button_"] {
+  border-radius: 50%;
+}
+
+/* REQUIRES VENCORD, with a plugin that adds message box buttons, such
+   as "SilentMessageToggle" or "SilentTyping". Without one these rules
+   match nothing and have no effect.
+   A hairline after the last Vencord button sets the plugin buttons apart
+   from Discord's own. */
+[class*="buttons_"] > .vc-chatbar-button:not(:has(+ .vc-chatbar-button)) {
+  position: relative;
+  margin-inline-end: 9px;
+}
+
+[class*="buttons_"] > .vc-chatbar-button:not(:has(+ .vc-chatbar-button))::after {
+  content: "";
+  position: absolute;
+  inset-block: 8px;
+  inset-inline-end: -6px;
+  width: 1px;
+  background-color: var(--umbra-raised-3);
+}
+
+/* ── Home: direct messages and friends ───────────────────────────────── */
+
+/* Sidebar search: a borderless pill, with no rule under its strip. */
+[class*="privateChannels_"] [class*="searchBar_"] {
+  border-bottom-color: var(--umbra-panel-line);
+}
+
+[class*="searchBar_"] [class*="searchBarComponent_"] {
+  border-color: var(--umbra-panel-line);
+  border-radius: var(--radius-round);
+}
+
+[class*="privateChannels_"] [class*="sectionDivider_"] {
+  background-color: var(--umbra-panel-line);
+}
+
+/* Friends, Shop and the other shortcuts: pill rows with the icon in a
+   chip, as in the channel list. */
+[class*="privateChannels_"] [class*="interactive_"] {
+  border-radius: var(--radius-round);
+}
+
+[class*="privateChannels_"] [class*="channel_"]:not([class*="dm_"]) [class*="avatar_"] {
+  border-radius: 10px;
+  background-color: var(--umbra-raised-2);
+}
+
+[class*="privateChannels_"] [class*="channel_"]:not([class*="dm_"]) [class*="interactiveSelected_"] [class*="avatar_"] {
+  background-color: var(--background-brand);
+}
+
+[class*="privateChannels_"] [class*="channel_"]:not([class*="dm_"]) [class*="interactiveSelected_"] [class*="linkButtonIcon_"] {
+  color: var(--white);
+}
+
+/* Conversations: one card. The "Direct messages" header draws the
+   card's top behind its label, the way role headers do in the member
+   list. The inline offsets line it up with the rows, which Discord
+   insets differently from the header. */
+[class*="privateChannelsHeaderContainer_"] {
+  position: relative;
+  isolation: isolate;
+}
+
+[class*="privateChannelsHeaderContainer_"]::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -6px -2px -4px 8px;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  background-color: var(--umbra-raised-2);
+}
+
+/* Each conversation continues the card and paints over the gap Discord
+   leaves above and below it. Inside the card, hover and selected step up
+   one surface. The fill sits in :where() so those two states still win. */
+[class*="dm_"] {
+  --interactive-background-hover: var(--umbra-raised-3);
+  --interactive-background-selected: var(--umbra-raised-3);
+}
+
+[class*="dm_"] > [class*="interactive_"] {
+  border-radius: 0;
+}
+
+:where([class*="dm_"] > [class*="interactive_"]) {
+  background: var(--umbra-raised-2);
+  box-shadow: 0 -2px var(--umbra-raised-2), 0 2px var(--umbra-raised-2);
+}
+
+[class*="dm_"]:nth-last-child(1 of [class*="dm_"]) > [class*="interactive_"] {
+  border-end-start-radius: var(--radius-md);
+  border-end-end-radius: var(--radius-md);
+}
+
+/* The open conversation carries a short marker on its leading edge. */
+[class*="dm_"] > [class*="interactiveSelected_"]::before {
+  content: "";
+  position: absolute;
+  inset-block: 10px;
+  inset-inline-start: 0;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background-color: var(--umbra-blue);
+}
+
+/* Unread conversations get the same dot as unread channels. */
+[class*="privateChannels_"] [class*="unreadPill_"] {
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 50%;
+  background-color: var(--umbra-blue);
+}
+
+/* Nameplates fade to a tint here too. */
+[class*="dm_"] > [class*="interactive_"] > :not([class*="link_"], [class*="closeButton_"]) {
+  opacity: 0.45;
+}
+
+/* Friends page: the tabs form one segmented control. Each tab is a
+   square slice of a shared track, so the slices sit flush; the track is
+   an inset shadow, which Discord's own hover fill cannot replace. The
+   pill for the hovered or selected tab is drawn inside the slice. The
+   page is the only one whose header, a section directly inside main,
+   holds a tab bar; Add Friend is always the last tab, so the one before
+   it closes the track. */
+main > section [class*="tabBar_"] > [class*="item_"]:not([class*="addFriend_"]) {
+  position: relative;
+  isolation: isolate;
+  margin: 0;
+  border-radius: 0;
+  box-shadow: inset 0 0 0 99px var(--umbra-base);
+}
+
+main > section [class*="tabBar_"] > [class*="item_"]:first-child {
+  border-start-start-radius: var(--radius-round);
+  border-end-start-radius: var(--radius-round);
+}
+
+main > section [class*="tabBar_"] > [class*="item_"]:nth-last-child(2) {
+  border-start-end-radius: var(--radius-round);
+  border-end-end-radius: var(--radius-round);
+}
+
+main > section [class*="tabBar_"] > [class*="item_"]:not([class*="addFriend_"])::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 3px;
+  border-radius: var(--radius-round);
+}
+
+main > section [class*="tabBar_"] > [class*="item_"]:not([class*="addFriend_"]):hover::before {
+  background-color: var(--umbra-raised-2);
+}
+
+main > section [class*="tabBar_"] > [class*="item_"][aria-selected="true"]::before {
+  background-color: var(--umbra-raised-3);
+}
+
+[class*="tabBar_"] > [class*="addFriend_"] {
+  margin-inline-start: var(--space-12);
+  border-radius: var(--radius-round);
+}
+
+/* Friends page: a pill search. */
+
+[class*="peopleColumn_"] [class*="searchBar_"] {
+  --radius-sm: var(--radius-round);
+  --input-border-default: var(--umbra-panel-line);
+}
+
+/* Friends: one card. Rows lose their own corners. Discord's hairlines
+   are cleared, and the one between two rows is repainted in the card's
+   colour and widened to the rows' width, so the card is unbroken. */
+[class*="peopleList_"] [class*="divider_"] {
+  background-color: transparent;
+}
+
+[class*="peopleListItem_"] {
+  border-radius: 0;
+  background-color: var(--umbra-raised-2);
+}
+
+[class*="peopleListItem_"]:is(:hover, [class*="active_"]) {
+  background-color: var(--umbra-raised-3);
+}
+
+[class*="peopleList_"] [class*="peopleListItem_"] + [class*="divider_"] {
+  margin-inline: 14px 10px;
+  background-color: var(--umbra-raised-2);
+}
+
+[class*="peopleListItem_"]:not([class*="peopleListItem_"] ~ *) {
+  border-start-start-radius: var(--radius-md);
+  border-start-end-radius: var(--radius-md);
+}
+
+[class*="peopleListItem_"]:nth-last-child(1 of [class*="peopleListItem_"]) {
+  border-end-start-radius: var(--radius-md);
+  border-end-end-radius: var(--radius-md);
+}
+
+/* The message and more buttons are dimmed until their row is in use.
+   They stay visible so the actions are never hidden. */
+[class*="peopleListItem_"]:not(:hover, [class*="active_"]) [class*="actions_"] {
+  opacity: 0.45;
+}
+
+/* Active now: borderless cards in one tone. Discord fills the top of
+   each card and leaves the rest clear, so both are set to the same
+   raised surface. */
+[class*="nowPlayingColumn_"] {
+  --border-subtle: transparent;
+  --border-muted: transparent;
+  --background-mod-muted: var(--umbra-raised-2);
+}
+
+[class*="nowPlayingColumn_"] [class*="body_"] {
+  background: var(--umbra-raised-2);
+}
+
+/* ── Settings window ─────────────────────────────────────────────────── */
+
+/* The page is lifted one surface above the sidebar, so the two separate
+   by tone and need no rule between them. Discord paints the page and
+   its header from the same base token. It is re-pointed on the header
+   and on the body after it, and the body paints it, so together they
+   cover the page. */
+aside[class*="sidebar_"] {
+  border-inline-end-color: var(--umbra-panel-line);
+}
+
+[class*="contentHeader_"],
+[class*="contentHeader_"] + [class*="contentBody_"] {
+  --background-base-low: var(--umbra-raised-1);
+}
+
+[class*="contentHeader_"] + [class*="contentBody_"] {
+  background: var(--background-base-low);
 }
 
 [class*="contentHeader_"] {
-  background-color: var(--fluenty-layer) !important;
+  border-bottom-color: var(--umbra-panel-line);
 }
 
-[class*="buttonsInner_"] {
-  background: var(--fluenty-acrylic) !important;
-  border: 1px solid var(--fluenty-stroke-card) !important;
-  border-radius: 4px !important;
+/* Section rules inside a settings page are cleared; spacing and headings
+   carry the grouping. */
+[class*="contentBody_"] {
+  --border-subtle: transparent;
 }
 
-[class*="scrollableContainer_"],
-[class*="themedBackground_"] {
-  background-color: transparent !important;
-}
-
-[class*="chatGradient_"],
-[class*="chatGradientBase_"] {
-  background: none !important;
-}
-
-/* 10c. LEFTOVER BLURPLE */
-
-[class*="barFill_"],
-[class*="botTag_"] {
-  background-color: var(--fluenty-accent) !important;
-}
-
-[class*="emptyBar_"],
-[class*="sliderBar_"] {
-  background-color: var(--fluenty-fill-selected) !important;
-}
-
-/* 11. CARD LAYOUT */
-
-:root,
-.theme-dark,
-.theme-light,
-.theme-midnight {
-  /* --- TUNE THESE --- */
-  --fluenty-card: rgba(255, 255, 255, 0.05);
-  --fluenty-card-hover: rgba(255, 255, 255, 0.09);
-  --fluenty-card-stroke: rgba(255, 255, 255, 0.07);
-  --fluenty-pane: rgba(255, 255, 255, 0.02);
-  --fluenty-gap: 8px;
-
-  --fluenty-panel: rgb(var(--fluenty-2b));
-  --fluenty-panel-hover: rgb(var(--fluenty-30));
-}
-
-html,
-body,
-#app-mount,
-[class*="appMount_"],
-[class*="app_"],
-[class*="bg_"] {
-  background-color: rgb(var(--fluenty-1b)) !important;
-}
-
-#app-mount {
-  background-image: var(--fluenty-base-gradient) !important;
-}
-
-[class*="guilds_"],
-[class*="membersWrap"],
-[class*="panels_"],
-[class*="chat_"],
-[class*="chatContent"] {
-  background-color: transparent !important;
-}
-
-[class*="sidebar_"] {
-  background-color: var(--fluenty-pane) !important;
-}
-
-[class*="guilds_"],
-[class*="sidebar_"],
-[class*="sidebarList_"],
-[class*="privateChannels_"],
-[class*="panels_"],
-[class*="chat_"],
-[class*="chatContent"] {
-  border-left: none !important;
-  border-right: none !important;
-  box-shadow: none !important;
-}
-
-[class*="chat_"] section[class*="title_"]:has(> [class*="toolbar_"]) {
-  background-color: var(--fluenty-card) !important;
-  border: 1px solid var(--fluenty-card-stroke) !important;
-  border-radius: 8px !important;
-  margin: var(--fluenty-gap) var(--fluenty-gap) 0 var(--fluenty-gap) !important;
-  padding: 0 8px !important;
-  box-shadow: var(--elevation-low) !important;
-}
-
-[class*="chat_"] section[class*="title_"] > [class*="toolbar_"] {
-  background-color: var(--fluenty-card) !important;
-  border: 1px solid var(--fluenty-card-stroke) !important;
-  border-radius: 8px !important;
-  align-self: center !important;
-  padding: 2px 4px !important;
-  box-shadow: var(--elevation-low) !important;
-  transition: background-color calc(0.12s * var(--fluenty-motion)) var(--fluenty-ease);
-}
-
-[class*="chat_"] section[class*="title_"] > [class*="toolbar_"]:hover {
-  background-color: var(--fluenty-card-hover) !important;
-}
-
-[class*="messagesWrapper_"] {
-  background-color: var(--fluenty-card) !important;
-  border: 1px solid var(--fluenty-card-stroke) !important;
-  border-radius: 8px !important;
-  margin: var(--fluenty-gap) var(--fluenty-gap) 0 var(--fluenty-gap) !important;
-  box-shadow: var(--elevation-low) !important;
-
-  overflow: clip !important;
-  overflow-clip-margin: content-box;
-}
-
-[class*="messagesWrapper_"] [class*="scroller_"],
-[class*="messagesWrapper_"] [class*="scrollerInner_"] {
-  background-color: transparent !important;
-}
-
-/* Keep a small inset below the final message. Inline-sized spacers belong
-   to Discord's scroll calculations and retain their supplied height. */
-[class*="messagesWrapper_"] [class*="scrollerSpacer_"]:last-child:not([style*="height"]) {
-  height: 12px !important;
-}
-
-[class*="chatContent_"] [class*="form_"] {
-  background-color: transparent !important;
-  padding: 28px var(--fluenty-gap) var(--fluenty-gap) var(--fluenty-gap) !important;
-  margin-top: 0 !important;
-}
-
-[class*="chatContent_"] [class*="form_"]::before {
-  display: none !important;
-}
-
-[class*="chatContent_"] [class*="typing_"] {
-  top: 2px !important;
-  bottom: auto !important;
-  left: var(--fluenty-gap) !important;
-  padding-left: 20px !important;
-}
-
-[class*="channelTextArea_"] {
-  background-color: rgb(var(--fluenty-2b)) !important;
-  border: 1px solid var(--fluenty-card-stroke) !important;
-  border-radius: 8px !important;
-  margin: 0 !important;
-  box-shadow: var(--elevation-low) !important;
-}
-
-[class*="channelTextArea_"]:focus-within {
-  background-color: rgb(var(--fluenty-30)) !important;
-  border-color: var(--fluenty-card-stroke) !important;
-  border-bottom-color: var(--fluenty-accent-light) !important;
-  box-shadow: inset 0 -1px 0 var(--fluenty-accent-light) !important;
-}
-
-[class*="containerDefault_"] h3 {
-  background-color: var(--fluenty-card) !important;
-  background-image: var(--fluenty-chip-sheen) !important;
-  border: 1px solid var(--fluenty-card-stroke) !important;
-  border-radius: 8px !important;
-  margin: 0 !important;
-  padding: 2px 8px !important;
-  width: auto !important;
-  box-sizing: border-box !important;
-  transition: background-color calc(0.12s * var(--fluenty-motion)) var(--fluenty-ease);
-}
-
-[class*="containerDefault_"] [class*="mainContent_"]:hover h3 {
-  background-color: var(--fluenty-card-hover) !important;
-}
-
-[class*="containerDefault_"] [class*="children_"] {
-  width: auto !important;
-}
-
-[class*="containerDefault_"] [class*="addButton_"] {
-  background-color: var(--fluenty-card) !important;
-  background-image: var(--fluenty-chip-sheen) !important;
-  border: 1px solid var(--fluenty-card-stroke) !important;
-  border-radius: 6px !important;
-  width: 24px !important;
-  height: 24px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  transition: background-color calc(0.12s * var(--fluenty-motion)) var(--fluenty-ease);
-}
-
-[class*="containerDefault_"] [class*="addButton_"]:hover {
-  background-color: var(--fluenty-card-hover) !important;
-}
-
-[class*="privateChannels_"] h2 {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  background: none !important;
-  padding: 0 8px !important;
-  margin-inline: 0 !important;
-}
-
-[class*="privateChannels_"] h2 [class*="headerText_"] {
-  flex: 0 0 auto !important;
-  width: auto !important;
-  background-color: var(--fluenty-card) !important;
-  background-image: var(--fluenty-chip-sheen) !important;
-  border: 1px solid var(--fluenty-card-stroke) !important;
-  border-radius: 8px !important;
-  padding: 2px 8px !important;
-  transition: background-color calc(0.12s * var(--fluenty-motion)) var(--fluenty-ease);
-}
-
-[class*="privateChannels_"] h2:hover [class*="headerText_"] {
-  background-color: var(--fluenty-card-hover) !important;
-}
-
-[class*="privateChannels_"] h2 [role="button"] {
-  background-color: var(--fluenty-card) !important;
-  background-image: var(--fluenty-chip-sheen) !important;
-  border: 1px solid var(--fluenty-card-stroke) !important;
-  border-radius: 6px !important;
-  width: 24px !important;
-  height: 24px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  transition: background-color calc(0.12s * var(--fluenty-motion)) var(--fluenty-ease);
-}
-
-[class*="privateChannels_"] h2 [role="button"]:hover {
-  background-color: var(--fluenty-card-hover) !important;
-}
-
-/* :not(h3):not(h2) keeps this off the channel-list headers below, which
-   use those tags — this is just the server name banner */
-[class*="sidebar_"] [class*="header_"]:not(h3):not(h2) {
-  background-color: var(--fluenty-card) !important;
-  border: 1px solid var(--fluenty-card-stroke) !important;
-  border-radius: 8px !important;
-  margin: var(--fluenty-gap) !important;
-  padding: 0 12px !important;
-  box-shadow: var(--elevation-low) !important;
-  transition: background-color calc(0.12s * var(--fluenty-motion)) var(--fluenty-ease);
-}
-
-[class*="sidebar_"] [class*="header_"]:not(h3):not(h2):hover {
-  background-color: var(--fluenty-card-hover) !important;
-}
-
-[class*="sidebar_"] [class*="header_"]:not(h3):not(h2) > div,
-[class*="sidebar_"] [class*="header_"]:not(h3):not(h2) [class*="guildDropdown"] {
-  background-color: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-[class*="panels_"] > [class*="activityPanel_"]:not(:empty),
-[class*="panels_"] > [class*="wrapper_"]:not(:empty) {
-  background-color: var(--fluenty-panel) !important;
-  background-image: var(--fluenty-panel-sheen) !important;
-  border: 1px solid var(--fluenty-card-stroke) !important;
-  border-radius: 10px !important;
-  margin: 0 8px 6px 8px !important;
-  padding: 4px !important;
-  box-shadow: var(--elevation-low) !important;
-}
-
-[class*="panels_"] > [class*="activityPanel_"]:not(:empty) {
-  padding: 7px 8px !important;
-}
-
-[class*="listeningAlong_"] {
-  background-color: var(--fluenty-panel) !important;
-  background-image: var(--fluenty-panel-sheen) !important;
-  border: 1px solid var(--fluenty-card-stroke) !important;
-  border-radius: 10px !important;
-  width: auto !important;
-  margin: 0 8px 6px 8px !important;
-
-  padding: 10px !important;
-  box-shadow: var(--elevation-low) !important;
-}
-
-[class*="listeningAlong_"] [class*="avatar_"] {
-  width: 24px !important;
-  height: 24px !important;
-}
-
-[class*="listeningAlong_"] [class*="text-"],
-[class*="listeningAlong_"] [class*="heading-"],
-[class*="listeningAlong_"] > div:first-child,
-[class*="listeningAlong_"] > div:first-child > * {
-  line-height: 1.3 !important;
-  overflow: visible !important;
-}
-
-[class*="listeningAlong_"] [class*="text-xs"]::before {
-  content: "";
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  margin-right: 4px;
-  vertical-align: -2px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%231db954' d='M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.42 1.56-.299.421-1.02.599-1.559.3z'/%3E%3C/svg%3E") center/contain no-repeat;
-}
-
-[class*="panels_"] > [class*="wrapper_"] {
-  background-color: transparent !important;
-}
-
-[class*="panels_"] > [class*="container_"] {
-  background-color: var(--fluenty-panel) !important;
-  background-image: var(--fluenty-panel-sheen) !important;
-  border: 1px solid var(--fluenty-card-stroke) !important;
-  box-shadow: var(--elevation-low) !important;
-  border-radius: 10px !important;
-  margin: 0 8px 8px 8px !important;
-  padding: 2px 4px !important;
-  transition: background-color calc(0.12s * var(--fluenty-motion)) var(--fluenty-ease);
-}
-
-[class*="panels_"] > [class*="container_"]:hover {
-  background-color: var(--fluenty-panel-hover) !important;
-}
-
-[class*="panels_"] button[class*="button_"] {
-  border-radius: 6px !important;
-  transition: background-color calc(0.12s * var(--fluenty-motion)) var(--fluenty-ease);
-}
-
-[class*="panels_"] button[class*="button_"]:hover {
-  background-color: var(--fluenty-fill-hover) !important;
-}
-
-[class*="rtcConnectionStatusWrapper_"] {
-  background-color: transparent !important;
-}
-
-[class*="sidebarList_"],
-[class*="sidebarList_"] [class*="container_"]:has(> [class*="scroller_"]),
-[class*="sidebarList_"] [class*="container_"]:has(> #channels) {
-  background-color: var(--fluenty-mica) !important;
-}
-
-/* The scroller overlaps the banner's lower portion. Let the banner and the
-   mica surface behind the channel rows show through. */
-[class*="sidebarList_"] #channels {
-  background-color: transparent !important;
-}
-
-/* Room for avatars, names and status text inside each member card. */
-
-[class*="membersWrap"] [class*="member_"] {
-  background-color: var(--fluenty-card) !important;
-
-  background-image: var(--fluenty-member-sheen) !important;
-  border: none !important;
-  border-radius: 10px !important;
-  min-height: 52px !important;
-  margin: 0 10px 8px !important;
-  box-sizing: border-box;
-  position: relative;
-  display: flex;
-  align-items: center;
+/* Each section's rows sit in one card. The card's side padding equals
+   the amount Discord lets a row's hover fill overhang, so that fill ends
+   exactly at the card's edge. Discord sets this stack's padding and gap
+   on the element itself, which only !important can outrank. */
+[class*="panel_"] > [class*="categories_"] > [class*="container_"] > [class*="stack_"]:last-child {
+  gap: 0 !important;
+  padding: var(--space-4) var(--space-12) !important;
+  border-radius: var(--radius-md);
+  background-color: var(--umbra-raised-2);
   overflow: hidden;
-  transition: background-color calc(0.12s * var(--fluenty-motion)) var(--fluenty-ease);
 }
 
-/* Stretch the nameplate wrapper with the card and center its contents. */
-[class*="membersWrap"] [class*="member_"] > [class*="childContainer_"] {
-  align-self: stretch;
+/* With cards doing the grouping, the section title drops to a quiet
+   label and the gap between sections closes up. */
+[class*="panel_"] > [class*="categories_"] > [class*="container_"] > [class*="stack_"]:first-child :is(h1, h2, h3, [class*="heading-"]) {
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.02em;
+}
+
+[class*="panel_"] > [class*="categories_"] > [class*="divider_"] {
+  margin-block: var(--space-12);
+}
+
+/* Buttons at the end of a row are compact pills, and the window's close
+   button is a round chip. */
+[class*="baseControlItemTrailingElement_"] button {
+  min-width: 0;
+  min-height: 0;
+  height: 1.75rem;
+  padding: 0 var(--space-12);
+  border-radius: var(--radius-round);
+}
+
+[class*="contentHeader_"] button {
+  border-radius: 50%;
+  background-color: var(--umbra-raised-2);
+}
+
+/* Sidebar: the profile entry is a card at rest. It is an ordinary menu
+   entry, so the fill sits on the same element Discord highlights and
+   steps aside for the hover and open states. */
+[class*="fixedContent_"] [class*="item_"]:not(:hover, [class*="active_"]) {
+  background-color: var(--umbra-raised-1);
+}
+
+/* Sidebar search: a borderless pill. */
+[class*="fixedContent_"] {
+  --radius-sm: var(--radius-round);
+  --input-border-default: var(--umbra-panel-line);
+}
+
+/* Sidebar groups: no rule between them, and a small quiet label. */
+[class*="navScroller_"] [class*="section_"] {
+  border-bottom-color: transparent;
+}
+
+[class*="sectionLabel_"] * {
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+}
+
+/* Sidebar entries: pill rows with the icon in a chip, as in the channel
+   list. The open entry gets the accent chip. */
+[class*="sectionList_"] [class*="item_"] {
+  border-radius: var(--radius-round);
+}
+
+[class*="sectionList_"] [class*="item_"] [class*="icon_"] {
+  box-sizing: content-box;
+  padding: 3px;
+  border-radius: 8px;
+  background-color: var(--umbra-raised-2);
+}
+
+[class*="sectionList_"] [class*="active_"] [class*="icon_"] {
+  background-color: var(--background-brand);
+  color: var(--white);
+}
+
+/* Sub-pages: the marker beside the open one takes the accent. */
+[class*="subnav_"] [class*="thumb_"] {
+  background-color: var(--umbra-blue);
+}
+
+/* ── Forum ───────────────────────────────────────────────────────────── */
+
+/* Every post is a card on the raised surface. Discord paints the card,
+   its outline and its hover from tokens, so they are re-pointed on the
+   card and no state has to be re-declared. */
+[class*="mainCard_"] {
+  --background-base-low: var(--umbra-raised-2);
+  --border-subtle: var(--umbra-panel-line);
+  --border-muted: var(--umbra-panel-line);
+  --interactive-background-hover: var(--umbra-raised-3);
+  --interactive-background-active: var(--umbra-raised-3);
+  --interactive-background-selected: var(--umbra-raised-3);
+}
+
+/* The search and new-post bar is a pill, and the sort button loses its
+   outline. */
+[class*="mainCard_"][class*="header_"] {
+  border-color: var(--umbra-panel-line);
+  border-radius: var(--radius-round);
+}
+
+[class*="sortDropdown_"] {
+  border-color: var(--umbra-panel-line);
+}
+
+/* A post with media leads with it. The card is a column, so the media
+   block is moved ahead of the heading; the 12px that sat above the
+   author row moves above the media, which keeps the card's height. A
+   media post is told apart by structure: its body, the card's third
+   child, holds two blocks (media and tags) where a text post holds one. */
+[class*="mainCard_"] > [class*="postBody_"]:has(> div > :nth-child(2)) {
+  order: -1;
+  margin-block-start: var(--space-12);
+}
+
+[class*="mainCard_"]:has(> :nth-child(3) > div > :nth-child(2)) [class*="authorRow_"] {
+  padding-block-start: 0;
+}
+
+/* Title first, then the author and date beneath it. */
+[class*="mainCard_"] > [class*="header_"] {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+/* The reply count is a pill, like the reactions beside it. */
+[class*="mainCard_"] [class*="messageCountBox_"] {
+  height: 22px;
+  padding: 0 var(--space-8);
+  border-radius: var(--radius-round);
+  background-color: var(--umbra-raised-3);
+}
+
+/* Gallery cards come out a size smaller. Discord's script sizes every
+   card from the scroller's width, and picks the number of columns from
+   the width of the container around the scroller. So the container is
+   laid out wider than the space it is given while the scroller keeps the
+   visible width: more columns fit, and each card is narrower and
+   shorter. The grid on the parent makes the percentage resolve against
+   the forum's own slot rather than the slot plus the member list, and
+   the clip keeps the hidden overhang from covering what sits beside it.
+   The list layout gets the same wrapper and is unaffected by it, since
+   its rows do not depend on that width. */
+[class*="chat_"] > [class*="content_"]:has(> [data-member-list-open]) {
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  grid-auto-flow: column;
+  grid-auto-columns: auto;
+}
+
+[data-member-list-open] {
+  width: calc(100% * var(--umbra-forum-density));
+  align-items: flex-start;
+  clip-path: inset(0 calc(100% - 100% / var(--umbra-forum-density)) 0 0);
+}
+
+[data-member-list-open] > :is([class*="grid_"], [class*="list_"]) {
+  width: calc(100% / var(--umbra-forum-density));
+}
+
+[data-member-list-open] [class*="newPostsButton_"] {
+  inset-inline-end: calc(100% - 50% / var(--umbra-forum-density));
+}
+
+/* ── Threads ─────────────────────────────────────────────────────────── */
+
+/* Channel list: the open thread carries the accent marker. */
+[class*="typeThread_"][class*="modeSelected_"]::after {
+  content: "";
+  position: absolute;
+  inset-block: 7px;
+  inset-inline-start: 0;
+  width: 2px;
+  border-radius: 1px;
+  background-color: var(--umbra-blue);
+}
+
+/* A thread opened beside its channel is set apart by one hairline. */
+[class*="chatLayerWrapper_"] > [class*="container_"] {
+  border-inline-start-color: var(--umbra-line);
+}
+
+/* The block at the top of a thread or channel: its icon sits in a
+   rounded chip and its title comes down to the interface scale. */
+[class*="scrollerInner_"] > [class*="container_"] > [class*="iconWrapper_"] {
+  border-radius: var(--radius-lg);
+  background: var(--umbra-raised-2);
+}
+
+[class*="scrollerInner_"] > [class*="container_"] > [class*="header_"] {
+  font-size: 1.25rem;
+}
+
+/* The message a thread was started from is shown as a card. The date
+   pill above it hangs 10px below its own line, so the card starts 18px
+   down to leave the same 8px gap it has on its other sides. */
+[class*="quotedChatMessage_"] {
+  margin: 18px var(--space-8) var(--space-8);
+  padding-block: var(--space-4);
+  border-radius: var(--radius-md);
+  background-color: var(--umbra-raised-2);
+}
+
+[class*="quotedChatMessage_"] [class*="jump_"] {
+  border-radius: var(--radius-round);
+  background-color: var(--umbra-raised-3);
+}
+
+/* In the parent channel, the thread under a message is a card: an icon
+   chip, the name with the last reply under it, and the link that opens
+   the thread centred on the right. The top line dissolves into the
+   card's grid so the link can span both lines. The card is the only
+   box Discord gives a role description. */
+[class*="container_"][aria-roledescription] {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: var(--space-12);
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--space-8) var(--space-12);
+  border-color: transparent;
+  border-radius: var(--radius-md);
+  background-color: var(--umbra-raised-2);
+}
+
+[class*="container_"][aria-roledescription]::before {
+  content: "";
+  grid-row: 1 / span 2;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--umbra-raised-3) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238e8f97' stroke-width='2' stroke-linejoin='round'%3E%3Cpath d='M5 5h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-8l-5 4v-4H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z'/%3E%3C/svg%3E") center / 16px no-repeat;
+}
+
+[class*="topLine_"] {
+  display: contents;
+}
+
+[class*="topLine_"] > [class*="name_"] {
+  grid-column: 2;
+  font-weight: var(--font-weight-semibold);
+}
+
+[class*="topLine_"] > [class*="cta_"] {
+  grid-area: 1 / 3 / span 2;
+}
+
+[class*="topLine_"] ~ [class*="bottomLine_"] {
+  grid-column: 2;
+}
+
+/* ── Voice call ──────────────────────────────────────────────────────── */
+
+/* The stage takes the panel's surface in place of black. Discord paints
+   black on two nested layers, so both are set. Tile corners and the
+   empty-tile fill are tokens Discord reads. The black fades behind the
+   controls are dropped; the tray below gives them their own backing. */
+[class*="callContainer_"] {
+  --custom-base-tile-border-radius: var(--radius-lg);
+  --primary-700: var(--umbra-raised-2);
+  background: var(--umbra-raised-1);
+}
+
+[class*="callContainer_"] > [class*="root_"] {
+  background: var(--umbra-raised-1);
+}
+
+[class*="callContainer_"] [class*="gradientContainer_"] {
+  display: none;
+}
+
+[class*="singleUserRoot_"] button {
+  border-radius: var(--radius-round);
+}
+
+/* Two tiles sit side by side. When the stage is tall Discord stacks
+   them, one full-width tile per row, which makes each far larger than
+   it needs to be. Discord writes the width on each tile, hence the
+   !important. Only that exact case is matched (two rows of one tile),
+   so every other layout is left to Discord. */
+[class*="videoGrid_"] > [class*="listItems_"]:has(> :first-child > :only-child):has(> :nth-child(2):last-child) {
   display: flex;
   align-items: center;
-  height: auto !important;
-  flex: 1 1 auto;
+  justify-content: center;
+  gap: var(--space-8);
+}
+
+[class*="videoGrid_"] > [class*="listItems_"]:has(> :first-child > :only-child):has(> :nth-child(2):last-child) > [class*="row_"] {
+  flex: 1 1 0;
   min-width: 0;
 }
 
-[class*="membersWrap"] [class*="memberInner_"] {
-  padding: 0 8px !important;
+[class*="videoGrid_"] > [class*="listItems_"]:has(> :first-child > :only-child):has(> :nth-child(2):last-child) > [class*="row_"] > [class*="tile_"] {
+  width: 100% !important;
+  margin: 0;
 }
 
-[class*="membersWrap"] [class*="member_"]:hover {
-  background-color: var(--fluenty-card-hover) !important;
-
-  background-image: var(--fluenty-member-sheen-hover) !important;
+/* Controls: one floating tray. Discord's two groups lose their own
+   boxes, every button is a round chip, and Leave sits after a divider as
+   a wider pill. A button with a menu arrow attached keeps its flat inner
+   edges so the two halves still join. */
+[class*="centerControls_"] > [class*="wrapper_"] {
+  align-items: center;
+  gap: var(--space-8);
+  padding: 6px var(--space-8);
+  border-radius: var(--radius-round);
+  background: var(--umbra-raised-2);
 }
 
-[class*="membersGroupHeader"],
-[class*="membersGroup"] {
-  background-color: transparent !important;
-  padding-left: 10px;
+[class*="centerControls_"] [class*="buttonSection_"] {
+  padding: 0;
+  border-color: transparent;
+  background: none;
 }
 
-/* 11b. HOME: FRIENDS / LIBRARY / MESSAGE REQUESTS */
-
-[class*="privateChannels_"],
-[class*="privateChannels_"] [class*="scroller_"],
-[class*="nowPlayingColumn_"],
-[class*="tabBody_"],
-main:has(> [class*="tabBody_"]) {
-  background-color: transparent !important;
+[class*="centerControls_"] [class*="centerButton_"] {
+  border-radius: var(--radius-round);
 }
 
-/* Active Now / Activity cards */
-[class*="itemCard_"],
-[class*="usesCardRows"],
-[class*="safetySettingsNotice_"],
-[class*="moreUsers_"] {
-  background-color: var(--fluenty-card) !important;
-  border: 1px solid var(--fluenty-card-stroke) !important;
-  border-radius: 10px !important;
-  box-shadow: var(--elevation-low) !important;
+[class*="centerControls_"] [class*="primaryDark_"] {
+  background: var(--umbra-raised-3);
 }
 
-[class*="itemCard_"]:hover {
-  background-color: var(--fluenty-card-hover) !important;
+[class*="centerControls_"] [class*="attachedButton_"] {
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
 }
 
-/* The round message / more buttons on each friend row */
-[class*="actionButton_"] {
-  background-color: var(--fluenty-card) !important;
-  transition: background-color calc(0.1s * var(--fluenty-motion)) var(--fluenty-ease);
+[class*="centerControls_"] [class*="attachedCaret_"] {
+  border-radius: 0 var(--radius-round) var(--radius-round) 0;
 }
 
-[class*="actionButton_"]:hover {
-  background-color: var(--fluenty-card-hover) !important;
+[class*="centerControls_"] > [class*="wrapper_"] > :last-child {
+  padding-inline-start: var(--space-8);
+  border-inline-start: 1px solid var(--umbra-raised-3);
 }
 
-/* 11c. SERVER SETTINGS / PICKER / QUESTS */
-
-/* Emoji / sticker / GIF picker */
-[class*="categoryList_"],
-[class*="inspector_"],
-[class*="unicodeShortcut_"],
-[class*="standardStickerShortcut_"],
-[class*="packHeader_"],
-[class*="gifFavoriteButton_"] {
-  background-color: transparent !important;
+[class*="centerControls_"] [class*="disconnect_"] {
+  padding-inline: var(--space-16);
+  border-color: transparent;
 }
 
-[class*="categoryItem_"][class*="Selected"],
-[class*="stickerCategory_"][class*="Selected"] {
-  background-color: var(--fluenty-card-hover) !important;
-  border-radius: 8px !important;
+/* The "Voice Connected" box in the sidebar is a card of its own inside
+   the user panel; it is the one box there set in Discord's small
+   medium text style. Its buttons read their fill from a token,
+   re-pointed here. The top row may grow, since plugins add lines to it. */
+[class*="panels_"] [class*="container_"][class*="body-sm/medium_"] {
+  --control-secondary-background-default: var(--umbra-raised-3);
+  position: relative;
+  gap: var(--space-8);
+  margin: var(--space-8) var(--space-8) 0;
+  padding: 10px var(--space-12);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--umbra-raised-2);
 }
 
-/* Quests */
-[class*="questTile_"] {
-  background-color: var(--fluenty-card) !important;
-  border: 1px solid var(--fluenty-card-stroke) !important;
-  border-radius: 10px !important;
+[class*="panels_"] [class*="connection_"],
+[class*="panels_"] [class*="connection_"] > [class*="inner_"],
+[class*="panels_"] [class*="rtcConnectionStatus_"] {
+  height: auto;
+  min-height: 32px;
 }
 
-[class*="heroBackgroundOrbs_"] {
-  background-color: transparent !important;
+/* Connection quality is a dot beside the title: green, amber or red as
+   Discord rates it. It still opens the connection details. */
+[class*="panels_"] [class*="clickablePing_"] {
+  align-self: flex-start;
+  margin-block-start: 5px;
 }
 
-/* Remaining hardcoded blurple */
-/* TODO: never found a live badge with a brand_ modifier to confirm this
-   still works — checked 7 across two profiles, none had it */
-[class*="badge_"][class*="brand_"] {
-  background-color: var(--fluenty-accent) !important;
+[class*="panels_"] [class*="largePing_"] {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--text-muted);
+  box-shadow: none;
 }
 
-/* Switches and checkboxes keep Discord's state colors. */
-
-/* Add Friend keeps the accent color — it's a primary action */
-[class*="addFriend_"] {
-  background-color: var(--fluenty-accent) !important;
+[class*="panels_"] [class*="largePing_"] > * {
+  display: none;
 }
 
-[class*="guilds_"] [class*="childWrapper_"] {
-  background-color: var(--fluenty-card) !important;
-  transition: background-color calc(0.15s * var(--fluenty-motion)) var(--fluenty-ease);
+[class*="rtcConnectionQualityFine_"] [class*="largePing_"] {
+  background: var(--text-feedback-positive);
 }
 
-[class*="guilds_"] [class*="listItem_"]:hover [class*="childWrapper_"] {
-  background-color: var(--fluenty-accent) !important;
+[class*="rtcConnectionQualityAverage_"] [class*="largePing_"] {
+  background: var(--text-feedback-warning);
 }
 
-/* 11d. PROFILES */
-
-/* Keep native profile backgrounds and avoid filtering content behind them. */
-.user-profile-popout {
-  border: 1px solid var(--fluenty-card-stroke) !important;
-  border-radius: 10px !important;
-  box-shadow: var(--elevation-high) !important;
+[class*="rtcConnectionQualityBad_"] [class*="largePing_"] {
+  background: var(--text-feedback-critical);
 }
 
-/* 11e. FULL PROFILE MODAL */
-
-/* No overflow clip here: this wrapper is also the profile EDITOR's root,
-   whose "unsaved changes" save bar sits outside its box. The editor root
-   keeps an inline transform from its enter animation, so it is the
-   containing block even for position:fixed — an overflow clip on it
-   swallows the save bar with no CSS escape. Square corner spill is the
-   lesser evil. */
-[role="dialog"] > *:has([class*="profile__"]) {
-  background-color: var(--fluenty-layer) !important;
-  border: 1px solid var(--fluenty-stroke-card) !important;
-  border-radius: 8px !important;
-  box-shadow: var(--elevation-high) !important;
+[class*="panels_"] [class*="rtcConnectionStatusLabel_"] [class*="/medium_"] {
+  font-weight: var(--font-weight-semibold);
 }
 
-/* 12. MOTION */
-
-/* Only the theme's transitions use this multiplier. Plugin and client
-   animations keep their own timing and reduced-motion handling. */
-@media (prefers-reduced-motion: reduce) {
-  :root,
-  .theme-dark,
-  .theme-light,
-  .theme-midnight {
-    --fluenty-motion: 0;
-  }
+/* Camera, screen share and the other actions: round chips in a row from
+   the left. A button that carries a label stays a pill. */
+[class*="panels_"] [class*="actionButtons_"] {
+  display: flex;
+  justify-content: flex-start;
+  gap: 6px;
+  padding-inline-end: 40px;
 }
 
-/* 13. HOME BUTTON LOGO */
-[data-list-item-id="guildsnav___home"] [class*="childWrapper_"] svg {
-  display: none !important;
+[class*="panels_"] [class*="actionButtons_"] > * {
+  flex: none;
+  width: auto;
 }
 
-[data-list-item-id="guildsnav___home"] [class*="childWrapper_"] {
-  background-image: url("data:image/png;base64,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") !important;
-  background-repeat: no-repeat !important;
-  background-position: center !important;
-  background-size: 30px 30px !important;
+[class*="panels_"] [class*="actionButtons_"] button {
+  width: auto;
+  min-width: 32px;
+  padding: 0 5px;
+  border-radius: var(--radius-round);
 }
 
-/* 1b. THEME OVERRIDES */
-
-/* ---------- LIGHT ---------- */
-.theme-light {
-  --fluenty-accent-light: #005fb8;
-
-  --fluenty-13: 228, 228, 228;
-  --fluenty-19: 255, 255, 255;
-  --fluenty-1b: 243, 243, 243;
-  --fluenty-20: 251, 251, 251;
-  --fluenty-2b: 255, 255, 255;
-  --fluenty-30: 246, 246, 246;
-  --fluenty-37: 240, 240, 240;
-
-  --fluenty-acrylic: rgba(252, 252, 252, 0.86);
-
-  --fluenty-fill-hover: rgba(0, 0, 0, 0.0373);
-  --fluenty-fill-pressed: rgba(0, 0, 0, 0.0241);
-  --fluenty-fill-selected: rgba(0, 0, 0, 0.0605);
-  --fluenty-fill-control: rgba(255, 255, 255, 0.7);
-
-  --fluenty-stroke-control: rgba(0, 0, 0, 0.0578);
-  --fluenty-stroke-card: rgba(0, 0, 0, 0.0578);
-  --fluenty-stroke-divider: rgba(0, 0, 0, 0.0803);
-
-  --fluenty-text-primary: rgba(0, 0, 0, 0.8956);
-  --fluenty-text-secondary: rgba(0, 0, 0, 0.6725);
-  --fluenty-text-tertiary: rgba(0, 0, 0, 0.4458);
-  --fluenty-text-disabled: rgba(0, 0, 0, 0.3614);
-
-  --fluenty-elev-low: 0 1px 2px rgba(0, 0, 0, 0.07), 0 0 2px rgba(0, 0, 0, 0.05);
-  --fluenty-elev-medium: 0 4px 8px rgba(0, 0, 0, 0.08), 0 0 2px rgba(0, 0, 0, 0.06);
-  --fluenty-elev-high: 0 8px 16px rgba(0, 0, 0, 0.09), 0 0 2px rgba(0, 0, 0, 0.06);
-
-  --fluenty-mod-faint: rgba(0, 0, 0, 0.03);
-  --fluenty-mod-subtle: rgba(0, 0, 0, 0.05);
-  --fluenty-mod-strong: rgba(0, 0, 0, 0.07);
-
-  --fluenty-card: rgba(255, 255, 255, 0.65);
-  --fluenty-card-hover: rgba(255, 255, 255, 0.9);
-  --fluenty-card-stroke: rgba(0, 0, 0, 0.06);
-  --fluenty-pane: rgba(255, 255, 255, 0.35);
-
-  --fluenty-scrollbar: rgba(0, 0, 0, 0.22);
-  --fluenty-scrollbar-hover: rgba(0, 0, 0, 0.42);
-  --fluenty-input-underline: rgba(0, 0, 0, 0.34);
-  --fluenty-hover-tint: rgba(0, 0, 0, 0.0261);
-
-  --fluenty-member-sheen: linear-gradient(180deg, rgb(255, 255, 255) 0%, rgb(233, 235, 239) 100%);
-  --fluenty-member-sheen-hover: linear-gradient(180deg, rgb(255, 255, 255) 0%, rgb(240, 242, 245) 100%);
-
-  --fluenty-base-gradient:
-    radial-gradient(125% 90% at 0% 0%, rgba(0, 95, 184, 0.1), transparent 58%),
-    radial-gradient(110% 85% at 100% 100%, rgba(0, 95, 184, 0.05), transparent 55%);
-
-  --fluenty-chip-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(0, 0, 0, 0.025));
-  --fluenty-panel-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.45), rgba(0, 0, 0, 0.012));
+/* Disconnect closes that row on the right as a red chip. It is the last
+   button of the top row, lifted out and pinned to the card's corner,
+   and only when a row follows the top one for it to join. */
+[class*="panels_"] [class*="connection_"]:not(:last-child) [class*="voiceButtonsContainer_"] > :last-child,
+[class*="panels_"] [class*="connection_"]:not(:last-child) [class*="voiceButtonsContainer_"] > :last-child:hover {
+  position: absolute;
+  inset-block-end: 10px;
+  inset-inline-end: var(--space-12);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--umbra-red);
+  color: #fff;
 }
 
-/* ---------- ONYX / MIDNIGHT ---------- */
+/* ── Older settings layout ───────────────────────────────────────────── */
 
-.theme-midnight {
-  --fluenty-13: 6, 6, 6;
-  --fluenty-19: 10, 10, 10;
-  --fluenty-1b: 14, 14, 14;
-  --fluenty-20: 20, 20, 20;
-  --fluenty-2b: 28, 28, 28;
-  --fluenty-30: 34, 34, 34;
-  --fluenty-37: 42, 42, 42;
+/* Server and channel settings still use Discord's earlier layout. These
+   carry the same treatment across: a lifted page, pill entries, and no
+   rules between groups. */
+[class*="contentRegion_"] {
+  --background-base-low: var(--umbra-raised-1);
+}
 
-  --fluenty-acrylic: rgba(20, 20, 20, 0.86);
+[class*="sidebarRegion_"] [class*="item_"] {
+  border-radius: var(--radius-round);
+}
 
-  --fluenty-fill-hover: rgba(255, 255, 255, 0.076);
-  --fluenty-fill-pressed: rgba(255, 255, 255, 0.052);
-  --fluenty-fill-selected: rgba(255, 255, 255, 0.1);
-  --fluenty-fill-control: rgba(255, 255, 255, 0.076);
+[class*="sidebarRegion_"] [class*="separator_"] {
+  background-color: transparent;
+}
 
-  --fluenty-stroke-card: rgba(255, 255, 255, 0.055);
-  --fluenty-stroke-divider: rgba(255, 255, 255, 0.07);
+/* ── Accent ramp ─────────────────────────────────────────────────────── */
 
-  --fluenty-elev-low: 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 2px rgba(0, 0, 0, 0.22);
-  --fluenty-elev-medium: 0 4px 8px rgba(0, 0, 0, 0.36), 0 0 2px rgba(0, 0, 0, 0.26);
-  --fluenty-elev-high: 0 8px 16px rgba(0, 0, 0, 0.46), 0 0 2px rgba(0, 0, 0, 0.3);
-
-  --fluenty-mod-faint: rgba(255, 255, 255, 0.04);
-  --fluenty-mod-subtle: rgba(255, 255, 255, 0.07);
-  --fluenty-mod-strong: rgba(255, 255, 255, 0.11);
-
-  --fluenty-card: rgba(255, 255, 255, 0.06);
-  --fluenty-card-hover: rgba(255, 255, 255, 0.11);
-  --fluenty-pane: rgba(255, 255, 255, 0.028);
-
-  --fluenty-base-gradient:
-    radial-gradient(125% 90% at 0% 0%, rgba(0, 95, 184, 0.15), transparent 58%),
-    radial-gradient(110% 85% at 100% 100%, rgba(96, 205, 255, 0.06), transparent 55%);
+/* Discord derives links, mentions, toggles and selection states from its
+   blurple scale. Re-basing the steps it reads onto --umbra-blue recolours
+   all of them without a selector. Step 50 is the fill behind white text
+   on buttons and badges, so it is set deep enough for 4.5:1 contrast. */
+:root {
+  --blurple-1-hsl: var(--umbra-blue-hs) 90.4%;
+  --blurple-3-hsl: var(--umbra-blue-hs) 87.9%;
+  --blurple-4-hsl: var(--umbra-blue-hs) 86.4%;
+  --blurple-5-hsl: var(--umbra-blue-hs) 85.3%;
+  --blurple-7-hsl: var(--umbra-blue-hs) 82.8%;
+  --blurple-8-hsl: var(--umbra-blue-hs) 81.4%;
+  --blurple-10-hsl: var(--umbra-blue-hs) 79.4%;
+  --blurple-12-hsl: var(--umbra-blue-hs) 77%;
+  --blurple-13-hsl: var(--umbra-blue-hs) 75.7%;
+  --blurple-14-hsl: var(--umbra-blue-hs) 74.7%;
+  --blurple-15-hsl: var(--umbra-blue-hs) 73.8%;
+  --blurple-19-hsl: var(--umbra-blue-hs) 69.7%;
+  --blurple-20-hsl: var(--umbra-blue-hs) 68.8%;
+  --blurple-21-hsl: var(--umbra-blue-hs) 67.9%;
+  --blurple-23-hsl: var(--umbra-blue-hs) 66.1%;
+  --blurple-24-hsl: var(--umbra-blue-hs) 65.2%;
+  --blurple-26-hsl: var(--umbra-blue-hs) 63.5%;
+  --blurple-28-hsl: var(--umbra-blue-hs) 61.9%;
+  --blurple-29-hsl: var(--umbra-blue-hs) 60.8%;
+  --blurple-30-hsl: var(--umbra-blue-hs) 60%;
+  --blurple-33-hsl: var(--umbra-blue-hs) 57.4%;
+  --blurple-36-hsl: var(--umbra-blue-hs) 54.9%;
+  --blurple-38-hsl: var(--umbra-blue-hs) 53.5%;
+  --blurple-41-hsl: var(--umbra-blue-hs) 51.2%;
+  --blurple-44-hsl: var(--umbra-blue-hs) 49.5%;
+  --blurple-45-hsl: var(--umbra-blue-hs) 48.8%;
+  --blurple-50-hsl: var(--umbra-blue-hs) 37.5%;
+  --blurple-53-hsl: var(--umbra-blue-hs) 36.5%;
+  --blurple-54-hsl: var(--umbra-blue-hs) 35.8%;
+  --blurple-59-hsl: var(--umbra-blue-hs) 34.9%;
+  --blurple-60-hsl: var(--umbra-blue-hs) 34%;
+  --blurple-61-hsl: var(--umbra-blue-hs) 33.1%;
+  --blurple-62-hsl: var(--umbra-blue-hs) 32.2%;
+  --blurple-63-hsl: var(--umbra-blue-hs) 31.4%;
+  --blurple-65-hsl: var(--umbra-blue-hs) 29.8%;
+  --blurple-70-hsl: var(--umbra-blue-hs) 26.2%;
+  --blurple-71-hsl: var(--umbra-blue-hs) 25.4%;
+  --blurple-74-hsl: var(--umbra-blue-hs) 23.6%;
+  --blurple-75-hsl: var(--umbra-blue-hs) 22.9%;
+  --blurple-80-hsl: var(--umbra-blue-hs) 19.5%;
+  --blurple-81-hsl: var(--umbra-blue-hs) 18.8%;
+  --blurple-82-hsl: var(--umbra-blue-hs) 18.1%;
+  --blurple-83-hsl: var(--umbra-blue-hs) 17.4%;
+  --blurple-84-hsl: var(--umbra-blue-hs) 16.9%;
+  --blurple-85-hsl: var(--umbra-blue-hs) 16.1%;
+  --blurple-86-hsl: var(--umbra-blue-hs) 15.5%;
+  --blurple-91-hsl: var(--umbra-blue-hs) 11.9%;
+  --blurple-95-hsl: var(--umbra-blue-hs) 8.4%;
+  --blurple-96-hsl: var(--umbra-blue-hs) 7.4%;
+  --blurple-99-hsl: var(--umbra-blue-hs) 2.5%;
+  --opacity-blurple-4-hsl: var(--blurple-50-hsl);
+  --opacity-blurple-8-hsl: var(--blurple-50-hsl);
+  --opacity-blurple-12-hsl: var(--blurple-50-hsl);
+  --opacity-blurple-16-hsl: var(--blurple-50-hsl);
+  --opacity-blurple-20-hsl: var(--blurple-50-hsl);
+  --opacity-blurple-24-hsl: var(--blurple-50-hsl);
+  --opacity-blurple-28-hsl: var(--blurple-50-hsl);
+  --opacity-blurple-32-hsl: var(--blurple-50-hsl);
+  --opacity-blurple-40-hsl: var(--blurple-50-hsl);
+  --opacity-blurple-48-hsl: var(--blurple-50-hsl);
+  --opacity-blurple-60-hsl: var(--blurple-50-hsl);
+  --opacity-blurple-80-hsl: var(--blurple-50-hsl);
+  --opacity-blurple-84-hsl: var(--blurple-50-hsl);
 }

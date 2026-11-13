@@ -42,9 +42,13 @@ User-facing text in the menu goes through `ng-Localize` with a phrase GMod alrea
 
 Discord's class names look like `word_hash` and the hash changes between builds, so every selector is a `[class*="word_"]` substring match. When something stops being themed, open DevTools (Vencord settings, or Ctrl+Shift+I), find the new class fragment, and update the selector. Keep the trailing underscore so you don't match longer names like `menuItem`.
 
+Don't put a class test inside `:has()`, as in `:has(> [class*="x_"])`. It makes Discord restyle most of the window every time any element's class changes, and Discord changes classes constantly. On a 7,000-element test page one class change on a channel row cost about 48ms with 24 such rules in the theme, against 0.07ms once they were rewritten. Tags, structure and other attributes inside `:has()` don't carry that cost: `:has(+ h3)`, `:has(> :nth-child(2))` and `:has(> [data-member-list-open])` are all fine. The check fails if a class test shows up inside `:has()` again.
+
+Discord sizes some things in script and writes the result on the element, so a plain CSS rule can't change them: forum gallery cards (width, height and position) and call tiles (width). The theme works around both, and the comments above those rules in the file say how.
+
 For UmbraMotion, every selector lives in `UmbraMotion/modules.ts`. Its README lists which modules have been confirmed against a live client.
 
 ## Before a release, by hand
 
-- Discord: switch between Light, Dark and Onyx. Open a context menu, a modal, a profile (including the profile editor's save bar), and the emoji picker.
+- Discord: switch between Light and Dark. Open a context menu, a modal, a profile (including the profile editor's save bar), and the emoji picker. Then open the areas with their own layout: settings, the friends page, a forum channel in gallery view, a thread, and a voice call with the Voice Connected box showing.
 - GMod: open the main menu, the server browser (select a server, try a passworded one), the recent-servers flyout, and a loading screen. Turn on `net_graph 1` in a game.

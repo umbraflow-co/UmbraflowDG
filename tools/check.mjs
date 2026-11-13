@@ -51,22 +51,26 @@ for (const tag of ["@name", "@description", "@author", "@version"]) {
 
 {
     const declared = declaredVars(discord);
-    const missing = [...usedVars(discord, "--fluenty-")].filter(v => !declared.has(v));
-    check("Discord: every --fluenty-* variable in use is declared", !missing.length, missing.join(", "));
+    const missing = [...usedVars(discord, "--umbra-")].filter(v => !declared.has(v));
+    check("Discord: every --umbra-* variable in use is declared", !missing.length, missing.join(", "));
 }
 
 // A bare substring match on layer_ also hits player_* elements.
 check("Discord: layer_ is matched as a class prefix, not a substring", !/\[class\*="layer_"\]/.test(discord));
 
-check("Discord: Light override block exists", /^\.theme-light \{/m.test(discord));
-check("Discord: Onyx override block exists", /^\.theme-midnight \{/m.test(discord));
+check("Discord: Dark palette block exists", /^\.theme-dark \{/m.test(discord));
+check("Discord: Light palette block exists", /^\.theme-light \{/m.test(discord));
 
-// Derived tokens only re-resolve per palette if every base block is also
-// declared on the theme classes, not just :root.
+// The font import only works as the first statement in the file.
+check("Discord: @import is the first statement", /^@import /.test(discord.replace(/\/\*[\s\S]*?\*\//g, "").trimStart()));
+
+// A class test inside :has() makes Discord restyle most of the window on
+// every class change (measured: about 48ms per change against 0.07ms
+// without). Tags, structure and other attributes inside :has() are fine.
 {
-    const heads = [...discord.matchAll(/^:root,\n([^{]*)\{/gm)].map(m => m[1]);
-    const bad = heads.filter(h => !["theme-dark", "theme-light", "theme-midnight"].every(t => h.includes(`.${t}`)));
-    check("Discord: base token blocks cover .theme-dark/.theme-light/.theme-midnight", heads.length > 0 && !bad.length);
+    const bare = discord.replace(/\/\*[\s\S]*?\*\//g, "");
+    const slow = [...bare.matchAll(/:has\((?:[^()]|\([^()]*\))*\)/g)].map(m => m[0]).filter(h => /\[class/.test(h));
+    check("Discord: no class test inside :has()", !slow.length, slow.join("  "));
 }
 
 // ---------------------------------------------------------------- Garry's Mod
