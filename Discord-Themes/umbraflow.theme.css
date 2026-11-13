@@ -1,7 +1,7 @@
 /**
  * @name Umbraflow
  * @author Big_Killers
- * @version 2.5.2
+ * @version 2.5.3
  * @description A calm charcoal and blue restyle of Discord. Rounded panels, card-based lists and Ubuntu Sans type across chat, settings, forums and voice calls. Follows Discord's own light and dark setting.
  */
 
@@ -490,6 +490,18 @@
 
 [class*="scrollableContainer_"] {
   background: none;
+}
+
+/* What you type is on the same scale as sent messages. Discord sizes the
+   box's text apart from message text, and centres it with the line
+   height variable, so the variable changes with it. */
+[class*="channelTextArea_"] {
+  --chat-markup-line-height: 1.25rem;
+}
+
+[class*="channelTextArea_"] :is([class*="textArea_"], [class*="slateTextArea_"]) {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
 }
 
 [class*="page_"] [class*="channelTextArea_"] {
