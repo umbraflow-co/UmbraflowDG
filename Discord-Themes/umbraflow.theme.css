@@ -1,7 +1,7 @@
 /**
  * @name Umbraflow
  * @author Big_Killers
- * @version 2.5.3
+ * @version 2.6.0
  * @description A calm charcoal and blue restyle of Discord. Rounded panels, card-based lists and Ubuntu Sans type across chat, settings, forums and voice calls. Follows Discord's own light and dark setting.
  */
 
@@ -15,6 +15,8 @@
   --umbra-blue: #0fadff;
   --umbra-yellow: #fffc00;
   --umbra-red: #f23c57;
+  --umbra-gold: #f0b232;
+  --umbra-on-gold: #2b1d00;
 
   /* Hue and saturation of --umbra-blue, kept apart so the ramp at the end of
      this file still honours Discord's saturation accessibility slider. */
@@ -321,10 +323,12 @@
   background-color: var(--umbra-blue);
 }
 
-/* Unread and mention counts. Discord sets this background inline, which
-   only !important can outrank. */
+/* Ping and unread counts (servers, DMs, channels) are gold with dark
+   numbers, so they stand apart from the blue selection marker. Discord
+   sets this background inline, which only !important can outrank. */
 [class*="numberBadge_"] {
-  background-color: var(--background-brand) !important;
+  background-color: var(--umbra-gold) !important;
+  color: var(--umbra-on-gold);
 }
 
 /* Channel list: pill rows with the channel icon in a chip. The chip is

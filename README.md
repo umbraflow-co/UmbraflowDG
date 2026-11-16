@@ -39,7 +39,7 @@ The Discord screenshots show version 1. They have not been retaken for version 2
 
 | Area | What changes |
 |------|--------------|
-| Color | Dark mode uses three charcoal surfaces (`#232323`, `#2b2b2b`, `#333`) with a blue accent. Light mode uses white and pale grey with the same accent. |
+| Color | Dark mode uses three charcoal surfaces (`#232323`, `#2b2b2b`, `#333`) with a blue accent. Light mode uses white and pale grey with the same accent. Ping and unread counts on servers, DMs and channels are gold. |
 | Type | The interface is set in Ubuntu Sans on a 14px scale. |
 | Chat | The chat sits in a rounded panel. Each sender's messages carry a thin line on the left, which turns yellow on messages that mention you. The message box is a pill with its tools in a tray. |
 | Lists | Channels are pill rows with the icon in a chip, and categories sit in a bubble. The member list groups each role into one card. Direct messages and the friends list are cards too, and the friends tabs are one segmented control. |
